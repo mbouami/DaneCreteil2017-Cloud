@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.bouami.danecreteil2017.AnimateursActivity">
+
+        <item
+            android:id="@+id/animateurrechercher"
+            app:actionViewClass="android.support.v7.widget.SearchView"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Rechercher un animateur"
+            app:showAsAction="ifRoom|collapseActionView"></item>
+        <item
+            android:id="@+id/action_reinitialisation"
+            android:title="@string/menu_reinitialisation"
+            android:visible="true"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_logout"
+            android:title="@string/menu_logout"
+            android:visible="true"
+            app:showAsAction="never" />
+</menu>

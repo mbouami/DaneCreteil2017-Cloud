@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DaneCreteil2017-Cloud</string>
+    <string name="title_activity_animateurs">Liste des Animateurs</string>
+    <string name="title_activity_etablissements">Liste des Etablissements</string>
+    <string name="search_hint">Rechercher un animateur</string>
+    <string name="search_label_animateur">RechercherAnimateur</string>
+    <string name="heading_my_animateurs">Animateurs</string>
+    <string name="heading_my_etablissements">Etablissements</string>
+    <string name="heading_my_personnel">Personnel</string>
+    <string name="menu_logout">Quitter</string>
+    <string name="menu_reinitialisation">Réinitialiser les données</string>
+    <string name="title_activity_new_referent">NewReferentActivity</string>
+</resources>
