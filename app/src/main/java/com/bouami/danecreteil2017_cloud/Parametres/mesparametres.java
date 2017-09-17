@@ -38,7 +38,6 @@ public class mesparametres {
                     AjouterAnimateurParDepart(donnees, keydepart);
                 }
             } else {
-                JSONArray datadepart = donnees.getJSONArray(depart);
                 AjouterAnimateurParDepart(donnees, depart);
             }
 
@@ -99,7 +98,7 @@ public class mesparametres {
         for (int i = 0; i < datadepart.length(); i++) {
             JSONArray etabsObject = datadepart.getJSONObject(i).getJSONArray("etabs");
             for (int j = 0; j < etabsObject.length(); j++) {
-                listedesetablissements.add(new Etablissement(etabsObject.getJSONObject(i)));
+                listedesetablissements.add(new Etablissement(etabsObject.getJSONObject(j)));
             }
         }
     }

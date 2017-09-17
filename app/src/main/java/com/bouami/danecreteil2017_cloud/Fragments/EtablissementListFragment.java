@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +73,7 @@ public class EtablissementListFragment extends Fragment {
                         listedesetablissementsfiltre.add(etab);
                     }
                 }
+//                Log.d(TAG, "onQueryTextChange " + newText + listedesetablissementsfiltre.size()+ "-"+listedesetablissements.size());
                 mAdapter = new EtablissementRecyclerViewAdapter(Etablissement.class,
                         R.layout.item_etablissement, EtablissementViewHolder.class, listedesetablissementsfiltre) {
                 };

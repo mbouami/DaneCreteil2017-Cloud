@@ -101,6 +101,7 @@ public class AnimateurListFragment extends Fragment {
                         listedesanimateursfiltre.add(anim);
                     }
                 }
+//                Log.d(TAG, "onQueryTextChange " + newText + listedesanimateursfiltre.size()+ "-"+listedesanimateurs.size());
                 mAdapter = new AnimateursRecyclerViewAdapter(Animateur.class,
                         R.layout.item_animateur,AnimateurViewHolder.class,listedesanimateursfiltre);
                 mRecycler.setAdapter(mAdapter);
