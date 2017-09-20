@@ -10,4 +10,6 @@
     <string name="menu_logout">Quitter</string>
     <string name="menu_reinitialisation">Réinitialiser les données</string>
     <string name="title_activity_new_referent">NewReferentActivity</string>
+    <string name="title_activity_etablissements_par_animateur">EtablissementsParAnimateurActivity
+    </string>
 </resources>

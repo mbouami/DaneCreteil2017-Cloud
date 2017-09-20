@@ -62,7 +62,7 @@ public class Etablissement {
 
     public Etablissement(JSONObject etab) throws JSONException {
         this.id = etab.get("id").toString();
-        this.rne = etab.get("rne").toString();
+//        this.rne = etab.get("rne").toString();
         this.type = etab.get("type").toString();
         this.nom = etab.get("nom").toString();
         this.fax = etab.get("fax").toString();

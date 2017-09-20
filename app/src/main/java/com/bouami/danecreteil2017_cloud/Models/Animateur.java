@@ -28,7 +28,6 @@ public class Animateur {
         this.tel = anim.get("tel").toString();
         this.email = anim.get("email").toString();
         this.photo = anim.get("photo").toString();
-
     }
 
     public Animateur(String id,String genre, String nom, String prenom, String tel, String email, String photo) {

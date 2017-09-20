@@ -1,5 +1,8 @@
 package com.bouami.danecreteil2017_cloud.Models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +41,16 @@ public class Personnel {
         this.tel = tel;
         this.email = email;
         this.statut = statut;
+    }
+
+    public Personnel(JSONObject person) throws JSONException {
+            this.id = person.get("id").toString();
+            this.genre = person.get("genre").toString();
+            this.nom = person.get("nom").toString();
+            this.prenom = person.get("prenom").toString();
+            this.tel = person.get("tel").toString();
+            this.email = person.get("email").toString();
+            this.statut = person.get("statut").toString();
     }
 
     public Map<String, Object> toMap(String etabkey) {

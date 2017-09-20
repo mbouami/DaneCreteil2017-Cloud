@@ -1,5 +1,6 @@
 package com.bouami.danecreteil2017_cloud;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,7 +21,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bouami.danecreteil2017_cloud.Fragments.AnimateurListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.EtablissementListFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
+import com.bouami.danecreteil2017_cloud.Models.Etablissement;
 import com.bouami.danecreteil2017_cloud.Parametres.mesparametres;
 
 import org.json.JSONArray;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     StringRequest stringRequest; // Assume this exists.
     RequestQueue mRequestQueue;  // Assume this exists.
     List<Animateur> listedesanimateurspardepart = new ArrayList<Animateur>();
+    public List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
+    public List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     private FragmentPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private mesparametres mesdonnees = new mesparametres();
@@ -43,46 +48,58 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        ProgressDialog mDialog = ProgressDialog.show(MainActivity.this,"Chargement en cours", "Patienter ...", true, true);
         mRequestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, mesdonnees.BASE_URL_DEPART, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, mesdonnees.BASE_URL_EXPORT, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(final JSONObject response) {
-                        listedesanimateurspardepart = mesdonnees.getListeAnimateurs(response,"93");
+//                        listedesanimateurspardepart = mesdonnees.getListeAnimateurs(response,"93");
+//                        listedesanimateurs = mesdonnees.getListeAnimateurs(response,"");
+//                        listedesetablissements = mesdonnees.getListeEtablissements(response,"");
                         // Create the adapter that will return a fragment for each section
-                        mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-                            private final Fragment[] mFragments = new Fragment[] {
-//                                    new AnimateurListFragment(listedesanimateurspardepart),
-//                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"94")),
-//                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"77"))
-                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"")),
-                                    new EtablissementListFragment(mesdonnees.getListeEtablissements(response,""))
+                        try {
+                            mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+                                private final Fragment[] mFragments = new Fragment[] {
+    //                                    new AnimateurListFragment(listedesanimateurspardepart),
+    //                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"94")),
+    //                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"77"))
+    //                                    new AnimateurListFragment(listedesanimateurs),
+    //                                    new EtablissementListFragment(listedesetablissements)
+                                        new AnimateurListFragment(mesdonnees.getListeAnimateursCreteil(response,"")),
+                                        new EtablissementListFragment(mesdonnees.getListeEtablissementsCreteil(response,"")),
+                                        new PersonnelListFragment(mesdonnees.getListePersonnelCreteil(response,""))
+                                };
+                                private final String[] mFragmentNames = new String[] {
+    //                                    getString(R.string.heading_my_animateurs)+ " du 93",
+    //                                    getString(R.string.heading_my_animateurs)+ " du 94",
+    //                                    getString(R.string.heading_my_animateurs)+ " du 77"
+                                        getString(R.string.heading_my_animateurs),
+                                        getString(R.string.heading_my_etablissements),
+                                        getString(R.string.heading_my_personnel)
+                                };
+                                @Override
+                                public Fragment getItem(int position) {
+                                    return mFragments[position];
+                                }
+                                @Override
+                                public int getCount() {
+                                    return mFragments.length;
+                                }
+                                @Override
+                                public CharSequence getPageTitle(int position) {
+                                    return mFragmentNames[position];
+                                }
                             };
-                            private final String[] mFragmentNames = new String[] {
-//                                    getString(R.string.heading_my_animateurs)+ " du 93",
-//                                    getString(R.string.heading_my_animateurs)+ " du 94",
-//                                    getString(R.string.heading_my_animateurs)+ " du 77"
-                                    getString(R.string.heading_my_animateurs),
-                                    getString(R.string.heading_my_etablissements)
-                            };
-                            @Override
-                            public Fragment getItem(int position) {
-                                return mFragments[position];
-                            }
-                            @Override
-                            public int getCount() {
-                                return mFragments.length;
-                            }
-                            @Override
-                            public CharSequence getPageTitle(int position) {
-                                return mFragmentNames[position];
-                            }
-                        };
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         mViewPager = (ViewPager) findViewById(R.id.container);
                         mViewPager.setAdapter(mPagerAdapter);
                         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
                         tabLayout.setupWithViewPager(mViewPager);
+//                        ProgressDialog.d
                     }
                 }, new Response.ErrorListener() {
 

@@ -16,7 +16,9 @@ import com.bouami.danecreteil2017_cloud.R;
 public class PersonnelViewHolder extends RecyclerView.ViewHolder {
     public final TextView mNomView;
     public final TextView mStatutView;
-    public final ImageView mListePersonnelView;
+    public final TextView mTelView;
+    public final TextView mEmailView;
+    //    public final ImageView mListePersonnelView;
     public final LinearLayout mZoneReferencePersonnel;
     public Personnel mItem;
     public final View mView;
@@ -25,7 +27,9 @@ public class PersonnelViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mNomView = (TextView) itemView.findViewById(R.id.nom);
         mStatutView = (TextView) itemView.findViewById(R.id.statut);
-        mListePersonnelView = (ImageView) itemView.findViewById(R.id.detail);
+        mTelView = (TextView) itemView.findViewById(R.id.tel);
+        mEmailView = (TextView) itemView.findViewById(R.id.email);
+//        mListePersonnelView = (ImageView) itemView.findViewById(R.id.detail);
         mZoneReferencePersonnel = (LinearLayout) itemView.findViewById(R.id.zone_reference_personnel);
         mView = itemView;
     }
@@ -33,6 +37,8 @@ public class PersonnelViewHolder extends RecyclerView.ViewHolder {
     public void bindToPersonnel(Personnel personnel,View.OnClickListener starClickListener) {
         mNomView.setText(personnel.getGenre() + " " + personnel.getPrenom() + " " + personnel.getNom());
         mStatutView.setText(personnel.getStatut());
+        mTelView.setText("Tél : "+personnel.getTel());
+        mEmailView.setText("Email : "+personnel.getEmail());
         mZoneReferencePersonnel.setOnClickListener(starClickListener);
     }
 

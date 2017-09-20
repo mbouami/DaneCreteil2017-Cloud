@@ -1,10 +1,12 @@
 package com.bouami.danecreteil2017_cloud.Parametres;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
+import com.bouami.danecreteil2017_cloud.Models.Personnel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,13 +22,62 @@ import java.util.List;
 
 public class mesparametres {
     public final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+    public final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public final String BASE_URL_DEPART_93 = BASE_URL_DEPART + "93";
     public final String BASE_URL_DEPART_94 = BASE_URL_DEPART + "94";
     public final String BASE_URL_DEPART_77 = BASE_URL_DEPART + "77";
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
+    List<Personnel> listedespersonnels = new ArrayList<Personnel>();
 
+
+    @SuppressLint("LongLogTag")
+    public List<Animateur> getListeAnimateursCreteil(JSONObject donnees, String depart) throws JSONException {
+        listedesanimateurs = new ArrayList<Animateur>();
+        JSONArray listeanims = donnees.getJSONArray("animateurs");
+        try {
+            for (int j = 0; j < listeanims.length(); j++) {
+                Animateur anim = new Animateur(listeanims.getJSONObject(j));
+                listedesanimateurs.add(anim);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return listedesanimateurs;
+    }
+
+    @SuppressLint("LongLogTag")
+    public List<Etablissement> getListeEtablissementsCreteil(JSONObject donnees, String depart) throws JSONException {
+        listedesetablissements = new ArrayList<Etablissement>();
+        JSONArray etabsdepart = donnees.getJSONArray("etablissements");
+        try {
+            for (int i = 0; i < etabsdepart.length(); i++) {
+                Etablissement etab = new Etablissement(etabsdepart.getJSONObject(i));
+//                Log.d(TAG,etab.nom);
+                listedesetablissements.add(etab);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listedesetablissements;
+    }
+
+    public List<Personnel> getListePersonnelCreteil(JSONObject donnees, String depart) throws JSONException {
+        listedespersonnels = new ArrayList<Personnel>();
+        JSONArray personneldepart = donnees.getJSONArray("personnel");
+        try {
+            for (int i = 0; i < personneldepart.length(); i++) {
+                Personnel personnel = new Personnel(personneldepart.getJSONObject(i));
+                listedespersonnels.add(personnel);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return listedespersonnels;
+    }
 
     public List<Animateur> getListeAnimateurs(JSONObject donnees, String depart) {
         listedesanimateurs = new ArrayList<Animateur>();
