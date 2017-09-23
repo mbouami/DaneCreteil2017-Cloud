@@ -42,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     public List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     private FragmentPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-    private mesparametres mesdonnees = new mesparametres();
+    public static mesparametres mesparametresencours = new mesparametres();
+    public static String departencours = "";
+    public static JSONObject donneesjson;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,30 +54,21 @@ public class MainActivity extends AppCompatActivity {
 //        ProgressDialog mDialog = ProgressDialog.show(MainActivity.this,"Chargement en cours", "Patienter ...", true, true);
         mRequestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, mesdonnees.BASE_URL_EXPORT, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, mesparametresencours.BASE_URL_EXPORT, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(final JSONObject response) {
-//                        listedesanimateurspardepart = mesdonnees.getListeAnimateurs(response,"93");
-//                        listedesanimateurs = mesdonnees.getListeAnimateurs(response,"");
-//                        listedesetablissements = mesdonnees.getListeEtablissements(response,"");
+                        donneesjson = response;
+                        departencours = "93";
                         // Create the adapter that will return a fragment for each section
                         try {
                             mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
                                 private final Fragment[] mFragments = new Fragment[] {
-    //                                    new AnimateurListFragment(listedesanimateurspardepart),
-    //                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"94")),
-    //                                    new AnimateurListFragment(mesdonnees.getListeAnimateurs(response,"77"))
-    //                                    new AnimateurListFragment(listedesanimateurs),
-    //                                    new EtablissementListFragment(listedesetablissements)
-                                        new AnimateurListFragment(mesdonnees.getListeAnimateursCreteil(response,"")),
-                                        new EtablissementListFragment(mesdonnees.getListeEtablissementsCreteil(response,"")),
-                                        new PersonnelListFragment(mesdonnees.getListePersonnelCreteil(response,""))
+                                        new AnimateurListFragment(mesparametresencours.getListeAnimateursCreteil(response,departencours)),
+                                        new EtablissementListFragment(mesparametresencours.getListeEtablissementsCreteil(response,departencours)),
+                                        new PersonnelListFragment(mesparametresencours.getListePersonnelCreteil(response,departencours))
                                 };
                                 private final String[] mFragmentNames = new String[] {
-    //                                    getString(R.string.heading_my_animateurs)+ " du 93",
-    //                                    getString(R.string.heading_my_animateurs)+ " du 94",
-    //                                    getString(R.string.heading_my_animateurs)+ " du 77"
                                         getString(R.string.heading_my_animateurs),
                                         getString(R.string.heading_my_etablissements),
                                         getString(R.string.heading_my_personnel)

@@ -31,19 +31,38 @@ public class mesparametres {
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
 
-
     @SuppressLint("LongLogTag")
     public List<Animateur> getListeAnimateursCreteil(JSONObject donnees, String depart) throws JSONException {
         listedesanimateurs = new ArrayList<Animateur>();
-        JSONArray listeanims = donnees.getJSONArray("animateurs");
-        try {
-            for (int j = 0; j < listeanims.length(); j++) {
-                Animateur anim = new Animateur(listeanims.getJSONObject(j));
-                listedesanimateurs.add(anim);
+        if (depart!="") {
+            JSONObject listeanims = donnees.getJSONObject("animateurs").getJSONObject(depart);
+            Iterator<String> keys = listeanims.keys();
+            try {
+                while(keys.hasNext()){
+                    String keyanimateur = keys.next();
+                    Animateur anim = new Animateur(listeanims.getJSONObject(keyanimateur));
+                    listedesanimateurs.add(anim);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else {
+            JSONObject listeanims = donnees.getJSONObject("animateurs");
+            Iterator<String> keysdepart = listeanims.keys();
+            while (keysdepart.hasNext()){
+                String keydepartencours = keysdepart.next();
+                JSONObject listeanimspardepart = listeanims.getJSONObject(keydepartencours);
+                Iterator<String> keys = listeanimspardepart.keys();
+                try {
+                    while(keys.hasNext()){
+                        String keyanimateur = keys.next();
+                        Animateur anim = new Animateur(listeanimspardepart.getJSONObject(keyanimateur));
+                        listedesanimateurs.add(anim);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return listedesanimateurs;
@@ -52,31 +71,90 @@ public class mesparametres {
     @SuppressLint("LongLogTag")
     public List<Etablissement> getListeEtablissementsCreteil(JSONObject donnees, String depart) throws JSONException {
         listedesetablissements = new ArrayList<Etablissement>();
-        JSONArray etabsdepart = donnees.getJSONArray("etablissements");
-        try {
-            for (int i = 0; i < etabsdepart.length(); i++) {
-                Etablissement etab = new Etablissement(etabsdepart.getJSONObject(i));
-//                Log.d(TAG,etab.nom);
-                listedesetablissements.add(etab);
+        if (depart!="") {
+            JSONObject listeetabs = donnees.getJSONObject("etablissements").getJSONObject(depart);
+            Iterator<String> keys = listeetabs.keys();
+            try {
+                while (keys.hasNext()) {
+                    String keyetablissement = keys.next();
+                    Etablissement etab = new Etablissement(listeetabs.getJSONObject(keyetablissement));
+                    listedesetablissements.add(etab);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else {
+            JSONObject listeetabs = donnees.getJSONObject("etablissements");
+            Iterator<String> keysdepart = listeetabs.keys();
+            while (keysdepart.hasNext()){
+                String keydepartencours = keysdepart.next();
+                JSONObject listeanimspardepart = listeetabs.getJSONObject(keydepartencours);
+                Iterator<String> keys = listeanimspardepart.keys();
+                try {
+                    while(keys.hasNext()){
+                        String keyetablissement = keys.next();
+                        Etablissement etab = new Etablissement(listeanimspardepart.getJSONObject(keyetablissement));
+                        listedesetablissements.add(etab);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return listedesetablissements;
     }
 
     public List<Personnel> getListePersonnelCreteil(JSONObject donnees, String depart) throws JSONException {
         listedespersonnels = new ArrayList<Personnel>();
-        JSONArray personneldepart = donnees.getJSONArray("personnel");
+        if (depart!="") {
+            JSONObject listepersonnels = donnees.getJSONObject("personnel").getJSONObject(depart);
+            Iterator<String> keys = listepersonnels.keys();
+            try {
+                while (keys.hasNext()) {
+                    String keypersonnel = keys.next();
+                    Personnel personnel = new Personnel(listepersonnels.getJSONObject(keypersonnel));
+                    listedespersonnels.add(personnel);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            JSONObject listepersonnels = donnees.getJSONObject("personnel");
+            Iterator<String> keysdepart = listepersonnels.keys();
+            while (keysdepart.hasNext()){
+                String keydepartencours = keysdepart.next();
+                JSONObject listepersonnelspardepart = listepersonnels.getJSONObject(keydepartencours);
+                Iterator<String> keys = listepersonnelspardepart.keys();
+                try {
+                    while(keys.hasNext()){
+                        String keypersonnel = keys.next();
+                        Personnel personnel = new Personnel(listepersonnelspardepart.getJSONObject(keypersonnel));
+                        listedespersonnels.add(personnel);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return listedespersonnels;
+    }
+
+    @SuppressLint("LongLogTag")
+    public List<Etablissement> getListeEtablissementsCreteilParAnimateur(JSONObject donnees, String depart, String idanimateur) throws JSONException {
+        List<Etablissement> etabsparanim = new ArrayList<Etablissement>();
+        JSONObject listeetabs = donnees.getJSONObject("animateurs").getJSONObject(depart).getJSONObject(idanimateur).getJSONObject("etablissements");
+        JSONArray etabsparanimateur= null;
+        Iterator<String> keys = listeetabs.keys();
         try {
-            for (int i = 0; i < personneldepart.length(); i++) {
-                Personnel personnel = new Personnel(personneldepart.getJSONObject(i));
-                listedespersonnels.add(personnel);
+            while (keys.hasNext()) {
+                String keyetab = keys.next();
+                Etablissement etablissement = new Etablissement(donnees.getJSONObject("etablissements").getJSONObject(depart).getJSONObject(keyetab));
+                etabsparanim.add(etablissement);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return listedespersonnels;
+        return etabsparanim;
     }
 
     public List<Animateur> getListeAnimateurs(JSONObject donnees, String depart) {

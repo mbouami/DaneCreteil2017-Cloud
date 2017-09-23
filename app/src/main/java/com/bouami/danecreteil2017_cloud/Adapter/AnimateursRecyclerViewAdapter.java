@@ -8,11 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bouami.danecreteil2017_cloud.MainActivity;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
+import com.bouami.danecreteil2017_cloud.Models.Etablissement;
 import com.bouami.danecreteil2017_cloud.R;
 import com.bouami.danecreteil2017_cloud.ViewHolder.AnimateurViewHolder;
 
 import com.bouami.danecreteil2017_cloud.Parametres.mesparametres;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -75,7 +79,11 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
             @Override
             public void onClick(View v) {
                 // Launch PostDetailActivity
-                Log.d(TAG, "setOnClickListener:" + model.getNom());
+                JSONObject jobj = MainActivity.donneesjson;
+                String depart = MainActivity.departencours;
+                String idanim = model.getId();
+                List<Etablissement> listeetabs = MainActivity.mesparametresencours.getListeEtablissementsCreteilParAnimateur(jobj,depart,idanim);
+                Log.d(TAG, "setOnClickListener:" +listeetabs.get(0).getNom());
             }
         });
         // Bind Post to ViewHolder, setting OnClickListener for the star button
