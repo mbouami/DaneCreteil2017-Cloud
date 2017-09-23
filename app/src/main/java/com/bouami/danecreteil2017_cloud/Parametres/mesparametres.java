@@ -143,19 +143,16 @@ public class mesparametres {
     public List<Etablissement> getListeEtablissementsCreteilParAnimateur(JSONObject donnees, String depart, String idanimateur) throws JSONException {
         List<Etablissement> etabsparanim = new ArrayList<Etablissement>();
         JSONObject listeetabs = donnees.getJSONObject("animateurs").getJSONObject(depart).getJSONObject(idanimateur).getJSONObject("etablissements");
-        JSONArray etabsparanimateur= null;
+        JSONObject etabs = donnees.getJSONObject("etablissements").getJSONObject(depart);
         Iterator<String> keys = listeetabs.keys();
-        try {
-            while (keys.hasNext()) {
-                String keyetab = keys.next();
-                Etablissement etablissement = new Etablissement(donnees.getJSONObject("etablissements").getJSONObject(depart).getJSONObject(keyetab));
-                etabsparanim.add(etablissement);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        while (keys.hasNext()) {
+            String keyetab = keys.next();
+            Etablissement etablissement = new Etablissement(etabs.getJSONObject(keyetab));
+            etabsparanim.add(etablissement);
         }
         return etabsparanim;
     }
+
 
     public List<Animateur> getListeAnimateurs(JSONObject donnees, String depart) {
         listedesanimateurs = new ArrayList<Animateur>();

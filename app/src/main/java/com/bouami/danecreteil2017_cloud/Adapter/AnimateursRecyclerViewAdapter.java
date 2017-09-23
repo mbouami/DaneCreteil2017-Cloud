@@ -1,5 +1,6 @@
 package com.bouami.danecreteil2017_cloud.Adapter;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bouami.danecreteil2017_cloud.EtablissementsParAnimateurActivity;
 import com.bouami.danecreteil2017_cloud.MainActivity;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
@@ -79,11 +81,9 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
             @Override
             public void onClick(View v) {
                 // Launch PostDetailActivity
-                JSONObject jobj = MainActivity.donneesjson;
-                String depart = MainActivity.departencours;
-                String idanim = model.getId();
-                List<Etablissement> listeetabs = MainActivity.mesparametresencours.getListeEtablissementsCreteilParAnimateur(jobj,depart,idanim);
-                Log.d(TAG, "setOnClickListener:" +listeetabs.get(0).getNom());
+                Intent intent = new Intent(v.getContext(), EtablissementsParAnimateurActivity.class);
+                intent.putExtra(EtablissementsParAnimateurActivity.EXTRA_ANIMATEUR_ID, model.getId());
+                v.getContext().startActivity(intent);
             }
         });
         // Bind Post to ViewHolder, setting OnClickListener for the star button

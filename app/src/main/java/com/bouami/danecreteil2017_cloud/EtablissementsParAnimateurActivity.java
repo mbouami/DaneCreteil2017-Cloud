@@ -9,16 +9,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bouami.danecreteil2017_cloud.Adapter.EtablissementRecyclerViewAdapter;
 import com.bouami.danecreteil2017_cloud.Adapter.MyRecycleAdapter;
+import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
+import com.bouami.danecreteil2017_cloud.Parametres.mesparametres;
 import com.bouami.danecreteil2017_cloud.ViewHolder.EtablissementViewHolder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +36,10 @@ public class EtablissementsParAnimateurActivity extends AppCompatActivity {
     private static final String TAG = "EtablissementsParAnimateurActivity";
     public static final String EXTRA_ANIMATEUR_ID = "animateur_id";
     private String mAnimateurId;
-    private static final List<Etablissement> ITEMS= new ArrayList<Etablissement>();
+    private String mDepartement;
+    private JSONObject mDonneesJson;
+    private mesparametres mMesParametres;
+    private static List<Etablissement> mListedesetabs= new ArrayList<Etablissement>();
     private RecyclerView recyclerView;
     private MyRecycleAdapter<Etablissement,EtablissementViewHolder> mAdapter;
     private TextView nomanimateur;
@@ -56,37 +66,27 @@ public class EtablissementsParAnimateurActivity extends AppCompatActivity {
         if (mAnimateurId == null) {
             throw new IllegalArgumentException("Must pass EXTRA_ANIMATEUR_KEY");
         }
-//        Query etabsparanimateurQuery = getQueryEtabsParAnim(mDatabase,mAnimateurKey);
-//        mAdapter = new EtablissementRecyclerViewAdapter(Etablissement.class, R.layout.item_etablissement,
-//                EtablissementViewHolder.class, listedesetablissements);
-//        recyclerView.setAdapter(mAdapter);
-
+        mDepartement = MainActivity.departementencours;
+        mDonneesJson = MainActivity.mesdonneesjson;
+        mMesParametres = MainActivity.mesparametres;
+        try {
+            Animateur animateur = new Animateur(mDonneesJson.getJSONObject("animateurs").getJSONObject(mDepartement).getJSONObject(mAnimateurId));
+            nomanimateur.setText(animateur.getGenre()+ " "+animateur.getPrenom()+ " "+animateur.getNom());
+            telanimateur.setText(animateur.getTel());
+            mailanimateur.setText(animateur.getEmail());
+            mListedesetabs = mMesParametres.getListeEtablissementsCreteilParAnimateur(mDonneesJson,mDepartement,mAnimateurId);
+            mAdapter = new EtablissementRecyclerViewAdapter(Etablissement.class, R.layout.item_etablissement,
+                    EtablissementViewHolder.class, mListedesetabs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        recyclerView.setAdapter(mAdapter);
     }
-//
-//    public Query getQueryEtabsParAnim(DatabaseReference databaseReference, String animId) {
-//        return databaseReference.child("etablissements").orderByChild("animateurs/"+animkey).equalTo(true);
-//    }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        mAnimateurReference = FirebaseDatabase.getInstance().getReference().child("animateurs").child(mAnimateurKey);
-//        postListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Animateur animateur = dataSnapshot.getValue(Animateur.class);
-//                nomanimateur.setText(animateur.getGenre()+ " "+animateur.getPrenom()+ " "+animateur.getNom());
-//                telanimateur.setText(animateur.getTel());
-//                mailanimateur.setText(animateur.getEmail());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Getting Post failed, log a message
-//                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-//            }
-//        };
-//        mAnimateurReference.addListenerForSingleValueEvent(postListener);
+
     }
 
     @Override
@@ -97,8 +97,40 @@ public class EtablissementsParAnimateurActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_animateurs, menu);
+        MenuItem menusearch = menu.findItem(R.id.animateurrechercher);
+        SearchView searchview = (SearchView) menusearch.getActionView();
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener (){
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Log.d(TAG, "setOnQueryTextListener: onQueryTextSubmit " + query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<Etablissement> listedesetablissementsfiltre = new ArrayList<Etablissement>();
+                for (Etablissement etab : mListedesetabs) {
+                    if (etab.getNom().toLowerCase().contains(newText.toLowerCase())) {
+                        listedesetablissementsfiltre.add(etab);
+                    }
+                }
+                mAdapter = new EtablissementRecyclerViewAdapter(Etablissement.class,
+                        R.layout.item_etablissement, EtablissementViewHolder.class, listedesetablissementsfiltre) {
+                };
+                recyclerView.setAdapter(mAdapter);
+                return false;
+            }
+        });
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mAdapter != null) {
+            mAdapter.cleanup();
+        }
+    }
 
 }

@@ -18,7 +18,7 @@ import java.util.List;
  * Created by mbouami on 16/09/2017.
  */
 
-public abstract class EtablissementRecyclerViewAdapter extends MyRecycleAdapter<Etablissement,EtablissementViewHolder> {
+public class EtablissementRecyclerViewAdapter extends MyRecycleAdapter<Etablissement,EtablissementViewHolder> {
 
     private static final String TAG = "EtablissementRecyclerViewAdapter";
     private final List<Etablissement> mValues;
@@ -68,16 +68,16 @@ public abstract class EtablissementRecyclerViewAdapter extends MyRecycleAdapter<
                 view.getContext().startActivity(mesfonctions.createPhoneIntent(etablissementselectionne.getTel()));
             }
         });
-        addreferentetablissement = (FloatingActionButton) parent.getRootView().findViewById(R.id.addreferent);
-        addreferentetablissement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                view.getContext().startActivity(mesfonctions.createPhoneIntent(etablissementselectionne.getTel()));
-//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_KEY, "0931192R");
-//                view.getContext().startActivity(intent);
-            }
-        });
+//        addreferentetablissement = (FloatingActionButton) parent.getRootView().findViewById(R.id.addreferent);
+//        addreferentetablissement.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                view.getContext().startActivity(mesfonctions.createPhoneIntent(etablissementselectionne.getTel()));
+////                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
+////                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_KEY, "0931192R");
+////                view.getContext().startActivity(intent);
+//            }
+//        });
         return super.onCreateViewHolder(parent, viewType);
     }
 
