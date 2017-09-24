@@ -12,4 +12,6 @@
     <string name="title_activity_new_referent">NewReferentActivity</string>
     <string name="title_activity_etablissements_par_animateur">EtablissementsParAnimateurActivity
     </string>
+    <string name="title_activity_personnel_par_etablissement">PersonnelParEtablissementActivity
+    </string>
 </resources>

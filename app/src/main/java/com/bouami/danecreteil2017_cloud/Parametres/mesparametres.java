@@ -153,6 +153,19 @@ public class mesparametres {
         return etabsparanim;
     }
 
+    @SuppressLint("LongLogTag")
+    public List<Personnel> getListePersonnelsCreteilParEtablissement(JSONObject donnees, String depart, String idetablissement) throws JSONException {
+        List<Personnel> personnesparetab = new ArrayList<Personnel>();
+        JSONObject listepersonnels = donnees.getJSONObject("etablissements").getJSONObject(depart).getJSONObject(idetablissement).getJSONObject("personnels");
+        JSONObject personnelsjson = donnees.getJSONObject("personnel").getJSONObject(depart);
+        Iterator<String> keys = listepersonnels.keys();
+        while (keys.hasNext()) {
+            String keypersonnel = keys.next();
+            Personnel lepersonnel = new Personnel(personnelsjson.getJSONObject(keypersonnel));
+            personnesparetab.add(lepersonnel);
+        }
+        return personnesparetab;
+    }
 
     public List<Animateur> getListeAnimateurs(JSONObject donnees, String depart) {
         listedesanimateurs = new ArrayList<Animateur>();

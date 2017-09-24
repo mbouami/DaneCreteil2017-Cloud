@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
 import com.bouami.danecreteil2017_cloud.Parametres.mesparametres;
+import com.bouami.danecreteil2017_cloud.PersonnelParEtablissementActivity;
 import com.bouami.danecreteil2017_cloud.R;
 import com.bouami.danecreteil2017_cloud.ViewHolder.EtablissementViewHolder;
 
@@ -99,9 +100,9 @@ public class EtablissementRecyclerViewAdapter extends MyRecycleAdapter<Etablisse
             @Override
             public void onClick(View v) {
                 // Launch PostDetailActivity
-//                Intent intent = new Intent(v.getContext(), PersonnelParEtablissementActivity.class);
-//                intent.putExtra(PersonnelParEtablissementActivity.EXTRA_ETABLISSEMENT_KEY, etablissementKey);
-//                v.getContext().startActivity(intent);
+                Intent intent = new Intent(v.getContext(), PersonnelParEtablissementActivity.class);
+                intent.putExtra(PersonnelParEtablissementActivity.EXTRA_ETABLISSEMENT_ID, model.getId());
+                v.getContext().startActivity(intent);
             }
         });
 
