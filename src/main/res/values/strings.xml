@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">DaneCreteil 2017-2018</string>
+    <string name="title_activity_animateurs">Liste des Animateurs</string>
+    <string name="title_activity_etablissements">Liste des Etablissements</string>
+    <string name="search_hint">Rechercher un animateur</string>
+    <string name="search_label_animateur">RechercherAnimateur</string>
+    <string name="heading_my_animateurs">Animateurs</string>
+    <string name="heading_my_etablissements">Etablissements</string>
+    <string name="heading_my_personnel">Personnel</string>
+    <string name="menu_logout">Quitter</string>
+    <string name="menu_reinitialisation">Réinitialiser les données</string>
+    <string name="title_activity_new_referent">NewReferentActivity</string>
+    <string name="title_activity_etablissements_par_animateur">Etablissements Par Animateur
+    </string>
+    <string name="title_activity_personnel_par_etablissement">Personnel Par Etablissement
+    </string>
+    <string name="label_recherche_discipline">Discipline</string>
+</resources>
