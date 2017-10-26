@@ -1,6 +1,5 @@
 package com.bouami.danecreteil2017_cloud;
 
-import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,10 +23,7 @@ import com.bouami.danecreteil2017_cloud.Fragments.EtablissementListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
-import com.bouami.danecreteil2017_cloud.Parametres.mesparametres;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
