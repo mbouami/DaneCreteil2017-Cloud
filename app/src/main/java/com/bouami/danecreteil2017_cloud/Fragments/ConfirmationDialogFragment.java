@@ -21,16 +21,18 @@ import org.json.JSONObject;
 public class ConfirmationDialogFragment extends DialogFragment {
     private String TAG = "ConfirmationDialogFragment";
     private Cursor mcursor;
+    private String mMessage;
 
-    public ConfirmationDialogFragment(Cursor cursor) {
+    public ConfirmationDialogFragment(Cursor cursor,String message) {
         mcursor = cursor;
+        mMessage = message;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.dialog_confirmation_suppression)
+        builder.setMessage(mMessage)
                 .setPositiveButton(R.string.Oui, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!

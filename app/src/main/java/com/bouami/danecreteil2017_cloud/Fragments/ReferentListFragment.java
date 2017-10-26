@@ -105,7 +105,8 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View view) {
-                ConfirmationDialogFragment confirmation = new ConfirmationDialogFragment(mcursor);
+                final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+                ConfirmationDialogFragment confirmation = new ConfirmationDialogFragment(mcursor,"Voulez-vous supprimer le référent " +nomreferent);
                 confirmation.show(getFragmentManager(),"suppression_referent");
             }
         });
