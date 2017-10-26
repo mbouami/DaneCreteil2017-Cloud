@@ -22,9 +22,37 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
+    <RadioGroup
+        android:id="@+id/choixdepartement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appbarlayout"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/sem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="77" />
+
+        <RadioButton
+            android:id="@+id/ssd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="93" />
+
+        <RadioButton
+            android:id="@+id/vdm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="94" />
+    </RadioGroup>
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbarlayout" />
+        android:layout_below="@id/choixdepartement" />
 </RelativeLayout>

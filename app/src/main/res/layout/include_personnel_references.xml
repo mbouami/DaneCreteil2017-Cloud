@@ -40,4 +40,11 @@
         android:textAlignment="center"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:textStyle="bold|italic" />
+    <TextView
+        android:id="@+id/etablissement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        style="@style/Base.TextAppearance.AppCompat.Small"
+        android:textStyle="bold|italic" />
 </LinearLayout>

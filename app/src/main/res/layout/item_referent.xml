@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <include
-                layout="@layout/include_personnel_references"
+                layout="@layout/include_referent_references"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"

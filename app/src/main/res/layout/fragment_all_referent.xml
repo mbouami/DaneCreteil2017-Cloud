@@ -9,31 +9,57 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/etablissement_list"
+            android:id="@+id/referent_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:clipToPadding="false"
             android:padding="5dp"
             android:scrollbars="vertical"
-            tools:listitem="@layout/item_etablissement"/>
+            tools:listitem="@layout/item_referent"/>
     </FrameLayout>
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/mailetablissement"
+        android:id="@+id/mailreferent"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:visibility="invisible"
         app:srcCompat="@android:drawable/ic_dialog_email"
         android:layout_margin="16dp"/>
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/phoneetablissement"
+        android:id="@+id/phonereferent"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:visibility="invisible"
         app:srcCompat="@android:drawable/ic_dialog_dialer"
         android:layout_margin="16dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addreferent"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:srcCompat="@android:drawable/ic_input_add" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/deletereferent"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/ic_delete"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/editreferent"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_edit"/>
 </RelativeLayout>

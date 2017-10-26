@@ -14,4 +14,5 @@
     </string>
     <string name="title_activity_personnel_par_etablissement">PersonnelParEtablissementActivity
     </string>
+    <string name="label_recherche_discipline">Discipline</string>
 </resources>

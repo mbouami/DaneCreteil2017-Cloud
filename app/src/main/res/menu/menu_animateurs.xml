@@ -5,7 +5,7 @@
     tools:context="com.bouami.danecreteil2017.AnimateursActivity">
 
         <item
-            android:id="@+id/animateurrechercher"
+            android:id="@+id/rechercher"
             app:actionViewClass="android.support.v7.widget.SearchView"
             android:icon="@android:drawable/ic_menu_search"
             android:title="Rechercher un animateur"

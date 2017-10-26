@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.bouami.danecreteil2017_cloud.EtablissementsParAnimateurActivity"
+    tools:context="com.bouami.danecreteil2017_cloud.DetailAnimateurActivity"
     tools:showIn="@layout/activity_etablissements_par_animateur">
 
 </android.support.constraint.ConstraintLayout>

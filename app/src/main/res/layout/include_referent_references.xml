@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/zone_reference_etablissement"
+    android:id="@+id/zone_reference_referent"
     android:orientation="vertical">
 
     <TextView
@@ -12,18 +12,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:gravity="center_horizontal"
+        android:textAlignment="center"
         android:textStyle="bold|italic" />
 
     <TextView
-        android:id="@+id/tel"
+        android:id="@+id/statut"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textAlignment="center"
         android:textStyle="bold|italic" />
+
     <TextView
-        android:id="@+id/fax"
+        android:id="@+id/tel"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,23 +40,15 @@
         android:textAlignment="center"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:textStyle="bold|italic" />
-
     <TextView
-        android:id="@+id/adresse"
+        android:id="@+id/discipline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:textStyle="bold|italic" />
     <TextView
-        android:id="@+id/ville"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        style="@style/Base.TextAppearance.AppCompat.Small"
-        android:textStyle="bold|italic" />
-    <TextView
-        android:id="@+id/animateur"
+        android:id="@+id/etablissement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
