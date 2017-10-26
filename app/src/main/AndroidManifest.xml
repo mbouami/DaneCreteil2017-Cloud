@@ -64,7 +64,18 @@
         <activity
             android:name=".NewReferentActivity"
             android:label="@string/title_activity_new_referent"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/paramètres"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ParametresActivity"
+            android:label="@string/paramètres"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

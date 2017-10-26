@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/choix_departement">
+    <ListPreference
+        android:title="@string/pref_depart_label"
+        android:key="@string/pref_depart_key"
+        android:defaultValue="@string/pref_depart_default"
+        android:entryValues="@array/pref_depart_values"
+        android:entries="@array/pref_depart_options">
+    </ListPreference>
+    </PreferenceCategory>
+
+<!--    <PreferenceCategory android:title="@string/paramètres">
+            <CheckBoxPreference
+                android:key="checkbox_preference"
+                android:title="@string/pref_depart_77"
+                android:summary="@string/pref_depart_label_77" />
+    </PreferenceCategory>-->
+</PreferenceScreen>

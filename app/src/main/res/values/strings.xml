@@ -15,4 +15,18 @@
     <string name="title_activity_personnel_par_etablissement">PersonnelParEtablissementActivity
     </string>
     <string name="label_recherche_discipline">Discipline</string>
+    <string name="pref_depart_key">departement</string>
+    <string name="pref_depart_label">Département</string>
+    <string name="pref_depart_default">93</string>
+
+    <string name="pref_depart_label_93">Seine Saint Denis</string>
+    <string name="pref_depart_label_94">Val de Marne</string>
+    <string name="pref_depart_label_77">Seine et Marne</string>
+
+    <string name="pref_depart_77" translatable="false">77</string>
+    <string name="pref_depart_93" translatable="false">93</string>
+    <string name="pref_depart_94" translatable="false">94</string>
+    <string name="paramètres">Paramètres</string>
+    <string name="choix_departement">Département par défault</string>
+
 </resources>

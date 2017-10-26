@@ -1,6 +1,11 @@
 package com.bouami.danecreteil2017_cloud;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -31,16 +37,32 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "danecreteil2017_cloud";
-    StringRequest stringRequest; // Assume this exists.
-    RequestQueue mRequestQueue;  // Assume this exists.
-    List<Animateur> listedesanimateurspardepart = new ArrayList<Animateur>();
+    RequestQueue mRequestQueue;
     private MyFragmentPagerAdapter mPagerAdapter = null;
     private ViewPager mViewPager;
     private TabLayout mtabLayout;
-    public static JSONObject mesdonneesjson = new JSONObject();
     public static String departementencours = "";
     public static Fragment[] mFragments;
     public static String[] mFragmentNames;
+    private RadioGroup choixdepartement;
+
+    private void SelectDepart() {
+        departementencours = getPreferredDepart(this);
+        switch (departementencours) {
+            case "77" :
+                RadioButton selection77 = (RadioButton) findViewById(R.id.sem);
+                selection77.setChecked(true);
+                break;
+            case "93" :
+                RadioButton selection93 = (RadioButton) findViewById(R.id.ssd);
+                selection93.setChecked(true);
+                break;
+            case "94" :
+                RadioButton selection94 = (RadioButton) findViewById(R.id.vdm);
+                selection94.setChecked(true);
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mtabLayout = (TabLayout) findViewById(R.id.tabs);
-        RadioGroup choixdepartement = (RadioGroup) this.findViewById(R.id.choixdepartement);
-        departementencours = null;
+        SelectDepart();
+        choixdepartement = (RadioGroup) this.findViewById(R.id.choixdepartement);
+//        String departementpardefault = getPreferredDepart(this);
+        departementencours = getPreferredDepart(this);
         mFragments = new Fragment[] {
                 AnimateurListFragment.newInstance(departementencours) ,
                 EtablissementListFragment.newInstance(departementencours,Long.valueOf(0)),
@@ -80,10 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 departement = (RadioButton) findViewById(selectedId);
                 departementencours = departement.getText().toString();
                 try {
-//                    if(mPagerAdapter!=null){
-////                                        Log.d(TAG, "onCheckedChanged : "+departementencours+"---"+mesdonneesjson);
-//                        mPagerAdapter.notifyDataSetChanged();;
-//                    }
                     mFragments[0] = AnimateurListFragment.newInstance(departementencours);
                     mFragments[1] = EtablissementListFragment.newInstance(departementencours,Long.valueOf(0));
                     mFragments[2] = PersonnelListFragment.newInstance(departementencours,Long.valueOf(0));
@@ -113,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, NombreetablissementCursor.getCount()+" établissements sont déjà enregistrés dans la Base de données.");
         }
-
     }
+
 
     @Override
     protected void onStart() {
@@ -132,8 +152,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_animateurs, menu);
+        getMenuInflater().inflate(R.menu.menu_accueil, menu);
         return true;
+    }
+
+    public static String getPreferredDepart(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_depart_key),
+                context.getString(R.string.pref_depart_default));
     }
 
     @Override
@@ -147,7 +173,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout :
                 Log.d(TAG, "AccueilActivity: action_logout activé");
                 return true;
-            case R.id.rechercher:
+            case R.id.action_settings:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+//                Intent i = new Intent(this, ParametresActivity.class);
+//                startActivity(i);
                 return true;
             case R.id.action_reinitialisation :
 
