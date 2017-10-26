@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -18,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationDialogFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Discipline;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
@@ -1320,5 +1323,10 @@ public class DaneContract {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
         mRequestQueue.add(jsObjRequest);
+    }
+
+    public static void confirmationOperation(FragmentManager manager, Cursor cursor, String message, String tag) {
+        DialogFragment newFragment = new ConfirmationDialogFragment(cursor,message);
+        newFragment.show(manager, tag);
     }
 }

@@ -106,8 +106,7 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             @Override
             public void onClick(View view) {
                 final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-                ConfirmationDialogFragment confirmation = new ConfirmationDialogFragment(mcursor,"Voulez-vous supprimer le référent " +nomreferent);
-                confirmation.show(getFragmentManager(),"suppression_referent");
+                DaneContract.confirmationOperation(getFragmentManager(),mcursor,"Voulez-vous supprimer le référent " +nomreferent,"suppression_referent");
             }
         });
 
