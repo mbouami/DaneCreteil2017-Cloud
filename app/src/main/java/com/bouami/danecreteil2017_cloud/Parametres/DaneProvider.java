@@ -1097,7 +1097,7 @@ public class DaneProvider extends ContentProvider {
             case REFERENT_PAR_ID:
                 String idreferent = ReferentEntry.getReferentFromUri(uri);
                 rowsDeleted = db.delete(
-                        ReferentEntry.TABLE_NAME, ReferentEntry._ID, new String[]{idreferent});
+                        ReferentEntry.TABLE_NAME, ReferentEntry._ID + " = ?", new String[]{idreferent});
                 break;
             case ANIMATEURS:
                 rowsDeleted = db.delete(
