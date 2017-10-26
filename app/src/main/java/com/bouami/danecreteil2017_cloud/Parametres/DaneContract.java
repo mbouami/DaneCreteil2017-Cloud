@@ -40,15 +40,15 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+//    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
-//    public static final int DATABASE_VERSION = 6;
-    public static final int DATABASE_VERSION = 20;
+    public static final int DATABASE_VERSION = 6;
+//    public static final int DATABASE_VERSION = 20;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();

@@ -27,10 +27,12 @@ public class ReferentsRecyclerViewAdapter extends MyRecycleAdapter<Referent,Refe
     private final String TAG = "ReferentsRecyclerViewAdapter";
     private FloatingActionButton mailreferent, phonereferent, addreferent, deletereferent, editreferent;
     private int ligneselectionnee = 0;
+    Boolean mModifier;
 
     public ReferentsRecyclerViewAdapter(Class<Referent> mModelClass, @LayoutRes int mModelLayout, Class<ReferentViewHolder> mViewHolderClass,
-                                        Cursor mcursor) {
+                                        Cursor mcursor,Boolean modifier) {
         super(mModelClass, mModelLayout, mViewHolderClass, mcursor);
+        mModifier = modifier;
         swapCursor(mcursor);
     }
 
@@ -61,44 +63,44 @@ public class ReferentsRecyclerViewAdapter extends MyRecycleAdapter<Referent,Refe
         editreferent = (FloatingActionButton) parent.getRootView().findViewById(R.id.editreferent);
 
 //        addreferent = (FloatingActionButton) parent.getRootView().findViewById(R.id.addreferent);
-        deletereferent.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-//                mCursor.moveToPosition(ligneselectionnee);
-                final String idreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-                final String idbasereferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
-                final String nomreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-                Log.d(TAG, "Suppression du référent : "+nomreferent+"("+idreferent+"-"+idbasereferent+")");
-                JSONObject jsonreferent = new JSONObject();
-                try {
-                    jsonreferent.put("id",idreferent);
-                    jsonreferent.put("idbase",idbasereferent);
-                    DaneContract.deleteReferent(parent.getRootView().getContext(),jsonreferent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-//                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
-//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
-//                view.getContext().startActivity(intent);
-            }
-        });
-        editreferent.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-//                mCursor.moveToPosition(ligneselectionnee);
-                final String idreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-                final String nomreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-                Log.d(TAG, "edition du référent : "+nomreferent+"("+idreferent+")");
-//                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
-//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
-//                view.getContext().startActivity(intent);
-            }
-        });
+//        deletereferent.setOnClickListener(new View.OnClickListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onClick(View view) {
+////                mCursor.moveToPosition(ligneselectionnee);
+//                final String idreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+//                final String idbasereferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+//                final String nomreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+//                Log.d(TAG, "Suppression du référent : "+nomreferent+"("+idreferent+"-"+idbasereferent+")");
+//                JSONObject jsonreferent = new JSONObject();
+//                try {
+//                    jsonreferent.put("id",idreferent);
+//                    jsonreferent.put("idbase",idbasereferent);
+//                    DaneContract.deleteReferent(parent.getRootView().getContext(),jsonreferent);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+////                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
+////                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
+////                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
+////                view.getContext().startActivity(intent);
+//            }
+//        });
+//        editreferent.setOnClickListener(new View.OnClickListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onClick(View view) {
+////                mCursor.moveToPosition(ligneselectionnee);
+//                final String idreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+//                final String nomreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+//                Log.d(TAG, "edition du référent : "+nomreferent+"("+idreferent+")");
+////                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
+////                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
+////                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
+////                view.getContext().startActivity(intent);
+//            }
+//        });
         return super.onCreateViewHolder(parent, viewType);
     }
 
@@ -118,7 +120,7 @@ public class ReferentsRecyclerViewAdapter extends MyRecycleAdapter<Referent,Refe
                 if (phonereferent.getVisibility()==View.INVISIBLE && !telreferent.equals("")) {
                     phonereferent.setVisibility(View.VISIBLE);
                 }
-                if (cursor.getCount()>0) {
+                if (mModifier) {
                     deletereferent.setVisibility(View.VISIBLE);
                     editreferent.setVisibility(View.VISIBLE);
                 }

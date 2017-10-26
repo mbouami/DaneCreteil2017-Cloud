@@ -86,8 +86,8 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
         mRecycler = (RecyclerView) rootView.findViewById(R.id.referent_list);
         mRecycler.setHasFixedSize(true);
         addreferent = (FloatingActionButton) rootView.findViewById(R.id.addreferent);
-//        deletereferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.deletereferent);
-//        editreferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editreferent);
+        deletereferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.deletereferent);
+        editreferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editreferent);
 
         if (mEtablissementId!=0) {
             addreferent.setVisibility(View.VISIBLE);
@@ -99,6 +99,29 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
                 Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
                 intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, mEtablissementId);
                 view.getContext().startActivity(intent);
+            }
+        });
+        deletereferent.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onClick(View view) {
+                ConfirmationDialogFragment confirmation = new ConfirmationDialogFragment(mcursor);
+                confirmation.show(getFragmentManager(),"suppression_referent");
+            }
+        });
+
+        editreferent.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onClick(View view) {
+                final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+                final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+                final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+                Log.d(TAG, "edition du référent : "+nomreferent+"("+idreferent+"-"+idbasereferent+")");
+//                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
+//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
+//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
+//                view.getContext().startActivity(intent);
             }
         });
 //        deletereferent.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +171,12 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
 //        mManager.setReverseLayout(true);
 //        mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
-        mAdapter = new ReferentsRecyclerViewAdapter(Referent.class,R.layout.item_referent,ReferentViewHolder.class,mcursor);
+        if (mEtablissementId!=0) {
+            addreferent.setVisibility(View.VISIBLE);
+            mAdapter = new ReferentsRecyclerViewAdapter(Referent.class,R.layout.item_referent,ReferentViewHolder.class,mcursor,true);
+        } else {
+            mAdapter = new ReferentsRecyclerViewAdapter(Referent.class,R.layout.item_referent,ReferentViewHolder.class,mcursor,false);
+        }
         mRecycler.setAdapter(mAdapter);
     }
 

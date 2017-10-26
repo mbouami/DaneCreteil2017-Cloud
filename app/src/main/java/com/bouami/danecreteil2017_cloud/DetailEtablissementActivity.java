@@ -47,7 +47,6 @@ public class DetailEtablissementActivity extends AppCompatActivity {
     @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate : ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personnel_par_etablissement);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
