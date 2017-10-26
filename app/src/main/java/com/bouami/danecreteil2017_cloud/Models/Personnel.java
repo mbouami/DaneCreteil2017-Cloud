@@ -1,5 +1,7 @@
 package com.bouami.danecreteil2017_cloud.Models;
 
+import android.content.ContentValues;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,8 +22,35 @@ public class Personnel {
     public String tel;
     public String statut;
 
+    public ContentValues perso = new ContentValues();
+
     public Personnel() {
 
+    }
+
+    public Personnel(JSONObject person) throws JSONException {
+        this.id = person.get("id").toString();
+        this.genre = person.get("genre").toString();
+        this.nom = person.get("nom").toString();
+        this.prenom = person.get("prenom").toString();
+        this.tel = person.get("tel").toString();
+        this.email = person.get("email").toString();
+        this.statut = person.get("statut").toString();
+
+    }
+
+    public ContentValues getPerso() {
+        return perso;
+    }
+
+    public void setPerso(Long idetab, Boolean sync) {
+        this.perso.put("nom", this.genre+" "+this.nom+" "+this.prenom);
+        this.perso.put("tel", this.tel);
+        this.perso.put("statut", this.statut);
+        this.perso.put("email", this.email);
+        this.perso.put("personnel_id", this.id);
+        this.perso.put("etablissement_id", idetab);
+        this.perso.put("synchroniser", sync);
     }
 
     public Personnel(String id, String genre, String nom, String prenom, String tel, String email, String statut) {
@@ -41,16 +70,6 @@ public class Personnel {
         this.tel = tel;
         this.email = email;
         this.statut = statut;
-    }
-
-    public Personnel(JSONObject person) throws JSONException {
-            this.id = person.get("id").toString();
-            this.genre = person.get("genre").toString();
-            this.nom = person.get("nom").toString();
-            this.prenom = person.get("prenom").toString();
-            this.tel = person.get("tel").toString();
-            this.email = person.get("email").toString();
-            this.statut = person.get("statut").toString();
     }
 
     public Map<String, Object> toMap(String etabkey) {

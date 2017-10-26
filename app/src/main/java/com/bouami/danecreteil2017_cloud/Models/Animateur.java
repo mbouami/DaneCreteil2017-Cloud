@@ -1,5 +1,8 @@
 package com.bouami.danecreteil2017_cloud.Models;
 
+import android.content.ContentValues;
+import android.util.Base64;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +19,8 @@ public class Animateur {
     public String email;
     public String photo;
 
+    public ContentValues anim = new ContentValues();
+
     public Animateur() {
 
     }
@@ -28,9 +33,24 @@ public class Animateur {
         this.tel = anim.get("tel").toString();
         this.email = anim.get("email").toString();
         this.photo = anim.get("photo").toString();
+
     }
 
-    public Animateur(String id,String genre, String nom, String prenom, String tel, String email, String photo) {
+    public ContentValues getAnim() {
+        return anim;
+    }
+
+    public void setAnim(Long iddepart) {
+        this.anim.put("nom", this.genre+" "+this.nom+" "+this.prenom);
+        this.anim.put("tel", this.tel);
+        this.anim.put("photo", Base64.decode(this.photo, Base64.DEFAULT));
+//        this.anim.put("photo", this.photo);
+        this.anim.put("email", this.email);
+        this.anim.put("animateur_id", this.id);
+        this.anim.put("departement_id", iddepart);
+    }
+
+    public Animateur(String id, String genre, String nom, String prenom, String tel, String email, String photo) {
         this.id = id;
         this.genre = genre;
         this.nom = nom;

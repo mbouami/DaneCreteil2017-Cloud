@@ -1,12 +1,17 @@
 package com.bouami.danecreteil2017_cloud.ViewHolder;
 
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
+import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import com.bouami.danecreteil2017_cloud.R;
 
 /**
@@ -14,13 +19,14 @@ import com.bouami.danecreteil2017_cloud.R;
  */
 
 public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
+
+    private final String TAG = "AnimateurViewHolder";
     public final TextView mNomView;
     public final TextView mTelView;
     public final TextView mEmailView;
     public final ImageView mPhotoView;
     public final ImageView mListeEtabsView;
     public final LinearLayout mZoneReferenceAnimateur;
-    public Animateur mItem;
     public final View mView;
 
     public AnimateurViewHolder(View itemView) {
@@ -34,10 +40,23 @@ public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
         mView = itemView;
     }
 
-    public void bindToAnimateur(Animateur animateur,View.OnClickListener starClickListener) {
-        mNomView.setText(animateur.getGenre() + " " + animateur.getPrenom() + " " + animateur.getNom());
-        mTelView.setText(animateur.getTel());
-        mEmailView.setText(animateur.getEmail());
+    public void bindToAnimateur(Cursor cursor, View.OnClickListener starClickListener) {
+        String nomanimateur  = cursor.getString(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_NOM));
+        String telanimateur = cursor.getString(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_TEL));
+        String emailanimateur = cursor.getString(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
+        Bitmap photoanim = null;
+        if (cursor.getBlob(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_PHOTO)) != null){
+            final byte[] imageanim = cursor.getBlob(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_PHOTO));
+            photoanim = BitmapFactory.decodeByteArray(imageanim, 0, imageanim.length);
+        }
+//        Log.d(TAG,"Image : "+cursor.getBlob(cursor.getColumnIndexOrThrow(DaneContract.AnimateurEntry.COLUMN_PHOTO))+"---"+nomanimateur+"---");
+//        byte[] byteArrayPhoto = cursor.getBlob(cursor.getColumnIndexOrThrow(DaneContract.AnimateurEntry.COLUMN_PHOTO));
+//        Bitmap bm = BitmapFactory.decodeByteArray(byteArrayPhoto, 0 ,byteArrayPhoto.length);
+//        Log.d(TAG,"Taile Image : "+byteArrayPhoto.length+"---"+nomanimateur+"---");
+        mNomView.setText(nomanimateur);
+        mTelView.setText(telanimateur);
+        mEmailView.setText(emailanimateur);
+        if (photoanim!=null) mPhotoView.setImageBitmap(photoanim);
         mZoneReferenceAnimateur.setOnClickListener(starClickListener);
     }
 

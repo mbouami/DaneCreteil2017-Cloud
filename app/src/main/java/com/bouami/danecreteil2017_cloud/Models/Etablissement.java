@@ -1,9 +1,12 @@
 package com.bouami.danecreteil2017_cloud.Models;
 
+import android.content.ContentValues;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -24,8 +27,11 @@ public class Etablissement {
     public Map<String, Boolean> animateurs = new HashMap<>();
     public Map<String, Boolean> personnel = new HashMap<>();
 
+    public ContentValues etab = new ContentValues();
+    public ContentValues vil = new ContentValues();
 
-//    @Exclude
+
+    //    @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
@@ -60,9 +66,21 @@ public class Etablissement {
         this.adresse = adresse;
     }
 
+//    public Etablissement(JSONObject etab) throws JSONException {
+//        this.id = etab.get("id").toString();
+////        this.rne = etab.get("rne").toString();
+//        this.type = etab.get("type").toString();
+//        this.nom = etab.get("nom").toString();
+//        this.fax = etab.get("fax").toString();
+//        this.tel = etab.get("tel").toString();
+//        this.email = etab.get("email").toString();
+//        this.cp = etab.get("cp").toString();
+//        this.ville = etab.get("ville").toString();
+//        this.adresse = etab.get("adresse").toString();
+//    }
+
     public Etablissement(JSONObject etab) throws JSONException {
         this.id = etab.get("id").toString();
-//        this.rne = etab.get("rne").toString();
         this.type = etab.get("type").toString();
         this.nom = etab.get("nom").toString();
         this.fax = etab.get("fax").toString();
@@ -71,12 +89,54 @@ public class Etablissement {
         this.cp = etab.get("cp").toString();
         this.ville = etab.get("ville").toString();
         this.adresse = etab.get("adresse").toString();
+        if (!etab.isNull("animateurs")) {
+            Iterator<String> keysanimateurs = etab.getJSONObject("animateurs").keys();
+            while (keysanimateurs.hasNext()) {
+                this.animateurs.put(keysanimateurs.next(), true);
+            }
+        } else {
+            this.animateurs = null;
+        }
+        if (!etab.isNull("personnels")) {
+            Iterator<String> keyspersonnel = etab.getJSONObject("personnels").keys();
+            while (keyspersonnel.hasNext()) {
+                this.personnel.put(keyspersonnel.next(), true);
+            }
+        } else {
+            this.personnel = null;
+        }
     }
 
+    public ContentValues getEtab() {
+        return etab;
+    }
 
-    public Etablissement(String id, String rne,String type, String nom, String fax, String tel,
+    public void setEtab(Long idville,Long idanimateur) {
+        this.etab.put("nom", this.nom);
+        this.etab.put("rne", this.email.isEmpty()?null:this.email.substring(3,this.email.indexOf("@")));
+        this.etab.put("tel", this.tel);
+        this.etab.put("fax", this.fax);
+        this.etab.put("adresse", this.adresse);
+        this.etab.put("ville_id", idville);
+        this.etab.put("animateur_id", idanimateur);
+        this.etab.put("email", this.email);
+        this.etab.put("type", this.type);
+        this.etab.put("etablissement_id", this.id);
+    }
+
+    public ContentValues getVil() {
+        return vil;
+    }
+
+    public void setVil(Long iddepart) {
+        this.vil.put("nom",this.ville);
+        this.vil.put("cp",this.cp);
+        this.vil.put("departement_id",iddepart);
+    }
+
+    public Etablissement(String id, String rne, String type, String nom, String fax, String tel,
                          String email, String cp, String ville, String adresse, Map<String,
-                         Boolean> animateurs, Map<String, Boolean> personnel) {
+            Boolean> animateurs, Map<String, Boolean> personnel) {
         this.id = id;
         this.rne = rne;
         this.type = type;

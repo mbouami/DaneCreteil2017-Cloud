@@ -1,56 +1,51 @@
 package com.bouami.danecreteil2017_cloud.Adapter;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bouami.danecreteil2017_cloud.EtablissementsParAnimateurActivity;
-import com.bouami.danecreteil2017_cloud.MainActivity;
+import com.bouami.danecreteil2017_cloud.DetailAnimateurActivity;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
-import com.bouami.danecreteil2017_cloud.Models.Etablissement;
+import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import com.bouami.danecreteil2017_cloud.R;
 import com.bouami.danecreteil2017_cloud.ViewHolder.AnimateurViewHolder;
-
-import com.bouami.danecreteil2017_cloud.Parametres.mesparametres;
-
-import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by mbouami on 15/09/2017.
  */
 
 public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,AnimateurViewHolder> {
-    private final List<Animateur> mValues;
+    private Cursor mCursor;
     private final String TAG = "AnimateursRecyclerViewAdapter";
-    private Animateur animateurselectionne;
+    private int ligneselectionnee = 0;
     private FloatingActionButton mailanimateur;
     private FloatingActionButton phoneanimateur;
 
-    public AnimateursRecyclerViewAdapter(Class<Animateur> mModelClass,@LayoutRes int mModelLayout, Class<AnimateurViewHolder> mViewHolderClass,
-                                          List<Animateur> msnapshots) {
-        super(mModelClass, mModelLayout, mViewHolderClass, msnapshots);
-        mValues = msnapshots;
-    }
+//    private boolean mDataValid;
+//    private int mRowIDColumn;
 
+    public AnimateursRecyclerViewAdapter(Class<Animateur> mModelClass, @LayoutRes int mModelLayout, Class<AnimateurViewHolder> mViewHolderClass,
+                                         Cursor mcursor) {
+        super(mModelClass, mModelLayout, mViewHolderClass, mcursor);
+        swapCursor(mcursor);
+    }
 
     @Override
     public AnimateurViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.include_animateur_references, parent, false);
-        final mesparametres mesfonctions = new mesparametres();
         mailanimateur = (FloatingActionButton) parent.getRootView().findViewById(R.id.mailanimateur);
         mailanimateur.setVisibility(View.INVISIBLE);
         mailanimateur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.getContext().startActivity(mesfonctions.createMailIntent(animateurselectionne.getEmail()));
+                mCursor.moveToPosition(ligneselectionnee);
+                String emailanim = mCursor.getString(mCursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
+                view.getContext().startActivity(DaneContract.createMailIntent(emailanim));
             }
         });
         phoneanimateur = (FloatingActionButton) parent.getRootView().findViewById(R.id.phoneanimateur);
@@ -58,7 +53,9 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
         phoneanimateur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.getContext().startActivity(mesfonctions.createPhoneIntent(animateurselectionne.getTel()));
+                mCursor.moveToPosition(ligneselectionnee);
+                String telanim = mCursor.getString(mCursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_TEL));
+                view.getContext().startActivity(DaneContract.createPhoneIntent(telanim));
 
             }
         });
@@ -66,35 +63,27 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
     }
 
     @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
-
-    @Override
-    public Animateur getItem(int position) {
-        return super.getItem(position);
-    }
-
-    @Override
-    protected void populateViewHolder(AnimateurViewHolder viewHolder, final Animateur model, int position) {
+    protected void populateViewHolder(AnimateurViewHolder viewHolder, final Cursor cursor, final int position) {
         viewHolder.mListeEtabsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Launch PostDetailActivity
-                Intent intent = new Intent(v.getContext(), EtablissementsParAnimateurActivity.class);
-                intent.putExtra(EtablissementsParAnimateurActivity.EXTRA_ANIMATEUR_ID, model.getId());
+                cursor.moveToPosition(position);
+                Long idanim = Long.valueOf(DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry._ID));
+                Intent intent = new Intent(v.getContext(), DetailAnimateurActivity.class);
+                intent.putExtra(DetailAnimateurActivity.EXTRA_ANIMATEUR_ID, idanim);
                 v.getContext().startActivity(intent);
             }
         });
         // Bind Post to ViewHolder, setting OnClickListener for the star button
-        viewHolder.bindToAnimateur(model, new View.OnClickListener() {
+        viewHolder.bindToAnimateur(cursor, new View.OnClickListener() {
             @Override
             public void onClick(View starView) {
-                // Need to write to both places the post is stored
-//                Log.d(TAG, "bindToAnimateur:" + model.getId() + " - " + model.getNom());
-                animateurselectionne = model;
+                ligneselectionnee = position;
+                mCursor = cursor;
                 if (mailanimateur.getVisibility()==View.INVISIBLE) {
                     mailanimateur.setVisibility(View.VISIBLE);
+                }
+                if (phoneanimateur.getVisibility()==View.INVISIBLE) {
                     phoneanimateur.setVisibility(View.VISIBLE);
                 }
             }

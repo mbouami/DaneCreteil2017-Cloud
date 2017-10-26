@@ -1,5 +1,6 @@
 package com.bouami.danecreteil2017_cloud.ViewHolder;
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
+import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import com.bouami.danecreteil2017_cloud.R;
 
 /**
@@ -15,6 +17,7 @@ import com.bouami.danecreteil2017_cloud.R;
 
 public class EtablissementViewHolder extends RecyclerView.ViewHolder {
 
+    private static final String TAG = "EtablissementViewHolder";
     public final TextView mNomView;
     public final TextView mTelView;
     public final TextView mFaxView;
@@ -44,13 +47,21 @@ public class EtablissementViewHolder extends RecyclerView.ViewHolder {
         mView = itemView;
     }
 
-    public void bindToEtablissement(Etablissement etablissement,View.OnClickListener starClickListener) {
-        mNomView.setText(etablissement.getType() + " " + etablissement.getNom());
-        mTelView.setText("Tél : "+etablissement.getTel());
-        mFaxView.setText("Fax : "+etablissement.getFax());
-        mEmailView.setText(etablissement.getEmail());
-        mAdresseView.setText(etablissement.getAdresse());
-        mVilleView.setText(etablissement.getCp() + " " + etablissement.getVille());
+    public void bindToEtablissement(Cursor cursor, View.OnClickListener starClickListener) {
+        String nometab = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.EtablissementEntry.COLUMN_TYPE))
+                +" "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.EtablissementEntry.COLUMN_NOM));
+        String teletab = "Tél : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.EtablissementEntry.COLUMN_TEL)) ;
+        String faxetab = "Fax : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.EtablissementEntry.COLUMN_TEL));
+        String emailetab = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.EtablissementEntry.COLUMN_EMAIL));
+        String adresseetab = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.EtablissementEntry.COLUMN_ADRESSE));
+        String ville = cursor.getString(cursor.getColumnIndexOrThrow("CPVILLE"))+" "+
+                cursor.getString(cursor.getColumnIndexOrThrow("NOMVILLE"));
+        mNomView.setText(nometab);
+        mTelView.setText(teletab);
+        mFaxView.setText(faxetab);
+        mEmailView.setText(emailetab);
+        mAdresseView.setText(adresseetab);
+        mVilleView.setText(ville);
         mZoneReferenceEtablissement.setOnClickListener(starClickListener);
     }
 
