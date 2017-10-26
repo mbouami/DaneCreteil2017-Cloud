@@ -1,29 +1,29 @@
 package com.bouami.danecreteil2017_cloud;
 
+import android.database.Cursor;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bouami.danecreteil2017_cloud.Adapter.MyFragmentPagerAdapter;
+import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.AnimateurListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.EtablissementListFragment;
-import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
-import com.bouami.danecreteil2017_cloud.Models.Etablissement;
+import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,88 +34,99 @@ public class MainActivity extends AppCompatActivity {
     StringRequest stringRequest; // Assume this exists.
     RequestQueue mRequestQueue;  // Assume this exists.
     List<Animateur> listedesanimateurspardepart = new ArrayList<Animateur>();
-    public List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
-    public List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
-    private FragmentPagerAdapter mPagerAdapter;
+    private MyFragmentPagerAdapter mPagerAdapter = null;
     private ViewPager mViewPager;
-
-    public static mesparametres mesparametres;
+    private TabLayout mtabLayout;
     public static JSONObject mesdonneesjson = new JSONObject();
     public static String departementencours = "";
-
+    public static Fragment[] mFragments;
+    public static String[] mFragmentNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mesparametres = new mesparametres();
-//        ProgressDialog mDialog = ProgressDialog.show(MainActivity.this,"Chargement en cours", "Patienter ...", true, true);
         mRequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, mesparametres.BASE_URL_EXPORT, null, new Response.Listener<JSONObject>() {
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mtabLayout = (TabLayout) findViewById(R.id.tabs);
+        RadioGroup choixdepartement = (RadioGroup) this.findViewById(R.id.choixdepartement);
+        departementencours = null;
+        mFragments = new Fragment[] {
+                AnimateurListFragment.newInstance(departementencours) ,
+                EtablissementListFragment.newInstance(departementencours,Long.valueOf(0)),
+                PersonnelListFragment.newInstance(departementencours, Long.valueOf(0)),
+                ReferentListFragment.newInstance(departementencours, Long.valueOf(0)),
+        };
+        mFragmentNames = new String[] {
+                "Animateurs",
+                "Etablissements",
+                "Personnel",
+                "Référents Numériques"
+        };
+        try {
+            mPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),mFragments,mFragmentNames);
+            mViewPager.setAdapter(mPagerAdapter);
+            mtabLayout.setupWithViewPager(mViewPager);
+            mViewPager.setCurrentItem(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        choixdepartement.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            private RadioButton departement;
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                final int ongletencours = mViewPager.getCurrentItem();
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+                departement = (RadioButton) findViewById(selectedId);
+                departementencours = departement.getText().toString();
+                try {
+//                    if(mPagerAdapter!=null){
+////                                        Log.d(TAG, "onCheckedChanged : "+departementencours+"---"+mesdonneesjson);
+//                        mPagerAdapter.notifyDataSetChanged();;
+//                    }
+                    mFragments[0] = AnimateurListFragment.newInstance(departementencours);
+                    mFragments[1] = EtablissementListFragment.newInstance(departementencours,Long.valueOf(0));
+                    mFragments[2] = PersonnelListFragment.newInstance(departementencours,Long.valueOf(0));
+                    mFragments[3] = ReferentListFragment.newInstance(departementencours,Long.valueOf(0));
+                    mFragmentNames[0]="Animateurs du "+departementencours;
+                    mFragmentNames[1]="Etablissements du "+departementencours;
+                    mFragmentNames[2]="Personnel du "+departementencours;
+                    mFragmentNames[3]="Référents Numériques du "+departementencours;
+                    mViewPager.setAdapter(mPagerAdapter);
+                    mViewPager.setCurrentItem(ongletencours);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                    @Override
-                    public void onResponse(final JSONObject response) {
-                        mesdonneesjson = response;
-                        departementencours = "93";
-                        // Create the adapter that will return a fragment for each section
-                        try {
-                            mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-                                private final Fragment[] mFragments = new Fragment[] {
-                                        new AnimateurListFragment(mesparametres.getListeAnimateursCreteil(mesdonneesjson,departementencours)),
-                                        new EtablissementListFragment(mesparametres.getListeEtablissementsCreteil(mesdonneesjson,departementencours)),
-                                        new PersonnelListFragment(mesparametres.getListePersonnelCreteil(mesdonneesjson,departementencours))
-                                };
-                                private final String[] mFragmentNames = new String[] {
-                                        getString(R.string.heading_my_animateurs),
-                                        getString(R.string.heading_my_etablissements),
-                                        getString(R.string.heading_my_personnel)
-                                };
-                                @Override
-                                public Fragment getItem(int position) {
-                                    return mFragments[position];
-                                }
-                                @Override
-                                public int getCount() {
-                                    return mFragments.length;
-                                }
-                                @Override
-                                public CharSequence getPageTitle(int position) {
-                                    return mFragmentNames[position];
-                                }
-                            };
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        mViewPager = (ViewPager) findViewById(R.id.container);
-                        mViewPager.setAdapter(mPagerAdapter);
-                        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-                        tabLayout.setupWithViewPager(mViewPager);
-//                        ProgressDialog.d
-                    }
-                }, new Response.ErrorListener() {
+            }
+        });
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        Log.d(TAG, "That didn't work!");
-                    }
-                });
-//        stringRequest.setTag(TAG);
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
-        mRequestQueue.add(jsObjRequest);
+        Cursor NombreetablissementCursor = getBaseContext().getContentResolver().query(
+                DaneContract.EtablissementEntry.CONTENT_URI,
+                new String[]{DaneContract.EtablissementEntry._ID},
+                null,
+                null,
+                null);
+        if (!(NombreetablissementCursor.getCount() > 0)) {
+            Log.d(TAG, "Base de données non présente : ");
+            DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT);
+        } else {
+            Log.d(TAG, NombreetablissementCursor.getCount()+" établissements sont déjà enregistrés dans la Base de données.");
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
     protected void onStop () {
         super.onStop();
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(TAG);
-        }
+//        if (mRequestQueue != null) {
+//            mRequestQueue.cancelAll(TAG);
+//        }
     }
 
     @Override
@@ -136,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout :
                 Log.d(TAG, "AccueilActivity: action_logout activé");
                 return true;
-            case R.id.animateurrechercher :
+            case R.id.rechercher:
                 return true;
             case R.id.action_reinitialisation :
 
