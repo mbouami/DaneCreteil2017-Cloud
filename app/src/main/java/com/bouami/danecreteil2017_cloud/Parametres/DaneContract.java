@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.ReferentDialogFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Discipline;
 import com.bouami.danecreteil2017_cloud.Models.Etablissement;
@@ -31,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -43,15 +46,15 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-//    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
-    public static final int DATABASE_VERSION = 6;
-//    public static final int DATABASE_VERSION = 20;
+//    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 20;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -492,7 +495,6 @@ public class DaneContract {
         disciplineCursor.close();
         return disciplineId;
     }
-
 
     static long addVille(Context mContext, ContentValues laville) {
         long villeId = 0;
@@ -1287,6 +1289,7 @@ public class DaneContract {
         ));
         mRequestQueue.add(jsObjRequest);
     }
+
     public static void deleteReferent(final Context mcontext, JSONObject referent) {
 //        Log.d(TAG, "writeNewReferent : "+referent.toString());
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
@@ -1302,7 +1305,7 @@ public class DaneContract {
                                 Uri muri = DaneContract.ReferentEntry.buildReferentUri(Long.parseLong(response.getString("id")));
 //                                int deletedUri = mcontext.getContentResolver().delete(muri, ReferentEntry._ID,new String[]{response.getString("id")});
                                 int deletedUri = mcontext.getContentResolver().delete(muri, null,null);
-                                Log.d(TAG,"référent supprimé : "+deletedUri);
+//                                Log.d(TAG,"référent supprimé : "+deletedUri);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -1328,5 +1331,10 @@ public class DaneContract {
     public static void confirmationOperation(FragmentManager manager, Cursor cursor, String message, String tag) {
         DialogFragment newFragment = new ConfirmationDialogFragment(cursor,message);
         newFragment.show(manager, tag);
+    }
+
+    public static void NewReferentDialog(FragmentManager manager,Long idetab, String tag) {
+        DialogFragment referentFragment = ReferentDialogFragment.newInstance(idetab);
+        referentFragment.show(manager, tag);
     }
 }

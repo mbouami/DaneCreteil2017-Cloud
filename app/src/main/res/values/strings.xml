@@ -31,5 +31,7 @@
     <string name="dialog_confirmation_suppression">Voulez-vous confirmer la suppression ?</string>
     <string name="Oui">Oui</string>
     <string name="Non">Non</string>
+    <string name="valider">Valider</string>
+    <string name="cancel">Quitter</string>
 
 </resources>

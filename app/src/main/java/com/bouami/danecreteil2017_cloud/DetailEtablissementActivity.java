@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -21,13 +23,15 @@ import android.widget.TextView;
 
 import com.bouami.danecreteil2017_cloud.Adapter.MyFragmentPagerAdapter;
 import com.bouami.danecreteil2017_cloud.Adapter.PersonnelsRecyclerViewAdapter;
+import com.bouami.danecreteil2017_cloud.Fragments.NoticeDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
-public class DetailEtablissementActivity extends AppCompatActivity {
+public class DetailEtablissementActivity extends AppCompatActivity implements  NoticeDialogFragment.NoticeDialogListener {
     private static final String TAG = "DetailEtablissementActivity";
     public static final String EXTRA_ETABLISSEMENT_ID = "etablissement_id";
     public static Long mEtablissementId;
@@ -43,6 +47,8 @@ public class DetailEtablissementActivity extends AppCompatActivity {
     public static MyFragmentPagerAdapter mPagerAdapter = null;
     private ViewPager mViewPager;
     private TabLayout mtabLayout;
+    public static Fragment[] mFragments;
+    public static String[] mFragmentNames;
 
     @SuppressLint("LongLogTag")
     @Override
@@ -88,11 +94,11 @@ public class DetailEtablissementActivity extends AppCompatActivity {
         mtabLayout = (TabLayout) findViewById(R.id.tabs);
         try {
 //            Long idetab = Long.valueOf(DaneContract.getValueFromCursor(mcursor,DaneContract.EtablissementEntry._ID));
-            Fragment[] mFragments = new Fragment[] {
+            mFragments = new Fragment[] {
                     PersonnelListFragment.newInstance(null,mEtablissementId ),
                     ReferentListFragment.newInstance(null,mEtablissementId)
             };
-            String[] mFragmentNames = new String[] {
+            mFragmentNames = new String[] {
                     "Personnel",
                     "Référents Numériques"
             };
@@ -143,4 +149,23 @@ public class DetailEtablissementActivity extends AppCompatActivity {
         return true;
     }
 
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, JSONObject jsonreferent) {
+//        Log.d(TAG, "Création du référent : "+jsonreferent);
+        DaneContract.writeNewReferent(this,jsonreferent);
+        mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
+        mFragments[1] = ReferentListFragment.newInstance(null,mEtablissementId);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(1);
+//        Snackbar.make(this, "La création du référent à réussie", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+//        Log.d(TAG, "onDialogNegativeClick : ");
+    }
 }

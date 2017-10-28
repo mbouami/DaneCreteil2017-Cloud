@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -96,9 +97,12 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             @Override
             public void onClick(View view) {
 //                Log.d(TAG, "setOnClickListener : "+ DetailEtablissementActivity.mEtablissementId);
-                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, mEtablissementId);
-                view.getContext().startActivity(intent);
+//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
+//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, mEtablissementId);
+//                view.getContext().startActivity(intent);
+//                DaneContract.NewReferentDialog(getFragmentManager(),mEtablissementId,"new_referent");
+                DialogFragment dialog =  NoticeDialogFragment.newInstance(mEtablissementId);
+                dialog.show(getFragmentManager(), "NoticeDialogFragment");
             }
         });
         deletereferent.setOnClickListener(new View.OnClickListener() {
@@ -282,5 +286,4 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
-
 }

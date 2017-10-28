@@ -1,5 +1,6 @@
 package com.bouami.danecreteil2017_cloud.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
  * Created by mbouami on 26/10/2017.
  */
 
+@SuppressLint("ValidFragment")
 public class ConfirmationDialogFragment extends DialogFragment {
     private String TAG = "ConfirmationDialogFragment";
     private Cursor mcursor;
