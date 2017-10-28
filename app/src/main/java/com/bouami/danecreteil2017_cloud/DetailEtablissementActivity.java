@@ -2,6 +2,7 @@ package com.bouami.danecreteil2017_cloud;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.bouami.danecreteil2017_cloud.Adapter.MyFragmentPagerAdapter;
 import com.bouami.danecreteil2017_cloud.Adapter.PersonnelsRecyclerViewAdapter;
+import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.NoticeDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
@@ -31,7 +33,7 @@ import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DetailEtablissementActivity extends AppCompatActivity implements  NoticeDialogFragment.NoticeDialogListener {
+public class DetailEtablissementActivity extends AppCompatActivity implements  NoticeDialogFragment.NoticeDialogListener, ConfirmationDialogFragment.ConfirmationDialogListener {
     private static final String TAG = "DetailEtablissementActivity";
     public static final String EXTRA_ETABLISSEMENT_ID = "etablissement_id";
     public static Long mEtablissementId;
@@ -167,5 +169,29 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 //        Log.d(TAG, "onDialogNegativeClick : ");
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onDialogDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent) {
+        Uri muri = null;
+        try {
+            muri = DaneContract.ReferentEntry.buildReferentUri(Long.parseLong(jsonreferent.getString("id")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (this.getContentResolver().delete(muri, null,null)>0) {
+//        DaneContract.deleteReferent(this,jsonreferent);
+            Log.d(TAG, "Suppression du référent : "+jsonreferent);
+            mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
+            mFragments[1] = ReferentListFragment.newInstance(null,mEtablissementId);
+            mViewPager.setAdapter(mPagerAdapter);
+            mViewPager.setCurrentItem(1);
+        }
+    }
+
+    @Override
+    public void onDialogQuitterClick(ConfirmationDialogFragment dialog) {
+
     }
 }

@@ -49,18 +49,19 @@ public class NoticeDialogFragment extends DialogFragment {
     private EditText mPrenomReferent;
     private EditText mTelReferent;
     private EditText mMailReferent;
-    private View lavue;
+    private String mTitre;
 
     // Use this instance of the interface to deliver action events
     NoticeDialogListener mListener;
 
-    public static NoticeDialogFragment newInstance(Long idetab) {
+    public static NoticeDialogFragment newInstance(Long idetab, String titre) {
 
         NoticeDialogFragment f = new NoticeDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putLong("idetab", idetab);
+        args.putString("titre", titre);
         f.setArguments(args);
         return f;
     }
@@ -84,6 +85,7 @@ public class NoticeDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mEtablissementId = getArguments().getLong("idetab",0);
+        mTitre = getArguments().getString("titre");
         mDisciplineId="";
     }
 
@@ -110,7 +112,7 @@ public class NoticeDialogFragment extends DialogFragment {
         });
         // Pass null as the parent view because its going in the dialog layout
         builder.setIcon(R.drawable.ic_settings_applications_black_24dp)
-                .setTitle("Ajout d'un nouveau référent")
+                .setTitle(mTitre)
                 .setView(viewdialog)
                 // Add action buttons
                 .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {

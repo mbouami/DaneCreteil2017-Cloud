@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.NoticeDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentDialogFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Discipline;
@@ -1291,7 +1292,6 @@ public class DaneContract {
     }
 
     public static void deleteReferent(final Context mcontext, JSONObject referent) {
-//        Log.d(TAG, "writeNewReferent : "+referent.toString());
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, DaneContract.BASE_URL_DELETE_REFERENT, referent, new Response.Listener<JSONObject>() {
@@ -1299,9 +1299,9 @@ public class DaneContract {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.d(TAG,"retour + "+response);
+//                            Log.d(TAG,"retour + "+response);
                             if (response.getBoolean("removed")) {
-                                Log.d(TAG,"référent à supprimer : "+Long.parseLong(response.getString("id")));
+//                                Log.d(TAG,"référent à supprimer : "+Long.parseLong(response.getString("id")));
                                 Uri muri = DaneContract.ReferentEntry.buildReferentUri(Long.parseLong(response.getString("id")));
 //                                int deletedUri = mcontext.getContentResolver().delete(muri, ReferentEntry._ID,new String[]{response.getString("id")});
                                 int deletedUri = mcontext.getContentResolver().delete(muri, null,null);
@@ -1328,13 +1328,23 @@ public class DaneContract {
         mRequestQueue.add(jsObjRequest);
     }
 
-    public static void confirmationOperation(FragmentManager manager, Cursor cursor, String message, String tag) {
-        DialogFragment newFragment = new ConfirmationDialogFragment(cursor,message);
-        newFragment.show(manager, tag);
+//    public static void confirmationOperation(FragmentManager manager, Cursor cursor, String message, String tag) {
+//        DialogFragment newFragment = new ConfirmationDialogFragment(cursor,message);
+//        newFragment.show(manager, tag);
+//    }
+
+    public static void DeleteReferentDialog(FragmentManager manager, String titre, String message, String idreferent, String idbasereferent, String tag) {
+        DialogFragment referentFragment = ConfirmationDialogFragment.newInstance(titre,message,idreferent,idbasereferent);
+        referentFragment.show(manager, tag);
     }
 
     public static void NewReferentDialog(FragmentManager manager,Long idetab, String tag) {
         DialogFragment referentFragment = ReferentDialogFragment.newInstance(idetab);
         referentFragment.show(manager, tag);
+    }
+
+    public static void AjoutReferentDialog(FragmentManager manager,Long idetab,String titre, String tag) {
+        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
+        ajoutreferentFragment.show(manager, tag);
     }
 }
