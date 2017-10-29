@@ -14,6 +14,7 @@ public class DaneDbHelper extends SQLiteOpenHelper {
 
     private final String LOG_TAG = DaneDbHelper.class.getSimpleName();
     private static final String SQL_DELETE_DEPARTEMENTS_TABLE = "DROP TABLE IF EXISTS " + DepartementEntry.TABLE_NAME;
+    private static final String SQL_DELETE_CIVILITES_TABLE = "DROP TABLE IF EXISTS " + CiviliteEntry.TABLE_NAME;
     private static final String SQL_DELETE_DISCIPLINES_TABLE = "DROP TABLE IF EXISTS " + DisciplineEntry.TABLE_NAME;
     private static final String SQL_DELETE_ANIMATEUR_TABLE = "DROP TABLE IF EXISTS " + AnimateurEntry.TABLE_NAME;
     private static final String SQL_DELETE_VILLE_TABLE = "DROP TABLE IF EXISTS " + VilleEntry.TABLE_NAME;
@@ -39,14 +40,25 @@ public class DaneDbHelper extends SQLiteOpenHelper {
                 DisciplineEntry._ID + " INTEGER PRIMARY KEY," +
                 DisciplineEntry.COLUMN_DISCIPLINE_NOM + " TEXT NOT NULL " +
                 " );";
+
+        final String SQL_CREATE_CIVILITE_TABLE = "CREATE TABLE " + CiviliteEntry.TABLE_NAME + " (" +
+                CiviliteEntry._ID + " INTEGER PRIMARY KEY," +
+                CiviliteEntry.COLUMN_CIVILITE_NOM + " TEXT NOT NULL, " +
+                CiviliteEntry.COLUMN_CIVILITE_INTITULE + " TEXT NOT NULL " +
+                " );";
+
         final String SQL_CREATE_ANIMATEUR_TABLE = "CREATE TABLE " + AnimateurEntry.TABLE_NAME + " (" +
                 AnimateurEntry._ID + " INTEGER PRIMARY KEY," +
+                AnimateurEntry.COLUMN_CIVILITE_ID + " INTEGER NOT NULL, " +
                 AnimateurEntry.COLUMN_NOM + " TEXT NOT NULL, " +
+                AnimateurEntry.COLUMN_PRENOM + " TEXT NOT NULL, " +
                 AnimateurEntry.COLUMN_TEL + " TEXT NOT NULL, " +
                 AnimateurEntry.COLUMN_EMAIL + " TEXT NOT NULL, " +
                 AnimateurEntry.COLUMN_PHOTO + " BLOB, " +
                 AnimateurEntry.COLUMN_DEPARTEMENT_ID + " INTEGER NOT NULL, " +
-                AnimateurEntry.COLUMN_ANIMATEUR_ID + " INTEGER NOT NULL " +
+                AnimateurEntry.COLUMN_ANIMATEUR_ID + " INTEGER NOT NULL, " +
+                " FOREIGN KEY (" + AnimateurEntry.COLUMN_CIVILITE_ID + ") REFERENCES " +
+                CiviliteEntry.TABLE_NAME + " (" + CiviliteEntry._ID + ") " +
                 " );";
 
         final String SQL_CREATE_VILLES_TABLE = "CREATE TABLE " + VilleEntry.TABLE_NAME + " (" +
@@ -78,7 +90,9 @@ public class DaneDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_PERSONNEL_TABLE = "CREATE TABLE " + PersonnelEntry.TABLE_NAME + " (" +
                 PersonnelEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                PersonnelEntry.COLUMN_CIVILITE_ID + " INTEGER NOT NULL, " +
                 PersonnelEntry.COLUMN_NOM + " TEXT NOT NULL, " +
+                PersonnelEntry.COLUMN_PRENOM + " TEXT NOT NULL, " +
                 ReferentEntry.COLUMN_TEL + " TEXT, " +
                 ReferentEntry.COLUMN_EMAIL + " TEXT, " +
                 PersonnelEntry.COLUMN_STATUT + " TEXT NOT NULL, " +
@@ -87,11 +101,15 @@ public class DaneDbHelper extends SQLiteOpenHelper {
                 PersonnelEntry.COLUMN_PERSONNEL_ID + " INTEGER NOT NULL, " +
                 " FOREIGN KEY (" + PersonnelEntry.COLUMN_ETABLISSEMENT_ID + ") REFERENCES " +
                 EtablissementEntry.TABLE_NAME + " (" + EtablissementEntry._ID + ") " +
+                " FOREIGN KEY (" + PersonnelEntry.COLUMN_CIVILITE_ID + ") REFERENCES " +
+                CiviliteEntry.TABLE_NAME + " (" + CiviliteEntry._ID + ") " +
                 " );";
 
         final String SQL_CREATE_REFERENTS_TABLE = "CREATE TABLE " + ReferentEntry.TABLE_NAME + " (" +
                 ReferentEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                ReferentEntry.COLUMN_CIVILITE_ID + " INTEGER NOT NULL, " +
                 ReferentEntry.COLUMN_NOM + " TEXT NOT NULL, " +
+                ReferentEntry.COLUMN_PRENOM + " TEXT NOT NULL, " +
                 ReferentEntry.COLUMN_TEL + " TEXT, " +
                 ReferentEntry.COLUMN_EMAIL + " TEXT, " +
                 ReferentEntry.COLUMN_STATUT + " TEXT NOT NULL, " +
@@ -103,8 +121,10 @@ public class DaneDbHelper extends SQLiteOpenHelper {
                 EtablissementEntry.TABLE_NAME + " (" + EtablissementEntry._ID + ") " +
                 " FOREIGN KEY (" + ReferentEntry.COLUMN_DISCIPLINE_ID + ") REFERENCES " +
                 DisciplineEntry.TABLE_NAME + " (" + DisciplineEntry._ID + ") " +
-
+                " FOREIGN KEY (" + ReferentEntry.COLUMN_CIVILITE_ID + ") REFERENCES " +
+                CiviliteEntry.TABLE_NAME + " (" + CiviliteEntry._ID + ") " +
                 " );";
+        sqLiteDatabase.execSQL(SQL_CREATE_CIVILITE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_DEPARTEMENTS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_DISCIPLINES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ANIMATEUR_TABLE);
@@ -123,6 +143,7 @@ public class DaneDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_DELETE_REFERENTS_TABLE);
         sqLiteDatabase.execSQL(SQL_DELETE_DEPARTEMENTS_TABLE);
         sqLiteDatabase.execSQL(SQL_DELETE_DISCIPLINES_TABLE);
+        sqLiteDatabase.execSQL(SQL_DELETE_CIVILITES_TABLE);
         onCreate(sqLiteDatabase);
     }
 }

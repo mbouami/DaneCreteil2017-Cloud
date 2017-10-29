@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 public class Animateur {
     public String id;
-    public String genre;
+    public String civilite;
     public String nom;
     public String prenom;
     public String tel;
@@ -27,7 +27,7 @@ public class Animateur {
 
     public Animateur(JSONObject anim) throws JSONException {
         this.id = anim.get("id").toString();
-        this.genre = anim.get("genre").toString();
+        this.civilite = anim.get("genre").toString();
         this.nom = anim.get("nom").toString();
         this.prenom = anim.get("prenom").toString();
         this.tel = anim.get("tel").toString();
@@ -40,8 +40,10 @@ public class Animateur {
         return anim;
     }
 
-    public void setAnim(Long iddepart) {
-        this.anim.put("nom", this.genre+" "+this.nom+" "+this.prenom);
+    public void setAnim(Long iddepart,Long idcivilite) {
+        this.anim.put("civilite_id", idcivilite);
+        this.anim.put("nom", this.nom);
+        this.anim.put("prenom", this.prenom);
         this.anim.put("tel", this.tel);
         this.anim.put("photo", Base64.decode(this.photo, Base64.DEFAULT));
 //        this.anim.put("photo", this.photo);
@@ -50,9 +52,9 @@ public class Animateur {
         this.anim.put("departement_id", iddepart);
     }
 
-    public Animateur(String id, String genre, String nom, String prenom, String tel, String email, String photo) {
+    public Animateur(String id, String civilite, String nom, String prenom, String tel, String email, String photo) {
         this.id = id;
-        this.genre = genre;
+        this.civilite = civilite;
         this.nom = nom;
         this.prenom = prenom;
         this.tel = tel;
@@ -60,8 +62,8 @@ public class Animateur {
         this.photo = photo;
     }
 
-    public Animateur(String genre, String nom, String prenom, String tel, String email, String photo) {
-        this.genre = genre;
+    public Animateur(String civilite, String nom, String prenom, String tel, String email, String photo) {
+        this.civilite = civilite;
         this.nom = nom;
         this.prenom = prenom;
         this.tel = tel;
@@ -77,12 +79,12 @@ public class Animateur {
         this.id = id;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getCivilite() {
+        return civilite;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setCivilite(String civilite) {
+        this.civilite = civilite;
     }
 
     public String getNom() {
@@ -127,9 +129,9 @@ public class Animateur {
 
     public boolean lememeAnimateur (Animateur anim) {
         boolean lememe = false;
-//        if (anim.genre.equals(this.genre) && anim.nom.equals(this.nom) && anim.prenom.equals(this.prenom)&&
+//        if (anim.civilite.equals(this.civilite) && anim.nom.equals(this.nom) && anim.prenom.equals(this.prenom)&&
 //                anim.tel.equals(this.tel)&&anim.email.equals(this.email)&&anim.photo.equals(this.photo)) lememe=true;
-        if (anim.genre.equals(this.genre) && anim.nom.equals(this.nom) && anim.prenom.equals(this.prenom)) lememe=true;
+        if (anim.civilite.equals(this.civilite) && anim.nom.equals(this.nom) && anim.prenom.equals(this.prenom)) lememe=true;
         return lememe;
     }
 }

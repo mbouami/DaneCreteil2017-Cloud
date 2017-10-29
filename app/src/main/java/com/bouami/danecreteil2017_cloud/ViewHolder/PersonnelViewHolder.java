@@ -42,7 +42,11 @@ public class PersonnelViewHolder extends RecyclerView.ViewHolder {
     public void bindToPersonnel(Cursor cursor, View.OnClickListener starClickListener) {
         String etablissement = "Etablissement : "+cursor.getString(cursor.getColumnIndexOrThrow("NOMETABLISSEMENT"))+" ("+
                 cursor.getString(cursor.getColumnIndexOrThrow("RNEETABLISSEMENT"))+" - "+cursor.getString(cursor.getColumnIndexOrThrow("NOMVILLE"))+")";
-        mNomView.setText(cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_NOM)));
+        String civiliteperso = DaneContract.getValueFromCursor(cursor,"CIVILITE");
+//                cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.CiviliteEntry.COLUMN_CIVILITE_NOM));
+        String nomperso = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_NOM));
+        String prenomperso = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_PRENOM));
+        mNomView.setText(civiliteperso+" "+nomperso+" "+prenomperso);
         mStatutView.setText(cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_STATUT)));
         mTelView.setText("Tél : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_TEL)));
         mEmailView.setText("Email : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_EMAIL)));

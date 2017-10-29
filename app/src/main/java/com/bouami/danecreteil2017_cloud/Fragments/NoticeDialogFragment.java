@@ -6,14 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -36,7 +32,7 @@ public class NoticeDialogFragment extends DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, JSONObject jsonreferent);
+        public void onDialogReferentPositiveClick(DialogFragment dialog, JSONObject jsonreferent);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
     private String TAG = "NoticeDialogFragment";
@@ -94,7 +90,7 @@ public class NoticeDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View viewdialog = inflater.inflate(R.layout.referent_dialog, null);
-        mGenreReferent = (RadioGroup) viewdialog.findViewById(R.id.genre);
+        mGenreReferent = (RadioGroup) viewdialog.findViewById(R.id.civilite);
         mNomReferent = (EditText) viewdialog.findViewById(R.id.nom);
         mPrenomReferent = (EditText) viewdialog.findViewById(R.id.prenom);
         mTelReferent = (EditText) viewdialog.findViewById(R.id.tel);
@@ -123,7 +119,7 @@ public class NoticeDialogFragment extends DialogFragment {
                             final String genre = ((RadioButton) viewdialog.findViewById(mGenreReferent.getCheckedRadioButtonId())).getText().toString();
                             jsonreferent.put("nom",mNomReferent.getText().toString());
                             jsonreferent.put("prenom",mPrenomReferent.getText().toString());
-                            jsonreferent.put("genre",genre);
+                            jsonreferent.put("civilite",genre);
                             jsonreferent.put("tel",mTelReferent.getText().toString());
                             jsonreferent.put("email",mMailReferent.getText().toString());
                             jsonreferent.put("statut","1");
@@ -133,7 +129,7 @@ public class NoticeDialogFragment extends DialogFragment {
                             e.printStackTrace();
                         }
 //                        Log.d(TAG, "enregistrer le référent : "+jsonreferent);
-                        mListener.onDialogPositiveClick(NoticeDialogFragment.this, jsonreferent);
+                        mListener.onDialogReferentPositiveClick(NoticeDialogFragment.this, jsonreferent);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

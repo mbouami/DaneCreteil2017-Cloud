@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class Referent {
 
     public String id;
-    public String genre;
+    public String civilite;
     public String nom;
     public String prenom;
     public String email;
@@ -36,7 +36,7 @@ public class Referent {
 
     public Referent(JSONObject referent) throws JSONException {
         this.id = referent.get("id").toString();
-        this.genre = referent.get("genre").toString();
+        this.civilite = referent.get("genre").toString();
         this.nom = referent.get("nom").toString();
         this.prenom = referent.get("prenom").toString();
         this.tel = referent.get("tel").toString();
@@ -50,8 +50,10 @@ public class Referent {
         return refer;
     }
 
-    public void setRefer(Boolean sync) {
-        this.refer.put("nom", this.genre+" "+this.nom+" "+this.prenom);
+    public void setRefer(Boolean sync,Long idcivilite) {
+        this.refer.put("civilite_id", idcivilite);
+        this.refer.put("nom", this.nom);
+        this.refer.put("prenom", this.prenom);
         this.refer.put("tel", this.tel);
         this.refer.put("statut", this.statut);
         this.refer.put("email", this.email);
@@ -63,9 +65,9 @@ public class Referent {
 
 
 
-    public Referent(String id, String genre, String nom, String prenom, String email, String tel, String statut, String discipline, String etablissement) {
+    public Referent(String id, String civilite, String nom, String prenom, String email, String tel, String statut, String discipline, String etablissement) {
         this.id = id;
-        this.genre = genre;
+        this.civilite = civilite;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -75,8 +77,8 @@ public class Referent {
         this.etablissement = etablissement;
     }
 
-    public Referent(String genre, String nom, String prenom, String email, String tel, String statut, String discipline, String etablissement) {
-        this.genre = genre;
+    public Referent(String civilite, String nom, String prenom, String email, String tel, String statut, String discipline, String etablissement) {
+        this.civilite = civilite;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -94,12 +96,12 @@ public class Referent {
         this.id = id;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getCivilite() {
+        return civilite;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setCivilite(String civilite) {
+        this.civilite = civilite;
     }
 
     public String getNom() {

@@ -58,7 +58,7 @@ public class NewReferentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        mGenreReferent = (RadioGroup) findViewById(R.id.genre);
+        mGenreReferent = (RadioGroup) findViewById(R.id.civilite);
         mNomReferent = (EditText) findViewById(R.id.nom);
         mPrenomReferent = (EditText) findViewById(R.id.prenom);
         mTelReferent = (EditText) findViewById(R.id.tel);
@@ -99,7 +99,7 @@ public class NewReferentActivity extends AppCompatActivity {
         try {
             jsonreferent.put("nom",nom);
             jsonreferent.put("prenom",prenom);
-            jsonreferent.put("genre",genre);
+            jsonreferent.put("civilite",genre);
             jsonreferent.put("tel",tel);
             jsonreferent.put("email",email);
             jsonreferent.put("statut","1");

@@ -41,9 +41,11 @@ public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
     }
 
     public void bindToAnimateur(Cursor cursor, View.OnClickListener starClickListener) {
-        String nomanimateur  = cursor.getString(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_NOM));
-        String telanimateur = cursor.getString(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_TEL));
-        String emailanimateur = cursor.getString(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
+        String civiliteanimateur  = DaneContract.getValueFromCursor(cursor,"CIVILITE");
+        String nomanimateur  = DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry.COLUMN_NOM);
+        String prenomanimateur  = DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry.COLUMN_PRENOM);
+        String telanimateur = DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry.COLUMN_TEL);
+        String emailanimateur = DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry.COLUMN_EMAIL);
         Bitmap photoanim = null;
         if (cursor.getBlob(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_PHOTO)) != null){
             final byte[] imageanim = cursor.getBlob(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_PHOTO));
@@ -53,7 +55,7 @@ public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
 //        byte[] byteArrayPhoto = cursor.getBlob(cursor.getColumnIndexOrThrow(DaneContract.AnimateurEntry.COLUMN_PHOTO));
 //        Bitmap bm = BitmapFactory.decodeByteArray(byteArrayPhoto, 0 ,byteArrayPhoto.length);
 //        Log.d(TAG,"Taile Image : "+byteArrayPhoto.length+"---"+nomanimateur+"---");
-        mNomView.setText(nomanimateur);
+        mNomView.setText(civiliteanimateur+" "+nomanimateur+" "+prenomanimateur);
         mTelView.setText(telanimateur);
         mEmailView.setText(emailanimateur);
         if (photoanim!=null) mPhotoView.setImageBitmap(photoanim);

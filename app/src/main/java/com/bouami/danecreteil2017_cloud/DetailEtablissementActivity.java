@@ -83,7 +83,10 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
             String etab = DaneContract.getValueFromCursor(mcursor,DaneContract.EtablissementEntry.COLUMN_TYPE)
                     + " "+DaneContract.getValueFromCursor(mcursor,DaneContract.EtablissementEntry.COLUMN_NOM);
             Cursor manimateurcursor = DaneContract.getAnimateurFromId(this, Long.valueOf(DaneContract.getValueFromCursor(mcursor,DaneContract.EtablissementEntry.COLUMN_ANIMATEUR_ID)));
-            String nomanimateur = "Animateur DANE : "+(manimateurcursor==null?"":DaneContract.getValueFromCursor(manimateurcursor,DaneContract.AnimateurEntry.COLUMN_NOM));
+            String civiliteanim  = DaneContract.getValueFromCursor(mcursor,"CIVILITE");
+            String nomanim  = DaneContract.getValueFromCursor(mcursor,"NOMANIMATEUR");
+            String prenomanim  = DaneContract.getValueFromCursor(mcursor,"PRENOMANIMATEUR");
+            String nomanimateur = "Animateur DANE : "+(manimateurcursor==null?"":civiliteanim+" "+nomanim+" "+prenomanim);
             nometab.setText(etab);
             teletab.setText("Tél : "+DaneContract.getValueFromCursor(mcursor,DaneContract.EtablissementEntry.COLUMN_TEL));
             faxetab.setText("Fax : "+DaneContract.getValueFromCursor(mcursor,DaneContract.EtablissementEntry.COLUMN_FAX));
@@ -154,7 +157,7 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, JSONObject jsonreferent) {
+    public void onDialogReferentPositiveClick(DialogFragment dialog, JSONObject jsonreferent) {
 //        Log.d(TAG, "Création du référent : "+jsonreferent);
         DaneContract.writeNewReferent(this,jsonreferent);
         mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
@@ -173,7 +176,7 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onDialogDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent) {
+    public void onDialogReferentDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent) {
         Uri muri = null;
         try {
             muri = DaneContract.ReferentEntry.buildReferentUri(Long.parseLong(jsonreferent.getString("id")));
@@ -191,7 +194,7 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
     }
 
     @Override
-    public void onDialogQuitterClick(ConfirmationDialogFragment dialog) {
+    public void onDialogReferentQuitterClick(ConfirmationDialogFragment dialog) {
 
     }
 }

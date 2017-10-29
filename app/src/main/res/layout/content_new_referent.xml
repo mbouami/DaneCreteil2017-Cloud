@@ -23,7 +23,7 @@
             android:textStyle="bold|italic" />
 
         <RadioGroup
-            android:id="@+id/genre"
+            android:id="@+id/civilite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

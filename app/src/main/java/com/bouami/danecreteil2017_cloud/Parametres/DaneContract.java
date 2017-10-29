@@ -55,7 +55,7 @@ public class DaneContract {
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
 //    public static final int DATABASE_VERSION = 6;
-    public static final int DATABASE_VERSION = 20;
+    public static final int DATABASE_VERSION = 31;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -70,32 +70,38 @@ public class DaneContract {
     public static final String PATH_ANIMATEURS = "animateurs";
     public static final String PATH_DEPARTEMENTS = "departements";
     public static final String PATH_DISCIPLINES = "disciplines";
+    public static final String PATH_CIVILITES = "civilites";
     public static final String PATH_VILLES = "villes";
     public static final String PATH_ETABLISSEMENTS = "etablissements";
     public static final String PATH_PERSONNEL = "personnel";
     public static final String PATH_REFERENTS = "referents";
 
     private static final String[] ETABLISSEMENT_COLUMNS = {
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry._ID,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_TYPE,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_TEL,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_FAX,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_EMAIL,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_ADRESSE,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_ANIMATEUR_ID,
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_CP + " AS CPVILLE",
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT"
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry._ID,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_TYPE,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_NOM,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_TEL,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_FAX,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_EMAIL,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_ADRESSE,
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_ANIMATEUR_ID,
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_NOM + " AS NOMANIMATEUR",
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_PRENOM + " AS PRENOMANIMATEUR" ,
+            CiviliteEntry.TABLE_NAME + "." + CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
+            VilleEntry.TABLE_NAME + "." + VilleEntry.COLUMN_VILLE_CP + " AS CPVILLE",
+            VilleEntry.TABLE_NAME + "." + VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
+            DepartementEntry.TABLE_NAME + "." + DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT"
     };
 
     public static final String[] ANIM_COLUMNS = {
-            DaneContract.AnimateurEntry.TABLE_NAME + "." + DaneContract.AnimateurEntry._ID,
-            DaneContract.AnimateurEntry.TABLE_NAME + "." + DaneContract.AnimateurEntry.COLUMN_NOM,
-            DaneContract.AnimateurEntry.TABLE_NAME + "." + DaneContract.AnimateurEntry.COLUMN_TEL,
-            DaneContract.AnimateurEntry.TABLE_NAME + "." + DaneContract.AnimateurEntry.COLUMN_EMAIL,
-            DaneContract.AnimateurEntry.TABLE_NAME + "." + DaneContract.AnimateurEntry.COLUMN_PHOTO,
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT"
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry._ID,
+            CiviliteEntry.TABLE_NAME + "." + CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_NOM,
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_PRENOM,
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_TEL,
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_EMAIL,
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_PHOTO,
+            DepartementEntry.TABLE_NAME + "." + DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT"
     };
 
     public static final String[] DEPARTEMENT_COLUMNS = {
@@ -108,6 +114,44 @@ public class DaneContract {
     public static final String[] DISCIPLINES_COLUMNS = new String[] {
             DaneContract.DisciplineEntry.TABLE_NAME +"."+DaneContract.DisciplineEntry._ID,
             DaneContract.DisciplineEntry.TABLE_NAME +"."+DaneContract.DisciplineEntry.COLUMN_DISCIPLINE_NOM
+    };
+
+    public static final String[] CIVILITES_COLUMNS = new String[] {
+            CiviliteEntry.TABLE_NAME +"."+CiviliteEntry._ID,
+            CiviliteEntry.TABLE_NAME +"."+CiviliteEntry.COLUMN_CIVILITE_NOM,
+            CiviliteEntry.TABLE_NAME +"."+CiviliteEntry.COLUMN_CIVILITE_INTITULE
+    };
+
+    public static final String[] REFERENTS_COLUMNS = {
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry._ID,
+            DaneContract.CiviliteEntry.TABLE_NAME + "." + DaneContract.CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_NOM,
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_PRENOM,
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_TEL,
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_EMAIL,
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_STATUT,
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_REFERENT_ID,
+            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_SYNCHRONISER,
+            DaneContract.DisciplineEntry.TABLE_NAME + "." + DaneContract.DisciplineEntry.COLUMN_DISCIPLINE_NOM + " AS NOMDISCIPLINE",
+            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
+            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
+            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
+            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
+    };
+
+    public static final String[] PERSONNEL_COLUMNS = {
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry._ID,
+            DaneContract.CiviliteEntry.TABLE_NAME + "." + DaneContract.CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_NOM,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_PRENOM,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_TEL,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_EMAIL,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_STATUT,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_SYNCHRONISER,
+            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
+            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
+            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
+            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
     };
 
     public static final class DepartementEntry implements BaseColumns {
@@ -176,6 +220,33 @@ public class DaneContract {
         }
     }
 
+    public static final class CiviliteEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CIVILITES).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CIVILITES;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CIVILITES;
+
+        // Table name
+        public static final String TABLE_NAME = "civilites";
+
+        public static final String COLUMN_CIVILITE_NOM = "civilite";
+        public static final String COLUMN_CIVILITE_INTITULE = "intitule";
+
+        public static Uri buildCivilite() {
+            return CONTENT_URI.buildUpon().build();
+        }
+
+        public static Uri buildCiviliteUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+        public static String getCiviliteFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
 
     public static final class AnimateurEntry implements BaseColumns {
 
@@ -190,7 +261,9 @@ public class DaneContract {
         // Table name
         public static final String TABLE_NAME = "animateurs";
 
+        public static final String COLUMN_CIVILITE_ID = "civilite_id";
         public static final String COLUMN_NOM = "nom";
+        public static final String COLUMN_PRENOM = "prenom";
         public static final String COLUMN_TEL = "tel";
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_PHOTO = "photo";
@@ -345,7 +418,9 @@ public class DaneContract {
         // Column with the foreign key into the location table.
         public static final String COLUMN_PERSONNEL_ID = "personnel_id";
         public static final String COLUMN_ETABLISSEMENT_ID = "etablissement_id";
+        public static final String COLUMN_CIVILITE_ID = "civilite_id";
         public static final String COLUMN_NOM = "nom";
+        public static final String COLUMN_PRENOM = "prenom";
         public static final String COLUMN_TEL = "tel";
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_STATUT = "statut";
@@ -396,7 +471,9 @@ public class DaneContract {
         // Column with the foreign key into the location table.
         public static final String COLUMN_REFERENT_ID = "referent_id";
         public static final String COLUMN_ETABLISSEMENT_ID = "etablissement_id";
+        public static final String COLUMN_CIVILITE_ID = "civilite_id";
         public static final String COLUMN_NOM = "nom";
+        public static final String COLUMN_PRENOM = "prenom";
         public static final String COLUMN_TEL = "tel";
         public static final String COLUMN_EMAIL = "email";
         public static final String COLUMN_STATUT = "statut";
@@ -444,6 +521,7 @@ public class DaneContract {
         mContext.getContentResolver().delete(DaneContract.AnimateurEntry.CONTENT_URI,null,null);
         mContext.getContentResolver().delete(DaneContract.DepartementEntry.CONTENT_URI,null,null);
         mContext.getContentResolver().delete(DaneContract.DisciplineEntry.CONTENT_URI,null,null);
+        mContext.getContentResolver().delete(DaneContract.CiviliteEntry.CONTENT_URI,null,null);
     }
 
     static long addDepartement(Context mContext, String nom, String intitule) {
@@ -495,6 +573,32 @@ public class DaneContract {
         }
         disciplineCursor.close();
         return disciplineId;
+    }
+
+    static long addCivilite(Context mContext, String nom, String intitule) {
+
+        long civiliteId;
+        Cursor civiliteCursor = mContext.getContentResolver().query(
+                DaneContract.CiviliteEntry.CONTENT_URI,
+                new String[]{DaneContract.CiviliteEntry._ID},
+                CiviliteEntry.COLUMN_CIVILITE_NOM + " = ?",
+                new String[]{nom},
+                null);
+        if (civiliteCursor.moveToFirst()) {
+            int civiliteIdIndex = civiliteCursor.getColumnIndex(DaneContract.CiviliteEntry._ID);
+            civiliteId = civiliteCursor.getLong(civiliteIdIndex);
+        } else {
+            ContentValues civiliteValues = new ContentValues();
+            civiliteValues.put(CiviliteEntry.COLUMN_CIVILITE_NOM, nom);
+            civiliteValues.put(CiviliteEntry.COLUMN_CIVILITE_INTITULE, intitule);
+            Uri insertedUri = mContext.getContentResolver().insert(
+                    DaneContract.CiviliteEntry.CONTENT_URI,
+                    civiliteValues
+            );
+            civiliteId = ContentUris.parseId(insertedUri);
+        }
+        civiliteCursor.close();
+        return civiliteId;
     }
 
     static long addVille(Context mContext, ContentValues laville) {
@@ -776,6 +880,35 @@ public class DaneContract {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String getCiviliteFromId(Context mContext,Long idCivilite) {
+        Uri CiviliteUri = DaneContract.CiviliteEntry.buildCiviliteUri(idCivilite);
+        Cursor civilitecursor = mContext.getContentResolver().query(CiviliteUri,
+                CIVILITES_COLUMNS,
+                null,
+                null,
+                null);
+        if (civilitecursor.moveToFirst()){
+            return civilitecursor.getString(civilitecursor.getColumnIndexOrThrow(CiviliteEntry.COLUMN_CIVILITE_NOM));
+        }
+        return null;
+    }
+
+    public static Long getIdCiviliteFromNom(Context mContext,String civilite) {
+        long civiliteId = 0;
+        Cursor civiliteCursor = mContext.getContentResolver().query(
+                DaneContract.CiviliteEntry.CONTENT_URI,
+                new String[]{DaneContract.CiviliteEntry._ID},
+                CiviliteEntry.COLUMN_CIVILITE_NOM + " = ?",
+                new String[]{civilite},
+                null);
+        if (civiliteCursor.moveToFirst()) {
+            int civiliteIdIndex = civiliteCursor.getColumnIndex(DaneContract.CiviliteEntry._ID);
+            civiliteId = civiliteCursor.getLong(civiliteIdIndex);
+        }
+        civiliteCursor.close();
+        return civiliteId;
     }
 
     @SuppressLint("LongLogTag")
@@ -1190,7 +1323,13 @@ public class DaneContract {
         long insertedDepartement = DaneContract.addDepartement(ctx,departement,intitule);
         while (keysanimas.hasNext()){
             anim = new Animateur(donnees.getJSONObject("animateurs").getJSONObject(departement).getJSONObject(keysanimas.next()));
-            anim.setAnim(insertedDepartement);
+            String animciviliteintitule = "Madame";
+            switch (anim.getCivilite()) {
+                case "M" : animciviliteintitule = "Monsieur";break;
+                case "Mr" : animciviliteintitule = "Monsieur";break;
+            }
+            long insertedCivilite = DaneContract.addCivilite(ctx,anim.getCivilite(),animciviliteintitule);
+            anim.setAnim(insertedDepartement,insertedCivilite);
             long insertedanim = DaneContract.addAnimateur(ctx,anim.getAnim());
             Log.d(TAG, "animateur : "+"---"+insertedanim + anim.getAnim().getAsString("nom")+"---"+anim.getTel()+"---"+anim.getAnim().getAsString("email"));
         }
@@ -1204,7 +1343,13 @@ public class DaneContract {
             while (keysreferent.hasNext()){
                 idreferent = keysreferent.next();
                 Referent ref = new Referent(donnees.getJSONObject("referentsnumeriques").getJSONObject(departement).getJSONObject(idreferent));
-                ref.setRefer(true);
+                String referentciviliteintitule = "Madame";
+                switch (ref.getCivilite()) {
+                    case "M" : referentciviliteintitule = "Monsieur";break;
+                    case "Mr" : referentciviliteintitule = "Monsieur";break;
+                }
+                long insertedCivilite = DaneContract.addCivilite(ctx,ref.getCivilite(),referentciviliteintitule);
+                ref.setRefer(true,insertedCivilite);
                 long insertedreferent = DaneContract.addReferent(ctx,ref.getRefer());
                 Log.d(TAG, "referent : " + ref.getRefer().getAsString("nom") + "---"+ref.getRefer().getAsString("statut")+"---"+ref.getRefer().getAsString("etablissement_id"));
             }
@@ -1233,7 +1378,14 @@ public class DaneContract {
             if (lesanimateurs!=null) {
                 String idanims = donnees.getJSONObject("etablissements").getJSONObject(departement).getJSONObject(idetab).getJSONObject("animateurs").keys().next();
                 Animateur anim = new Animateur(donnees.getJSONObject("animateurs").getJSONObject(departement).getJSONObject(idanims));
-                anim.setAnim(insertedDepartement);
+                String animciviliteintitule = "Madame";
+                switch (anim.getCivilite()) {
+                    case "M" : animciviliteintitule = "Monsieur";break;
+                    case "Mr" : animciviliteintitule = "Monsieur";break;
+                    case "M." : animciviliteintitule = "Monsieur";break;
+                }
+                long insertedCivilite = DaneContract.addCivilite(ctx,anim.getCivilite(),animciviliteintitule);
+                anim.setAnim(insertedDepartement,insertedCivilite);
                 insertedanim = DaneContract.addAnimateur(ctx,anim.getAnim());
                 Log.d(TAG, "animateur : " + anim.getAnim().getAsString("nom")+"---"+anim.getId()+"---"+insertedDepartement);
             }
@@ -1244,7 +1396,14 @@ public class DaneContract {
             if (lespersonnel!=null) {
                 for ( String idpersonnel : lespersonnel.keySet() ) {
                     Personnel perso = new Personnel(donnees.getJSONObject("personnel").getJSONObject(departement).getJSONObject(idpersonnel));
-                    perso.setPerso(insertedetab,true);
+                    String persociviliteintitule = "Madame";
+                    switch (perso.getCivilite()) {
+                        case "M" : persociviliteintitule = "Monsieur";break;
+                        case "Mr" : persociviliteintitule = "Monsieur";break;
+                        case "M." : persociviliteintitule = "Monsieur";break;
+                    }
+                    long insertedCivilite = DaneContract.addCivilite(ctx,perso.getCivilite(),persociviliteintitule);
+                    perso.setPerso(insertedetab,insertedCivilite,true);
                     long insertedperso = DaneContract.addPersonnel(ctx,perso.getPerso());
                     Log.d(TAG, "personnel : "+insertedperso+"----" + perso.getPerso().getAsString("nom")+"---"+perso.getPerso().getAsString("statut"));
                 }
@@ -1263,11 +1422,17 @@ public class DaneContract {
                         try {
 //                            Log.d(TAG,"référent : "+response);
                             Referent referentajoute = new Referent(response);
-//                            Log.d(TAG,"référent : "+referentajoute);
+                            String referentciviliteintitule = "Madame";
+                            switch (referentajoute.getCivilite()) {
+                                case "M" : referentciviliteintitule = "Monsieur";break;
+                                case "Mr" : referentciviliteintitule = "Monsieur";break;
+                                case "M." : referentciviliteintitule = "Monsieur";break;
+                            }
+                            long insertedCivilite = DaneContract.addCivilite(mcontext,referentajoute.getCivilite(),referentciviliteintitule);
                             if (!response.getString("id").isEmpty()) {
-                                referentajoute.setRefer(true);
+                                referentajoute.setRefer(true,insertedCivilite);
                             }else {
-                                referentajoute.setRefer(false);
+                                referentajoute.setRefer(false,insertedCivilite);
                             }
                             DaneContract.addReferent(mcontext,referentajoute.getRefer());
                         } catch (JSONException e) {
@@ -1346,5 +1511,26 @@ public class DaneContract {
     public static void AjoutReferentDialog(FragmentManager manager,Long idetab,String titre, String tag) {
         DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
         ajoutreferentFragment.show(manager, tag);
+    }
+
+    public static void EditerReferentDialog(FragmentManager manager,Cursor mcursor,String titre, String tag) {
+        final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+        final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+        final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+        JSONObject jsonreferent = new JSONObject();
+        try {
+            jsonreferent.put("civilite",mcursor.getString(mcursor.getColumnIndex(CiviliteEntry._ID)));
+            jsonreferent.put("nom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_NOM)));
+            jsonreferent.put("prenom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_PRENOM)));
+            jsonreferent.put("tel",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_TEL)));
+            jsonreferent.put("email",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_EMAIL)));
+            jsonreferent.put("statut","1");
+            jsonreferent.put("discipline",mcursor.getString(mcursor.getColumnIndex(DisciplineEntry._ID)));
+            jsonreferent.put("etablissement",mcursor.getString(mcursor.getColumnIndex(EtablissementEntry._ID)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
+//        ajoutreferentFragment.show(manager, tag);
     }
 }

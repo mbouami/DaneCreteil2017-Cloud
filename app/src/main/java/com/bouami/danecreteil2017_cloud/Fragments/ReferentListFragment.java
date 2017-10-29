@@ -52,21 +52,6 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
     private Uri mUri;
     private static final int REFERENTS_PAR_DEPARTEMENT_LOADER = 0;
 
-    private static final String[] REFERENTS_COLUMNS = {
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry._ID,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_NOM,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_TEL,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_EMAIL,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_STATUT,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_REFERENT_ID,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_SYNCHRONISER,
-            DaneContract.DisciplineEntry.TABLE_NAME + "." + DaneContract.DisciplineEntry.COLUMN_DISCIPLINE_NOM + " AS NOMDISCIPLINE",
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
-    };
-
     public static ReferentListFragment newInstance(String champ, Long id) {
         ReferentListFragment f = new ReferentListFragment();
         Bundle args = new Bundle();
@@ -96,13 +81,6 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
         addreferent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Log.d(TAG, "setOnClickListener : "+ DetailEtablissementActivity.mEtablissementId);
-//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, mEtablissementId);
-//                view.getContext().startActivity(intent);
-//                DaneContract.NewReferentDialog(getFragmentManager(),mEtablissementId,"new_referent");
-//                DialogFragment dialog =  NoticeDialogFragment.newInstance(mEtablissementId);
-//                dialog.show(getFragmentManager(), "NoticeDialogFragment");
                 DaneContract.AjoutReferentDialog(getFragmentManager(),mEtablissementId,"Ajout d'un nouveau référent","Ajout_Referent");
             }
         });
@@ -132,42 +110,6 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
 //                view.getContext().startActivity(intent);
             }
         });
-//        deletereferent.setOnClickListener(new View.OnClickListener() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onClick(View view) {
-//                mCursor.moveToPosition(ligneselectionnee);
-//                final String idreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-//                final String nomreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-//                Log.d(TAG, "Suppression du référent : "+nomreferent+"("+idreferent+")");
-//                JSONObject jsonreferent = new JSONObject();
-//                try {
-//                    jsonreferent.put("id",idreferent);
-//                    DaneContract.deleteReferent(parent.getRootView().getContext(),jsonreferent);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-////                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
-////                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-////                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
-////                view.getContext().startActivity(intent);
-//            }
-//        });
-//        editreferent.setOnClickListener(new View.OnClickListener() {
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onClick(View view) {
-//                mCursor.moveToPosition(ligneselectionnee);
-//                final String idreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-//                final String nomreferent = mCursor.getString(mCursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-//                Log.d(TAG, "edition du référent : "+nomreferent+"("+idreferent+")");
-////                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
-////                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-////                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
-////                view.getContext().startActivity(intent);
-//            }
-//        });
         return rootView;
     }
 
@@ -219,7 +161,7 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             String selection = DaneContract.ReferentEntry.TABLE_NAME+"." + DaneContract.ReferentEntry.COLUMN_NOM +
                     " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" = ?";
             return getContext().getContentResolver().query(uri,
-                    REFERENTS_COLUMNS,
+                    DaneContract.REFERENTS_COLUMNS,
                     selection,
                     selectionArgs,
                     sortOrder,
@@ -269,11 +211,11 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             String sortOrder = " NOMVILLE ASC";
             if (mDepartement!=null) {
                 cursorLoader = new CursorLoader(getActivity(),mUri,
-                        REFERENTS_COLUMNS, "NOMDEPARTEMENT = ?",
+                        DaneContract.REFERENTS_COLUMNS, "NOMDEPARTEMENT = ?",
                         new String[]{mDepartement},sortOrder);
             } else {
                 cursorLoader = new CursorLoader(getActivity(),mUri,
-                        REFERENTS_COLUMNS,null ,null,sortOrder);
+                        DaneContract.REFERENTS_COLUMNS,null ,null,sortOrder);
             }
             return cursorLoader;
         }

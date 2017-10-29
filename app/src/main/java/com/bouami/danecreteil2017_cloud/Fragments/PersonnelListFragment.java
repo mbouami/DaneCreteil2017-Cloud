@@ -41,20 +41,6 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
     private Uri mUri;
     private static final int PERSONNEL_PAR_DEPARTEMENT_LOADER = 0;
 
-    private static final String[] PERSONNEL_COLUMNS = {
-            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry._ID,
-            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_NOM,
-            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_TEL,
-            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_EMAIL,
-            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_STATUT,
-            DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_SYNCHRONISER,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
-    };
-
-
     public PersonnelListFragment() {
     }
 
@@ -131,7 +117,7 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
             String selection = DaneContract.PersonnelEntry.TABLE_NAME+"." + DaneContract.PersonnelEntry.COLUMN_NOM +
                     " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" =?";
             return getContext().getContentResolver().query(uri,
-                    PERSONNEL_COLUMNS,
+                    DaneContract.PERSONNEL_COLUMNS,
                     selection,
                     selectionArgs,
                     sortOrder,
@@ -180,11 +166,11 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
             String sortOrder = " NOMVILLE ASC";
             if (mEtablissementId==0) {
                 cursorLoader = new CursorLoader(getActivity(),mUri,
-                        PERSONNEL_COLUMNS, "NOMDEPARTEMENT = ?",
+                        DaneContract.PERSONNEL_COLUMNS, "NOMDEPARTEMENT = ?",
                         new String[]{mDepartement},sortOrder);
             } else {
                 cursorLoader = new CursorLoader(getActivity(),mUri,
-                        PERSONNEL_COLUMNS,null ,null,sortOrder);
+                        DaneContract.PERSONNEL_COLUMNS,null ,null,sortOrder);
             }
             return cursorLoader;
         }

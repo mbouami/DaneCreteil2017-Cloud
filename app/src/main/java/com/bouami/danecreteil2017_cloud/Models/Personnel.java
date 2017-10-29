@@ -15,7 +15,7 @@ import java.util.Map;
 public class Personnel {
 
     public String id;
-    public String genre;
+    public String civilite;
     public String nom;
     public String prenom;
     public String email;
@@ -30,7 +30,7 @@ public class Personnel {
 
     public Personnel(JSONObject person) throws JSONException {
         this.id = person.get("id").toString();
-        this.genre = person.get("genre").toString();
+        this.civilite = person.get("genre").toString();
         this.nom = person.get("nom").toString();
         this.prenom = person.get("prenom").toString();
         this.tel = person.get("tel").toString();
@@ -43,8 +43,10 @@ public class Personnel {
         return perso;
     }
 
-    public void setPerso(Long idetab, Boolean sync) {
-        this.perso.put("nom", this.genre+" "+this.nom+" "+this.prenom);
+    public void setPerso(Long idetab,Long idcivilite, Boolean sync) {
+        this.perso.put("civilite_id",idcivilite);
+        this.perso.put("nom", this.nom);
+        this.perso.put("prenom", this.prenom);
         this.perso.put("tel", this.tel);
         this.perso.put("statut", this.statut);
         this.perso.put("email", this.email);
@@ -53,9 +55,9 @@ public class Personnel {
         this.perso.put("synchroniser", sync);
     }
 
-    public Personnel(String id, String genre, String nom, String prenom, String tel, String email, String statut) {
+    public Personnel(String id, String civilite, String nom, String prenom, String tel, String email, String statut) {
         this.id = id;
-        this.genre = genre;
+        this.civilite = civilite;
         this.nom = nom;
         this.prenom = prenom;
         this.tel = tel;
@@ -63,8 +65,8 @@ public class Personnel {
         this.statut = statut;
     }
 
-    public Personnel(String genre, String nom, String prenom,String tel, String email, String statut) {
-        this.genre = genre;
+    public Personnel(String civilite, String nom, String prenom, String tel, String email, String statut) {
+        this.civilite = civilite;
         this.nom = nom;
         this.prenom = prenom;
         this.tel = tel;
@@ -75,7 +77,7 @@ public class Personnel {
     public Map<String, Object> toMap(String etabkey) {
         HashMap<String, Object> result = new HashMap<>();
         HashMap<String, Object> etab = new HashMap<>();
-        result.put("genre", genre);
+        result.put("civilite", civilite);
         result.put("nom", nom);
         result.put("prenom", prenom);
         result.put("tel", tel);
@@ -93,12 +95,12 @@ public class Personnel {
         this.id = id;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getCivilite() {
+        return civilite;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setCivilite(String civilite) {
+        this.civilite = civilite;
     }
 
     public String getNom() {

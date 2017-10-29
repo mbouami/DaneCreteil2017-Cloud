@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import com.bouami.danecreteil2017_cloud.R;
@@ -25,8 +24,8 @@ import org.json.JSONObject;
 public class ConfirmationDialogFragment extends DialogFragment {
 
     public interface ConfirmationDialogListener {
-        public void onDialogDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent);
-        public void onDialogQuitterClick(ConfirmationDialogFragment dialog);
+        public void onDialogReferentDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent);
+        public void onDialogReferentQuitterClick(ConfirmationDialogFragment dialog);
     }
     private String TAG = "ConfirmationDialogFragment";
     private Cursor mcursor;
@@ -96,12 +95,12 @@ public class ConfirmationDialogFragment extends DialogFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        mListener.onDialogDeleteClick(ConfirmationDialogFragment.this,jsonreferent);
+                        mListener.onDialogReferentDeleteClick(ConfirmationDialogFragment.this,jsonreferent);
                     }
                 })
                 .setNegativeButton(R.string.Non, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogQuitterClick(ConfirmationDialogFragment.this);
+                        mListener.onDialogReferentQuitterClick(ConfirmationDialogFragment.this);
                     }
                 });
         // Create the AlertDialog object and return it

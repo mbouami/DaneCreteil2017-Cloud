@@ -42,14 +42,16 @@ public class ReferentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindToReferent(Cursor cursor, View.OnClickListener starClickListener) {
+        String civiliteref = cursor.getString(cursor.getColumnIndexOrThrow("CIVILITE"));
         String nomref = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_NOM));
+        String prenomref = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_PRENOM));
         String statutref = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_STATUT));
         String etablissement = "Etablissement : "+cursor.getString(cursor.getColumnIndexOrThrow("NOMETABLISSEMENT"))+" ("+
                 cursor.getString(cursor.getColumnIndexOrThrow("RNEETABLISSEMENT"))+" - "+cursor.getString(cursor.getColumnIndexOrThrow("NOMVILLE"))+")";
         String telref = "Tél : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_TEL)) ;
         String emailref = "Email : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_EMAIL));
         String disciplref = "Discipline : "+cursor.getString(cursor.getColumnIndexOrThrow("NOMDISCIPLINE"));
-        mNomView.setText(nomref);
+        mNomView.setText(civiliteref+" "+nomref+" "+prenomref);
         mStatutView.setText(statutref);
         mTelView.setText(telref);
         mEmailView.setText(emailref);

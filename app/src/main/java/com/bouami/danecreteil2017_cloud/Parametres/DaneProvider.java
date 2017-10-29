@@ -8,10 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.bouami.danecreteil2017_cloud.Models.Personnel;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract.*;
 
 import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.CONTENT_AUTHORITY;
 import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.PATH_ANIMATEURS;
+import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.PATH_CIVILITES;
 import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.PATH_DEPARTEMENTS;
 import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.PATH_DISCIPLINES;
 import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.PATH_ETABLISSEMENTS;
@@ -69,6 +71,10 @@ public class DaneProvider extends ContentProvider {
     static final int DISCIPLINE_PAR_NOM = DISCIPLINES+2;
     static final int DISCIPLINES_CONTENANT_NOM = DISCIPLINES+3;
 
+    static final int CIVILITES = 800*DaneContract.NUM_VERSION_SQLITE;
+    static final int CIVILITE_ID = CIVILITES+1;
+    static final int CIVILITE_PAR_NOM = CIVILITES+2;
+
     private static final SQLiteQueryBuilder sAnimateurParDepartementQueryBuilder;
     static{
         sAnimateurParDepartementQueryBuilder = new SQLiteQueryBuilder();
@@ -78,7 +84,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DepartementEntry.TABLE_NAME +
                         "." + DepartementEntry._ID +
                         " = " + AnimateurEntry.TABLE_NAME +
-                        "." + AnimateurEntry.COLUMN_DEPARTEMENT_ID
+                        "." + AnimateurEntry.COLUMN_DEPARTEMENT_ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + AnimateurEntry.TABLE_NAME +
+                        "." + AnimateurEntry.COLUMN_CIVILITE_ID
         );
     }
 
@@ -102,7 +113,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + EtablissementEntry.TABLE_NAME +
                         "." + EtablissementEntry.COLUMN_ANIMATEUR_ID +
                         " = " + AnimateurEntry.TABLE_NAME +
-                        "." + AnimateurEntry._ID
+                        "." + AnimateurEntry._ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + AnimateurEntry.TABLE_NAME +
+                        "." + AnimateurEntry.COLUMN_CIVILITE_ID
         );
     }
 
@@ -120,7 +136,17 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DepartementEntry.TABLE_NAME +
                         "." + DepartementEntry._ID +
                         " = " + VilleEntry.TABLE_NAME +
-                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID
+                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID +
+                        " LEFT JOIN " + AnimateurEntry.TABLE_NAME +
+                        " ON " + EtablissementEntry.TABLE_NAME +
+                        "." + EtablissementEntry.COLUMN_ANIMATEUR_ID +
+                        " = " + AnimateurEntry.TABLE_NAME +
+                        "." + AnimateurEntry._ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + AnimateurEntry.TABLE_NAME +
+                        "." + AnimateurEntry.COLUMN_CIVILITE_ID
 
         );
     }
@@ -144,7 +170,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DepartementEntry.TABLE_NAME +
                         "." + DepartementEntry._ID +
                         " = " + VilleEntry.TABLE_NAME +
-                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID
+                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + PersonnelEntry.TABLE_NAME +
+                        "." + PersonnelEntry.COLUMN_CIVILITE_ID
         );
     }
 
@@ -167,7 +198,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DepartementEntry.TABLE_NAME +
                         "." + DepartementEntry._ID +
                         " = " + VilleEntry.TABLE_NAME +
-                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID
+                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + PersonnelEntry.TABLE_NAME +
+                        "." + PersonnelEntry.COLUMN_CIVILITE_ID
         );
     }
 
@@ -195,7 +231,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DisciplineEntry.TABLE_NAME +
                         "." + DisciplineEntry._ID +
                         " = " + ReferentEntry.TABLE_NAME +
-                        "." + ReferentEntry.COLUMN_DISCIPLINE_ID
+                        "." + ReferentEntry.COLUMN_DISCIPLINE_ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + ReferentEntry.TABLE_NAME +
+                        "." + ReferentEntry.COLUMN_CIVILITE_ID
         );
     }
 
@@ -259,7 +300,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + EtablissementEntry.TABLE_NAME +
                         "." + EtablissementEntry.COLUMN_ANIMATEUR_ID +
                         " = " + AnimateurEntry.TABLE_NAME +
-                        "." + AnimateurEntry._ID
+                        "." + AnimateurEntry._ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + PersonnelEntry.TABLE_NAME +
+                        "." + PersonnelEntry.COLUMN_CIVILITE_ID
         );
     };
 
@@ -278,7 +324,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + ReferentEntry.TABLE_NAME +
                         "." + ReferentEntry.COLUMN_ETABLISSEMENT_ID +
                         " = " + EtablissementEntry.TABLE_NAME +
-                        "." + EtablissementEntry._ID
+                        "." + EtablissementEntry._ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + ReferentEntry.TABLE_NAME +
+                        "." + ReferentEntry.COLUMN_CIVILITE_ID
         );
     };
 
@@ -314,7 +365,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DisciplineEntry.TABLE_NAME +
                         "." + DisciplineEntry._ID +
                         " = " + ReferentEntry.TABLE_NAME +
-                        "." + ReferentEntry.COLUMN_DISCIPLINE_ID
+                        "." + ReferentEntry.COLUMN_DISCIPLINE_ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + ReferentEntry.TABLE_NAME +
+                        "." + ReferentEntry.COLUMN_CIVILITE_ID
         );
     }
 
@@ -336,6 +392,10 @@ public class DaneProvider extends ContentProvider {
         matcher.addURI(authority, PATH_DEPARTEMENTS, DEPARTEMENTS);
         matcher.addURI(authority, PATH_DEPARTEMENTS+ "/*", DEPARTEMENT_ID);
         matcher.addURI(authority, PATH_DEPARTEMENTS+ "/*/nom", DEPARTEMENT_PAR_NOM);
+
+        matcher.addURI(authority, PATH_CIVILITES, CIVILITES);
+        matcher.addURI(authority, PATH_CIVILITES+ "/*", CIVILITE_ID);
+        matcher.addURI(authority, PATH_CIVILITES+ "/*/nom", CIVILITE_PAR_NOM);
 
         matcher.addURI(authority, PATH_DISCIPLINES, DISCIPLINES);
         matcher.addURI(authority, PATH_DISCIPLINES+ "/*", DISCIPLINE_ID);
@@ -751,6 +811,8 @@ public class DaneProvider extends ContentProvider {
                 return AnimateurEntry.CONTENT_ITEM_TYPE;
             case DEPARTEMENTS:
                 return DepartementEntry.CONTENT_TYPE;
+            case CIVILITES:
+                return CiviliteEntry.CONTENT_TYPE;
             case DEPARTEMENT_ID:
                 return DepartementEntry.CONTENT_ITEM_TYPE;
             case DEPARTEMENT_PAR_NOM:
@@ -916,6 +978,18 @@ public class DaneProvider extends ContentProvider {
                 );
                 break;
             }
+            case CIVILITES: {
+                retCursor = mDaneHelper.getReadableDatabase().query(
+                        CiviliteEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             case DISCIPLINES: {
                 retCursor = mDaneHelper.getReadableDatabase().query(
                         DisciplineEntry.TABLE_NAME,
@@ -1047,6 +1121,14 @@ public class DaneProvider extends ContentProvider {
                     throw new android.database.SQLException("Erreur lors de l'ajout du département " + uri);
                 break;
             }
+            case CIVILITES: {
+                long _id = db.insert(CiviliteEntry.TABLE_NAME, null, contentValues);
+                if ( _id > 0 )
+                    returnUri = CiviliteEntry.buildCiviliteUri(_id);
+                else
+                    throw new android.database.SQLException("Erreur lors de l'ajout du département " + uri);
+                break;
+            }
             case DISCIPLINES: {
                 long _id = db.insert(DisciplineEntry.TABLE_NAME, null, contentValues);
                 if ( _id > 0 )
@@ -1106,6 +1188,10 @@ public class DaneProvider extends ContentProvider {
             case DEPARTEMENTS:
                 rowsDeleted = db.delete(
                         DepartementEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case CIVILITES:
+                rowsDeleted = db.delete(
+                        CiviliteEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case DISCIPLINES:
                 rowsDeleted = db.delete(
