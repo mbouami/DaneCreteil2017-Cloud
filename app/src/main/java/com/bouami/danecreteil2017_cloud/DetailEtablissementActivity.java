@@ -165,6 +165,8 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
             jsonreferent.remove("_id");
             DaneContract.addReferent(this,jsonreferent);
         } else {
+//            jsonreferent.remove("_id");
+//            jsonreferent.remove("referent_id");
             DaneContract.updateReferent(this,jsonreferent);
         }
         mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
