@@ -100,10 +100,11 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View view) {
-                final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-                final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
-                final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-                Log.d(TAG, "edition du référent : "+nomreferent+"("+idreferent+"-"+idbasereferent+")");
+                final Long idreferent = mcursor.getLong(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+//                final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+//                final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+//                Log.d(TAG, "edition du référent : "+nomreferent+"("+idreferent+"-"+idbasereferent+")");
+                DaneContract.EditerReferentDialog(getFragmentManager(),idreferent,"Edition du référent", "edit_referent");
 //                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
 //                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
 //                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);

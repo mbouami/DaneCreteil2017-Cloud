@@ -37,6 +37,7 @@ public class NoticeDialogFragment extends DialogFragment {
     }
     private String TAG = "NoticeDialogFragment";
     private Long mEtablissementId;
+    private Long mReferentId;
     private String mDisciplineId;
     private Context mContext;
     private AutoCompleteTextView mDiscipline;
@@ -50,13 +51,14 @@ public class NoticeDialogFragment extends DialogFragment {
     // Use this instance of the interface to deliver action events
     NoticeDialogListener mListener;
 
-    public static NoticeDialogFragment newInstance(Long idetab, String titre) {
+    public static NoticeDialogFragment newInstance(Long idetab,Long idreferent, String titre) {
 
         NoticeDialogFragment f = new NoticeDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putLong("idetab", idetab);
+        args.putLong("idreferent", idreferent);
         args.putString("titre", titre);
         f.setArguments(args);
         return f;
@@ -81,6 +83,7 @@ public class NoticeDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mEtablissementId = getArguments().getLong("idetab",0);
+        mReferentId = getArguments().getLong("idreferent",0);
         mTitre = getArguments().getString("titre");
         mDisciplineId="";
     }
@@ -106,6 +109,13 @@ public class NoticeDialogFragment extends DialogFragment {
                 mDisciplineId = DaneContract.getValueFromCursor(cursor,DaneContract.DisciplineEntry._ID);
             }
         });
+        if (mReferentId > 0) {
+            Cursor cursorreferent = DaneContract.getReferentFromId(mContext,mReferentId);
+            mNomReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_NOM));
+            mPrenomReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_PRENOM));
+            mTelReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_TEL));
+            mMailReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_EMAIL));
+        }
         // Pass null as the parent view because its going in the dialog layout
         builder.setIcon(R.drawable.ic_settings_applications_black_24dp)
                 .setTitle(mTitre)
