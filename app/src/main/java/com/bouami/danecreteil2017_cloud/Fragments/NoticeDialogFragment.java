@@ -1,7 +1,7 @@
 package com.bouami.danecreteil2017_cloud.Fragments;
-
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -32,11 +32,12 @@ public class NoticeDialogFragment extends DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
-        public void onDialogReferentPositiveClick(DialogFragment dialog, JSONObject jsonreferent);
+        public void onDialogReferentPositiveClick(DialogFragment dialog, ContentValues jsonreferent);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
     private String TAG = "NoticeDialogFragment";
     private Long mEtablissementId;
+    private Long mReferentId, mReferentIdBase;
     private String mDisciplineId;
     private Context mContext;
     private AutoCompleteTextView mDiscipline;
@@ -50,13 +51,14 @@ public class NoticeDialogFragment extends DialogFragment {
     // Use this instance of the interface to deliver action events
     NoticeDialogListener mListener;
 
-    public static NoticeDialogFragment newInstance(Long idetab, String titre) {
+    public static NoticeDialogFragment newInstance(Long idetab,Long idreferent, String titre) {
 
         NoticeDialogFragment f = new NoticeDialogFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putLong("idetab", idetab);
+        args.putLong("idreferent", idreferent);
         args.putString("titre", titre);
         f.setArguments(args);
         return f;
@@ -81,6 +83,7 @@ public class NoticeDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mEtablissementId = getArguments().getLong("idetab",0);
+        mReferentId = getArguments().getLong("idreferent",0);
         mTitre = getArguments().getString("titre");
         mDisciplineId="";
     }
@@ -106,6 +109,27 @@ public class NoticeDialogFragment extends DialogFragment {
                 mDisciplineId = DaneContract.getValueFromCursor(cursor,DaneContract.DisciplineEntry._ID);
             }
         });
+        mReferentIdBase = Long.valueOf(0);
+        if (mReferentId > 0) {
+            Cursor cursorreferent = DaneContract.getReferentFromId(mContext,mReferentId);
+            mReferentIdBase = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+            String civilite = DaneContract.getValueFromCursor(cursorreferent,"CIVILITE");
+            mNomReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_NOM));
+            mPrenomReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_PRENOM));
+            mTelReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_TEL));
+            mMailReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_EMAIL));
+            mDiscipline.setText(DaneContract.getValueFromCursor(cursorreferent,"NOMDISCIPLINE"));
+            switch (civilite) {
+                case "MM" :
+                    RadioButton selectionmme = (RadioButton) viewdialog.findViewById(R.id.mme);
+                    selectionmme.setChecked(true);
+                    break;
+                case "M" :
+                    RadioButton selectionmr = (RadioButton) viewdialog.findViewById(R.id.mr);
+                    selectionmr.setChecked(true);
+                    break;
+            }
+        }
         // Pass null as the parent view because its going in the dialog layout
         builder.setIcon(R.drawable.ic_settings_applications_black_24dp)
                 .setTitle(mTitre)
@@ -114,20 +138,19 @@ public class NoticeDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        JSONObject jsonreferent = new JSONObject();
-                        try {
+                        ContentValues jsonreferent = new ContentValues();
                             final String genre = ((RadioButton) viewdialog.findViewById(mGenreReferent.getCheckedRadioButtonId())).getText().toString();
                             jsonreferent.put("nom",mNomReferent.getText().toString());
                             jsonreferent.put("prenom",mPrenomReferent.getText().toString());
-                            jsonreferent.put("civilite",genre);
+                            jsonreferent.put("civilite_id",DaneContract.getIdCiviliteFromNom(mContext,genre));
                             jsonreferent.put("tel",mTelReferent.getText().toString());
                             jsonreferent.put("email",mMailReferent.getText().toString());
-                            jsonreferent.put("statut","1");
-                            jsonreferent.put("discipline",mDisciplineId);
-                            jsonreferent.put("etablissement",mEtablissementId);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                            jsonreferent.put("statut","référent numérique");
+                            jsonreferent.put("discipline_id",mDisciplineId);
+                            jsonreferent.put("etablissement_id",mEtablissementId);
+                            jsonreferent.put("synchroniser",false);
+                            jsonreferent.put("_id",mReferentId);
+                            jsonreferent.put("referent_id",mReferentIdBase);
 //                        Log.d(TAG, "enregistrer le référent : "+jsonreferent);
                         mListener.onDialogReferentPositiveClick(NoticeDialogFragment.this, jsonreferent);
                     }

@@ -43,18 +43,17 @@ import java.util.Map;
 /**
  * Created by Mohammed on 05/10/2017.
  */
-
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
 //    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
-//    public static final int DATABASE_VERSION = 6;
+    //    public static final int DATABASE_VERSION = 6;
     public static final int DATABASE_VERSION = 31;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
@@ -711,31 +710,32 @@ public class DaneContract {
 
     public static long addReferent(Context mContext, ContentValues referent) {
         long referentId = 0;
-        final String OWM_REFERENT_ID = "referent_id";
-        // First, check if the location with this city name exists in the db
-        Cursor referentCursor = null;
-        referentCursor = mContext.getContentResolver().query(
-                ReferentEntry.CONTENT_URI,
-                new String[]{ReferentEntry._ID},
-                ReferentEntry.COLUMN_REFERENT_ID + " = ?",
-                new String[]{referent.getAsString(OWM_REFERENT_ID)},
-                null);
-        if (referentCursor.moveToFirst()) {
-            int referentIdIndex = referentCursor.getColumnIndex(ReferentEntry._ID);
-            referentId = referentCursor.getLong(referentIdIndex);
-        } else {
+//        final String OWM_REFERENT_ID = "referent_id";
+//        // First, check if the location with this city name exists in the db
+//        Cursor referentCursor = null;
+//        referentCursor = mContext.getContentResolver().query(
+//                ReferentEntry.CONTENT_URI,
+//                new String[]{ReferentEntry._ID},
+//                ReferentEntry.COLUMN_REFERENT_ID + " = ?",
+//                new String[]{referent.getAsString(OWM_REFERENT_ID)},
+//                null);
+//        if (referentCursor.moveToFirst()) {
+//            int referentIdIndex = referentCursor.getColumnIndex(ReferentEntry._ID);
+//            referentId = referentCursor.getLong(referentIdIndex);
+//        } else {
             // Finally, insert location data into the database.
-            Uri insertedUri = mContext.getContentResolver().insert(
-                    ReferentEntry.CONTENT_URI,
-                    referent
-            );
-
-            // The resulting URI contains the ID for the row.  Extract the locatiofvnId from the Uri.
+            Uri insertedUri = mContext.getContentResolver().insert(ReferentEntry.CONTENT_URI,referent);
             referentId = ContentUris.parseId(insertedUri);
-        }
-        referentCursor.close();
-//        Log.d(TAG, "referent " + referent + " : "+referentId);
+//        }
+//        referentCursor.close();
         return referentId;
+    }
+
+    public static long updateReferent(Context mContext, ContentValues referent) {
+        Uri muri = DaneContract.ReferentEntry.buildReferentUri(referent.getAsLong("_id"));
+        referent.remove("referent_id");
+        long updatereferent = mContext.getContentResolver().update(muri,referent,null,null);
+        return updatereferent;
     }
 
     public static String getValueFromCursor(Cursor cursor,String champ) {
@@ -764,6 +764,19 @@ public class DaneContract {
                 null);
         if (etabcursor.moveToFirst()){
             return etabcursor;
+        }
+        return null;
+    };
+
+    public static  Cursor getReferentFromId(Context mContext, Long idreferent) {
+        Uri uri = ReferentEntry.buildReferentUri(idreferent);
+        Cursor referentcursor = mContext.getContentResolver().query(uri,
+                REFERENTS_COLUMNS,
+                null,
+                null,
+                null);
+        if (referentcursor.moveToFirst()){
+            return referentcursor;
         }
         return null;
     };
@@ -1412,7 +1425,6 @@ public class DaneContract {
     }
 
     public static void writeNewReferent(final Context mcontext, JSONObject referent) {
-//        Log.d(TAG, "writeNewReferent : "+referent.toString());
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, DaneContract.BASE_URL_NEW_REFERENT, referent, new Response.Listener<JSONObject>() {
@@ -1509,28 +1521,33 @@ public class DaneContract {
     }
 
     public static void AjoutReferentDialog(FragmentManager manager,Long idetab,String titre, String tag) {
-        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
+        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab, Long.valueOf(0),titre);
         ajoutreferentFragment.show(manager, tag);
     }
 
-    public static void EditerReferentDialog(FragmentManager manager,Cursor mcursor,String titre, String tag) {
-        final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-        final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-        final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
-        JSONObject jsonreferent = new JSONObject();
-        try {
-            jsonreferent.put("civilite",mcursor.getString(mcursor.getColumnIndex(CiviliteEntry._ID)));
-            jsonreferent.put("nom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_NOM)));
-            jsonreferent.put("prenom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_PRENOM)));
-            jsonreferent.put("tel",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_TEL)));
-            jsonreferent.put("email",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_EMAIL)));
-            jsonreferent.put("statut","1");
-            jsonreferent.put("discipline",mcursor.getString(mcursor.getColumnIndex(DisciplineEntry._ID)));
-            jsonreferent.put("etablissement",mcursor.getString(mcursor.getColumnIndex(EtablissementEntry._ID)));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-//        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
-//        ajoutreferentFragment.show(manager, tag);
+//    public static void EditerReferentDialog(FragmentManager manager,Cursor mcursor,String titre, String tag) {
+//        final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+//        final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+//        final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+//        JSONObject jsonreferent = new JSONObject();
+//        try {
+//            jsonreferent.put("civilite",mcursor.getString(mcursor.getColumnIndex(CiviliteEntry._ID)));
+//            jsonreferent.put("nom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_NOM)));
+//            jsonreferent.put("prenom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_PRENOM)));
+//            jsonreferent.put("tel",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_TEL)));
+//            jsonreferent.put("email",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_EMAIL)));
+//            jsonreferent.put("statut","1");
+//            jsonreferent.put("discipline",mcursor.getString(mcursor.getColumnIndex(DisciplineEntry._ID)));
+//            jsonreferent.put("etablissement",mcursor.getString(mcursor.getColumnIndex(EtablissementEntry._ID)));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+////        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
+////        ajoutreferentFragment.show(manager, tag);
+//    }
+
+    public static void EditerReferentDialog(FragmentManager manager,Long idreferent,String titre, String tag) {
+        DialogFragment editerreferentFragment = NoticeDialogFragment.newInstance(Long.valueOf(0),idreferent,titre);
+        editerreferentFragment.show(manager, tag);
     }
 }

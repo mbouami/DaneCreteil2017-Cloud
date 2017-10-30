@@ -1,6 +1,7 @@
 package com.bouami.danecreteil2017_cloud;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -157,9 +158,15 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onDialogReferentPositiveClick(DialogFragment dialog, JSONObject jsonreferent) {
+    public void onDialogReferentPositiveClick(DialogFragment dialog, ContentValues jsonreferent) {
 //        Log.d(TAG, "Création du référent : "+jsonreferent);
-        DaneContract.writeNewReferent(this,jsonreferent);
+        if (jsonreferent.getAsLong("_id")==0) {
+//                DaneContract.writeNewReferent(this,jsonreferent);
+            jsonreferent.remove("_id");
+            DaneContract.addReferent(this,jsonreferent);
+        } else {
+            DaneContract.updateReferent(this,jsonreferent);
+        }
         mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
         mFragments[1] = ReferentListFragment.newInstance(null,mEtablissementId);
         mViewPager.setAdapter(mPagerAdapter);

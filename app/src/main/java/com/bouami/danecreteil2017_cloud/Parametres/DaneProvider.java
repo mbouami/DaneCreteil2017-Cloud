@@ -25,6 +25,7 @@ import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.PATH_VILL
  * Created by Mohammed on 05/10/2017.
  */
 
+
 public class DaneProvider extends ContentProvider {
 
     // The URI Matcher used by this content provider.
@@ -315,6 +316,12 @@ public class DaneProvider extends ContentProvider {
         sDepartementQueryBuilder.setTables(DepartementEntry.TABLE_NAME);
     }
 
+    private  static final SQLiteQueryBuilder sCiviliteQueryBuilder;
+    static {
+        sCiviliteQueryBuilder = new SQLiteQueryBuilder();
+        sCiviliteQueryBuilder.setTables(CiviliteEntry.TABLE_NAME);
+    }
+
     private static final SQLiteQueryBuilder sReferentQueryBuilder;
     static{
         sReferentQueryBuilder = new SQLiteQueryBuilder();
@@ -458,6 +465,14 @@ public class DaneProvider extends ContentProvider {
             DepartementEntry.TABLE_NAME+
                     "." + DepartementEntry._ID + " = ? ";
 
+    private static final String sReferentsParIdSelection =
+            ReferentEntry.TABLE_NAME+
+                    "." + ReferentEntry._ID + " = ? ";
+
+    private static final String sCiviliteParIdSelection =
+            CiviliteEntry.TABLE_NAME +
+                    "." + CiviliteEntry._ID + " = ? ";
+
     private static final String sDepartementParNomSelection =
             DepartementEntry.TABLE_NAME+
                     "." + DepartementEntry.COLUMN_DEPARTEMENT_NOM + " = ? ";
@@ -568,6 +583,22 @@ public class DaneProvider extends ContentProvider {
         selectionArgs = new String[]{iddepart};
         selection = sDepartementParIdSelection;
         return sDepartementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getCiviliteParId(Uri uri, String[] projection, String sortOrder) {
+        String idcivilite = CiviliteEntry.getCiviliteFromUri(uri);
+        String[] selectionArgs;
+        String selection;
+        selectionArgs = new String[]{idcivilite};
+        selection = sCiviliteParIdSelection;
+        return sCiviliteQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -720,6 +751,21 @@ public class DaneProvider extends ContentProvider {
 
     private Cursor getReferentsContenantleNom(Uri uri, String[] projection,String selection, String[] selectionArgs, String sortOrder) {
         return sReferentQueryBuilder.query(mDaneHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+    private Cursor getReferentParId(Uri uri, String[] projection, String sortOrder) {
+        String idreferent = ReferentEntry.getReferentFromUri(uri);
+        String[] selectionArgs;
+        String selection;
+        selectionArgs = new String[]{idreferent};
+        selection = sReferentsParIdSelection;
+        return sReferentsParEtablissementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                 projection,
                 selection,
                 selectionArgs,
@@ -901,6 +947,11 @@ public class DaneProvider extends ContentProvider {
                 retCursor = getDepartenetParId(uri, projection, sortOrder);
                 break;
             }
+
+            case CIVILITE_ID: {
+                retCursor = getCiviliteParId(uri, projection, sortOrder);
+                break;
+            }
             case DEPARTEMENT_PAR_NOM: {
                 retCursor = getDepartenetParNom(uri, projection, sortOrder);
                 break;
@@ -932,6 +983,11 @@ public class DaneProvider extends ContentProvider {
 
             case PERSONNEL_PAR_DEPARTEMENT_CONTENANT_NOM: {
                 retCursor = getPersonnelParDepartementContenantleNom(uri, projection,selection,selectionArgs, sortOrder);
+                break;
+            }
+
+            case REFERENT_PAR_ID: {
+                retCursor = getReferentParId(uri, projection, sortOrder);
                 break;
             }
 
@@ -1231,6 +1287,10 @@ public class DaneProvider extends ContentProvider {
                         selectionArgs);
                 break;
             case REFERENT:
+                rowsUpdated = db.update(ReferentEntry.TABLE_NAME, contentValues, selection,
+                        selectionArgs);
+                break;
+            case REFERENT_PAR_ID:
                 rowsUpdated = db.update(ReferentEntry.TABLE_NAME, contentValues, selection,
                         selectionArgs);
                 break;
