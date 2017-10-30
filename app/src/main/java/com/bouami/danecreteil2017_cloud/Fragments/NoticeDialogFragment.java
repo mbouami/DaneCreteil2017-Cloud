@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -112,7 +113,8 @@ public class NoticeDialogFragment extends DialogFragment {
         mReferentIdBase = Long.valueOf(0);
         if (mReferentId > 0) {
             Cursor cursorreferent = DaneContract.getReferentFromId(mContext,mReferentId);
-            mReferentIdBase = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+//            mEtablissementId = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
+//            mReferentIdBase = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
             String civilite = DaneContract.getValueFromCursor(cursorreferent,"CIVILITE");
             mNomReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_NOM));
             mPrenomReferent.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.ReferentEntry.COLUMN_PRENOM));
@@ -151,7 +153,7 @@ public class NoticeDialogFragment extends DialogFragment {
                             jsonreferent.put("synchroniser",false);
                             jsonreferent.put("_id",mReferentId);
                             jsonreferent.put("referent_id",mReferentIdBase);
-//                        Log.d(TAG, "enregistrer le référent : "+jsonreferent);
+                        Log.d(TAG, "enregistrer le référent : "+jsonreferent);
                         mListener.onDialogReferentPositiveClick(NoticeDialogFragment.this, jsonreferent);
                     }
                 })

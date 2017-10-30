@@ -53,8 +53,8 @@ public class DaneContract {
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
-    //    public static final int DATABASE_VERSION = 6;
-    public static final int DATABASE_VERSION = 31;
+//        public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 32;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -732,9 +732,20 @@ public class DaneContract {
     }
 
     public static long updateReferent(Context mContext, ContentValues referent) {
-        Uri muri = DaneContract.ReferentEntry.buildReferentUri(referent.getAsLong("_id"));
+//        Uri muri = DaneContract.ReferentEntry.buildReferentUri(referent.getAsLong("_id"));
+//        referent.remove("referent_id");
+//        long updatereferent = mContext.getContentResolver().update(muri,referent,null,null);
+//        return updatereferent;
+        Uri muri = DaneContract.ReferentEntry.buildReferent();
+        String idreferent = referent.getAsString("_id");
+        referent.remove("_id");
+        referent.remove("etablissement_id");
         referent.remove("referent_id");
-        long updatereferent = mContext.getContentResolver().update(muri,referent,null,null);
+        Long iddiscipline = referent.getAsLong("discipline_id");
+        if (iddiscipline==null) referent.remove("discipline_id");
+        String[] selectionArgs = new String[]{idreferent};
+        String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry._ID + " = ? ";
+        long updatereferent = mContext.getContentResolver().update(muri,referent,selection,selectionArgs);
         return updatereferent;
     }
 
