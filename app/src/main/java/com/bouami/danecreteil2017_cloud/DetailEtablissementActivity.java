@@ -178,8 +178,8 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  R
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-//        Log.d(TAG, "onDialogNegativeClick : ");
+    public void onDialogReferentCancelClick(DialogFragment dialog) {
+//        Log.d(TAG, "onDialogReferentCancelClick : ");
     }
 
     @SuppressLint("LongLogTag")

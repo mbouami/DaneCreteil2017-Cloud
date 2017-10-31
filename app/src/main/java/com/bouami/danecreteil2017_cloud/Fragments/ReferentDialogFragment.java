@@ -31,7 +31,7 @@ public class ReferentDialogFragment extends DialogFragment {
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
         public void onDialogReferentPositiveClick(DialogFragment dialog, ContentValues jsonreferent);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        public void onDialogReferentCancelClick(DialogFragment dialog);
     }
     private String TAG = "ReferentDialogFragment";
     private Long mEtablissementId;
@@ -158,7 +158,7 @@ public class ReferentDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
 //                        LoginDialogFragment.this.getDialog().cancel();
 //                        Log.d(TAG, "quitter : ");
-                        mListener.onDialogNegativeClick(ReferentDialogFragment.this);
+                        mListener.onDialogReferentCancelClick(ReferentDialogFragment.this);
                     }
                 });
         return builder.create();
