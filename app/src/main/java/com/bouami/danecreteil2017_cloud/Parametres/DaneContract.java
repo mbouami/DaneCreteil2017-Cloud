@@ -44,8 +44,8 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+//        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
@@ -747,6 +747,17 @@ public class DaneContract {
         return updatereferent;
     }
 
+    public static long updatePersonnel(Context mContext, ContentValues personnel) {
+        Uri muri = DaneContract.PersonnelEntry.buildPersonnel();
+        String idpersonnel = personnel.getAsString("_id");
+        personnel.remove("_id");
+//        personnel.remove("etablissement_id");
+        personnel.remove("personnel_id");
+        String[] selectionArgs = new String[]{idpersonnel};
+        String selection = PersonnelEntry.TABLE_NAME+"." + PersonnelEntry._ID + " = ? ";
+        long updatepersonnel = mContext.getContentResolver().update(muri,personnel,selection,selectionArgs);
+        return updatepersonnel;
+    }
     public static String getValueFromCursor(Cursor cursor,String champ) {
         return cursor.getString(cursor.getColumnIndexOrThrow(champ));
     }
@@ -786,6 +797,19 @@ public class DaneContract {
                 null);
         if (referentcursor.moveToFirst()){
             return referentcursor;
+        }
+        return null;
+    };
+
+    public static  Cursor getPersonnelFromId(Context mContext, Long idpersonnel) {
+        Uri uri = PersonnelEntry.buildPersonnelUri(idpersonnel);
+        Cursor personnelcursor = mContext.getContentResolver().query(uri,
+                PERSONNEL_COLUMNS,
+                null,
+                null,
+                null);
+        if (personnelcursor.moveToFirst()){
+            return personnelcursor;
         }
         return null;
     };

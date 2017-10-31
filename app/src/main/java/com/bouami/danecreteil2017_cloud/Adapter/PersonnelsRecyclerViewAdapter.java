@@ -20,15 +20,16 @@ public class PersonnelsRecyclerViewAdapter extends MyRecycleAdapter<Personnel,Pe
     private Cursor mCursor;
     private final String TAG = "AnimateursRecyclerViewAdapter";
     private int ligneselectionnee = 0;
-    private FloatingActionButton mailpersonnel;
-    private FloatingActionButton phonepersonnel;
+    private FloatingActionButton mailpersonnel, phonepersonnel, editpersonnel;
+    Boolean mModifier;
 
 //    private boolean mDataValid;
 //    private int mRowIDColumn;
 
     public PersonnelsRecyclerViewAdapter(Class<Personnel> mModelClass, @LayoutRes int mModelLayout, Class<PersonnelViewHolder> mViewHolderClass,
-                                         Cursor mcursor) {
+                                         Cursor mcursor,Boolean modifier) {
         super(mModelClass, mModelLayout, mViewHolderClass, mcursor);
+        mModifier = modifier;
         swapCursor(mcursor);
     }
 
@@ -36,6 +37,7 @@ public class PersonnelsRecyclerViewAdapter extends MyRecycleAdapter<Personnel,Pe
     public PersonnelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.include_personnel_references, parent, false);
+        editpersonnel = (FloatingActionButton) parent.getRootView().findViewById(R.id.editpersonnel);
         mailpersonnel = (FloatingActionButton) parent.getRootView().findViewById(R.id.mailpersonnel);
         mailpersonnel.setVisibility(View.INVISIBLE);
         mailpersonnel.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +87,9 @@ public class PersonnelsRecyclerViewAdapter extends MyRecycleAdapter<Personnel,Pe
                 }
                 if (phonepersonnel.getVisibility()==View.INVISIBLE && !telpersonnel.equals("")) {
                     phonepersonnel.setVisibility(View.VISIBLE);
+                }
+                if (mModifier) {
+                    editpersonnel.setVisibility(View.VISIBLE);
                 }
             }
         });

@@ -85,7 +85,11 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
 //        mManager.setReverseLayout(true);
 //        mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
-        mAdapter = new PersonnelsRecyclerViewAdapter(Personnel.class,R.layout.item_personnel,PersonnelViewHolder.class,mcursor);
+        if (mEtablissementId!=0) {
+            mAdapter = new PersonnelsRecyclerViewAdapter(Personnel.class,R.layout.item_personnel,PersonnelViewHolder.class,mcursor,true);
+        } else {
+            mAdapter = new PersonnelsRecyclerViewAdapter(Personnel.class,R.layout.item_personnel,PersonnelViewHolder.class,mcursor,false);
+        }
         mRecycler.setAdapter(mAdapter);
     }
 

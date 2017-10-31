@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.bouami.danecreteil2017_cloud.Adapter.MyFragmentPagerAdapter;
 import com.bouami.danecreteil2017_cloud.Adapter.PersonnelsRecyclerViewAdapter;
 import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationReferentDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.PersonnelDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
@@ -33,7 +34,10 @@ import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DetailEtablissementActivity extends AppCompatActivity implements  ReferentDialogFragment.NoticeDialogListener, ConfirmationReferentDialogFragment.ConfirmationDialogListener {
+public class DetailEtablissementActivity extends AppCompatActivity
+                                implements  ReferentDialogFragment.NoticeDialogListener,
+                                            PersonnelDialogFragment.NoticeDialogListener,
+                                            ConfirmationReferentDialogFragment.ConfirmationDialogListener {
     private static final String TAG = "DetailEtablissementActivity";
     public static final String EXTRA_ETABLISSEMENT_ID = "etablissement_id";
     public static Long mEtablissementId;
@@ -164,8 +168,6 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  R
             jsonreferent.remove("_id");
             DaneContract.addReferent(this,jsonreferent);
         } else {
-//            jsonreferent.remove("_id");
-//            jsonreferent.remove("referent_id");
             DaneContract.updateReferent(this,jsonreferent);
         }
         mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
@@ -203,6 +205,26 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  R
 
     @Override
     public void onDialogReferentQuitterClick(ConfirmationReferentDialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDialogPersonnelPositiveClick(DialogFragment dialog, ContentValues jsonpersonnel) {
+        if (jsonpersonnel.getAsLong("_id")==0) {
+//                DaneContract.writeNewReferent(this,jsonreferent);
+            jsonpersonnel.remove("_id");
+            DaneContract.addPersonnel(this,jsonpersonnel);
+        } else {
+            DaneContract.updatePersonnel(this,jsonpersonnel);
+        }
+        mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
+        mFragments[1] = ReferentListFragment.newInstance(null,mEtablissementId);
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void onDialogPersonnelCancelClick(DialogFragment dialog) {
 
     }
 }

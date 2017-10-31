@@ -87,7 +87,7 @@ public class PersonnelDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View viewdialog = inflater.inflate(R.layout.referent_dialog, null);
+        final View viewdialog = inflater.inflate(R.layout.personnel_dialog, null);
         mGenrePersonnel = (RadioGroup) viewdialog.findViewById(R.id.civilite);
         mNomPersonnel = (EditText) viewdialog.findViewById(R.id.nom);
         mPrenomPersonnel = (EditText) viewdialog.findViewById(R.id.prenom);
@@ -95,14 +95,14 @@ public class PersonnelDialogFragment extends DialogFragment {
         mMailPersonnel = (EditText) viewdialog.findViewById(R.id.email);
         mPersonnelIdBase = Long.valueOf(0);
         if (mPersonnelId > 0) {
-            Cursor cursorreferent = DaneContract.getReferentFromId(mContext,mPersonnelId);
+            Cursor cursorpersonnel = DaneContract.getPersonnelFromId(mContext,mPersonnelId);
 //            mEtablissementId = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
 //            mReferentIdBase = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
-            String civilite = DaneContract.getValueFromCursor(cursorreferent,"CIVILITE");
-            mNomPersonnel.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.PersonnelEntry.COLUMN_NOM));
-            mPrenomPersonnel.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.PersonnelEntry.COLUMN_PRENOM));
-            mTelPersonnel.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.PersonnelEntry.COLUMN_TEL));
-            mMailPersonnel.setText(DaneContract.getValueFromCursor(cursorreferent,DaneContract.PersonnelEntry.COLUMN_EMAIL));
+            String civilite = DaneContract.getValueFromCursor(cursorpersonnel,"CIVILITE");
+            mNomPersonnel.setText(DaneContract.getValueFromCursor(cursorpersonnel,DaneContract.PersonnelEntry.COLUMN_NOM));
+            mPrenomPersonnel.setText(DaneContract.getValueFromCursor(cursorpersonnel,DaneContract.PersonnelEntry.COLUMN_PRENOM));
+            mTelPersonnel.setText(DaneContract.getValueFromCursor(cursorpersonnel,DaneContract.PersonnelEntry.COLUMN_TEL));
+            mMailPersonnel.setText(DaneContract.getValueFromCursor(cursorpersonnel,DaneContract.PersonnelEntry.COLUMN_EMAIL));
             switch (civilite) {
                 case "MM" :
                     RadioButton selectionmme = (RadioButton) viewdialog.findViewById(R.id.mme);
@@ -122,18 +122,18 @@ public class PersonnelDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        ContentValues jsonreferent = new ContentValues();
+                        ContentValues jsonpersonnel = new ContentValues();
                             final String genre = ((RadioButton) viewdialog.findViewById(mGenrePersonnel.getCheckedRadioButtonId())).getText().toString();
-                            jsonreferent.put("nom",mNomPersonnel.getText().toString());
-                            jsonreferent.put("prenom",mPrenomPersonnel.getText().toString());
-                            jsonreferent.put("civilite_id",DaneContract.getIdCiviliteFromNom(mContext,genre));
-                            jsonreferent.put("tel",mTelPersonnel.getText().toString());
-                            jsonreferent.put("email",mMailPersonnel.getText().toString());
-                            jsonreferent.put("synchroniser",false);
-                            jsonreferent.put("_id",mPersonnelId);
-                            jsonreferent.put("personnel_id",mPersonnelIdBase);
-                        Log.d(TAG, "enregistrer le référent : "+jsonreferent);
-                        mListener.onDialogPersonnelPositiveClick(PersonnelDialogFragment.this, jsonreferent);
+                            jsonpersonnel.put("nom",mNomPersonnel.getText().toString());
+                            jsonpersonnel.put("prenom",mPrenomPersonnel.getText().toString());
+                            jsonpersonnel.put("civilite_id",DaneContract.getIdCiviliteFromNom(mContext,genre));
+                            jsonpersonnel.put("tel",mTelPersonnel.getText().toString());
+                            jsonpersonnel.put("email",mMailPersonnel.getText().toString());
+                            jsonpersonnel.put("synchroniser",false);
+                            jsonpersonnel.put("_id",mPersonnelId);
+                            jsonpersonnel.put("personnel_id",mPersonnelIdBase);
+                            Log.d(TAG, "enregistrer le personnel : "+jsonpersonnel);
+                        mListener.onDialogPersonnelPositiveClick(PersonnelDialogFragment.this, jsonpersonnel);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
