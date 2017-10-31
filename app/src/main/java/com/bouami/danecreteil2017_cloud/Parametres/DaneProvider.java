@@ -509,6 +509,10 @@ public class DaneProvider extends ContentProvider {
             ReferentEntry.TABLE_NAME+
                     "." + ReferentEntry.COLUMN_ETABLISSEMENT_ID + " = ? ";
 
+    private static final String sPersonnelsParIdSelection =
+            PersonnelEntry.TABLE_NAME+
+                    "." + PersonnelEntry._ID + " = ? ";
+
     private static final String sReferentsParDepartementSelection =
             DepartementEntry.TABLE_NAME+
                     "." + DepartementEntry.COLUMN_DEPARTEMENT_NOM + " = ? ";
@@ -710,7 +714,21 @@ public class DaneProvider extends ContentProvider {
                 sortOrder
         );
     }
-
+    private Cursor getPersonnelParId(Uri uri, String[] projection, String sortOrder) {
+        String idpersonnel = PersonnelEntry.getPersonnelFromUri(uri);
+        String[] selectionArgs;
+        String selection;
+        selectionArgs = new String[]{idpersonnel};
+        selection = sPersonnelsParIdSelection;
+        return sPersonnelParEtablissementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
     private Cursor getPersonnelContenantleNom(Uri uri, String[] projection,String selection, String[] selectionArgs, String sortOrder) {
         return sPersonnelQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                 projection,
@@ -985,7 +1003,10 @@ public class DaneProvider extends ContentProvider {
                 retCursor = getPersonnelParDepartementContenantleNom(uri, projection,selection,selectionArgs, sortOrder);
                 break;
             }
-
+            case PERSONNEL_PAR_ID: {
+                retCursor = getPersonnelParId(uri, projection, sortOrder);
+                break;
+            }
             case REFERENT_PAR_ID: {
                 retCursor = getReferentParId(uri, projection, sortOrder);
                 break;
