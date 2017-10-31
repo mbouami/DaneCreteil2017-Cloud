@@ -21,22 +21,22 @@ import org.json.JSONObject;
  */
 
 @SuppressLint("ValidFragment")
-public class ConfirmationDialogFragment extends DialogFragment {
+public class ConfirmationReferentDialogFragment extends DialogFragment {
 
     public interface ConfirmationDialogListener {
-        public void onDialogReferentDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent);
-        public void onDialogReferentQuitterClick(ConfirmationDialogFragment dialog);
+        public void onDialogReferentDeleteClick(ConfirmationReferentDialogFragment dialog, JSONObject jsonreferent);
+        public void onDialogReferentQuitterClick(ConfirmationReferentDialogFragment dialog);
     }
-    private String TAG = "ConfirmationDialogFragment";
+    private String TAG = "ConfirmationReferentDialogFragment";
     private Cursor mcursor;
     private String mTitre, mMessage, mIdreferent, mIdbasereferent;
     private Context mContext;
 
     ConfirmationDialogListener mListener;
 
-    public static ConfirmationDialogFragment newInstance(String titre, String message, String idreferent, String idbasereferent) {
+    public static ConfirmationReferentDialogFragment newInstance(String titre, String message, String idreferent, String idbasereferent) {
 
-        ConfirmationDialogFragment f = new ConfirmationDialogFragment();
+        ConfirmationReferentDialogFragment f = new ConfirmationReferentDialogFragment();
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putString("titre", titre);
@@ -46,7 +46,7 @@ public class ConfirmationDialogFragment extends DialogFragment {
         f.setArguments(args);
         return f;
     }
-//    public ConfirmationDialogFragment(Cursor cursor,String message) {
+//    public ConfirmationReferentDialogFragment(Cursor cursor,String message) {
 //        mcursor = cursor;
 //        mMessage = message;
 //    }
@@ -95,12 +95,12 @@ public class ConfirmationDialogFragment extends DialogFragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        mListener.onDialogReferentDeleteClick(ConfirmationDialogFragment.this,jsonreferent);
+                        mListener.onDialogReferentDeleteClick(ConfirmationReferentDialogFragment.this,jsonreferent);
                     }
                 })
                 .setNegativeButton(R.string.Non, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogReferentQuitterClick(ConfirmationDialogFragment.this);
+                        mListener.onDialogReferentQuitterClick(ConfirmationReferentDialogFragment.this);
                     }
                 });
         // Create the AlertDialog object and return it

@@ -34,7 +34,7 @@
         </RadioGroup>
 
         <TableLayout
-            android:id="@+id/referent"
+            android:id="@+id/personnel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center">
@@ -90,21 +90,6 @@
                     android:hint="Email"
                     android:inputType="textEmailAddress" />
 
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <AutoCompleteTextView
-                    android:id="@+id/liste_disciplines"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:completionHint="Discipline"
-                    android:hint="@string/label_recherche_discipline">
-
-                    <requestFocus />
-                </AutoCompleteTextView>
             </TableRow>
         </TableLayout>
     </LinearLayout>

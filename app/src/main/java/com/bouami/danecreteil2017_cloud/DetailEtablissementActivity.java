@@ -20,13 +20,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.bouami.danecreteil2017_cloud.Adapter.MyFragmentPagerAdapter;
 import com.bouami.danecreteil2017_cloud.Adapter.PersonnelsRecyclerViewAdapter;
-import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationDialogFragment;
-import com.bouami.danecreteil2017_cloud.Fragments.NoticeDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationReferentDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.ReferentDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
@@ -34,7 +33,7 @@ import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DetailEtablissementActivity extends AppCompatActivity implements  NoticeDialogFragment.NoticeDialogListener, ConfirmationDialogFragment.ConfirmationDialogListener {
+public class DetailEtablissementActivity extends AppCompatActivity implements  ReferentDialogFragment.NoticeDialogListener, ConfirmationReferentDialogFragment.ConfirmationDialogListener {
     private static final String TAG = "DetailEtablissementActivity";
     public static final String EXTRA_ETABLISSEMENT_ID = "etablissement_id";
     public static Long mEtablissementId;
@@ -185,7 +184,7 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onDialogReferentDeleteClick(ConfirmationDialogFragment dialog, JSONObject jsonreferent) {
+    public void onDialogReferentDeleteClick(ConfirmationReferentDialogFragment dialog, JSONObject jsonreferent) {
         Uri muri = null;
         try {
             muri = DaneContract.ReferentEntry.buildReferentUri(Long.parseLong(jsonreferent.getString("id")));
@@ -203,7 +202,7 @@ public class DetailEtablissementActivity extends AppCompatActivity implements  N
     }
 
     @Override
-    public void onDialogReferentQuitterClick(ConfirmationDialogFragment dialog) {
+    public void onDialogReferentQuitterClick(ConfirmationReferentDialogFragment dialog) {
 
     }
 }

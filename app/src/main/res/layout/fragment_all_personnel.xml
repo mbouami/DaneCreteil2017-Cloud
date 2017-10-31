@@ -36,4 +36,15 @@
         android:layout_alignParentLeft="true"
         app:srcCompat="@android:drawable/ic_dialog_dialer"
         android:layout_margin="16dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/editpersonnel"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:src="@android:drawable/ic_menu_edit"/>
 </RelativeLayout>

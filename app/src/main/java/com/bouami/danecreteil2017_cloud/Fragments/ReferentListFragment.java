@@ -102,10 +102,6 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
             public void onClick(View view) {
                 final Long idreferent = mcursor.getLong(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
                 DaneContract.EditerReferentDialog(getFragmentManager(),idreferent,"Edition du référent", "edit_referent");
-//                Log.d(TAG, "setOnClickListener : "+DetailEtablissementActivity.mEtablissementId);
-//                Intent intent = new Intent(view.getContext(), NewReferentActivity.class);
-//                intent.putExtra(NewReferentActivity.EXTRA_ETABLISSEMENT_ID, DetailEtablissementActivity.mEtablissementId);
-//                view.getContext().startActivity(intent);
             }
         });
         return rootView;

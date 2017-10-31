@@ -1,9 +1,11 @@
 package com.bouami.danecreteil2017_cloud.Fragments;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -37,7 +39,7 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
     private String mDepartement;
     private Long mEtablissementId;
     private Cursor mcursor;
-
+    private FloatingActionButton editpersonnel;
     private Uri mUri;
     private static final int PERSONNEL_PAR_DEPARTEMENT_LOADER = 0;
 
@@ -63,6 +65,15 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_all_personnel, container, false);
         mRecycler = (RecyclerView) rootView.findViewById(R.id.personnel_list);
         mRecycler.setHasFixedSize(true);
+        editpersonnel = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editpersonnel);
+        editpersonnel.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onClick(View view) {
+                final Long idpersonnel = mcursor.getLong(mcursor.getColumnIndex(DaneContract.PersonnelEntry._ID));
+                DaneContract.EditerPersonnelDialog(getFragmentManager(),idpersonnel,"Edition du personnel", "edit_personnel");
+            }
+        });
         return rootView;
     }
 

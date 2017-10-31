@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.provider.BaseColumns;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -21,8 +20,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationDialogFragment;
-import com.bouami.danecreteil2017_cloud.Fragments.NoticeDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.ConfirmationReferentDialogFragment;
+import com.bouami.danecreteil2017_cloud.Fragments.PersonnelDialogFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentDialogFragment;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Models.Discipline;
@@ -34,7 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -1516,49 +1514,23 @@ public class DaneContract {
         mRequestQueue.add(jsObjRequest);
     }
 
-//    public static void confirmationOperation(FragmentManager manager, Cursor cursor, String message, String tag) {
-//        DialogFragment newFragment = new ConfirmationDialogFragment(cursor,message);
-//        newFragment.show(manager, tag);
-//    }
-
     public static void DeleteReferentDialog(FragmentManager manager, String titre, String message, String idreferent, String idbasereferent, String tag) {
-        DialogFragment referentFragment = ConfirmationDialogFragment.newInstance(titre,message,idreferent,idbasereferent);
-        referentFragment.show(manager, tag);
-    }
-
-    public static void NewReferentDialog(FragmentManager manager,Long idetab, String tag) {
-        DialogFragment referentFragment = ReferentDialogFragment.newInstance(idetab);
+        DialogFragment referentFragment = ConfirmationReferentDialogFragment.newInstance(titre,message,idreferent,idbasereferent);
         referentFragment.show(manager, tag);
     }
 
     public static void AjoutReferentDialog(FragmentManager manager,Long idetab,String titre, String tag) {
-        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab, Long.valueOf(0),titre);
+        DialogFragment ajoutreferentFragment = ReferentDialogFragment.newInstance(idetab, Long.valueOf(0),titre);
         ajoutreferentFragment.show(manager, tag);
     }
 
-//    public static void EditerReferentDialog(FragmentManager manager,Cursor mcursor,String titre, String tag) {
-//        final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-//        final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-//        final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
-//        JSONObject jsonreferent = new JSONObject();
-//        try {
-//            jsonreferent.put("civilite",mcursor.getString(mcursor.getColumnIndex(CiviliteEntry._ID)));
-//            jsonreferent.put("nom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_NOM)));
-//            jsonreferent.put("prenom",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_PRENOM)));
-//            jsonreferent.put("tel",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_TEL)));
-//            jsonreferent.put("email",mcursor.getString(mcursor.getColumnIndex(ReferentEntry.COLUMN_EMAIL)));
-//            jsonreferent.put("statut","1");
-//            jsonreferent.put("discipline",mcursor.getString(mcursor.getColumnIndex(DisciplineEntry._ID)));
-//            jsonreferent.put("etablissement",mcursor.getString(mcursor.getColumnIndex(EtablissementEntry._ID)));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-////        DialogFragment ajoutreferentFragment = NoticeDialogFragment.newInstance(idetab,titre);
-////        ajoutreferentFragment.show(manager, tag);
-//    }
-
     public static void EditerReferentDialog(FragmentManager manager,Long idreferent,String titre, String tag) {
-        DialogFragment editerreferentFragment = NoticeDialogFragment.newInstance(Long.valueOf(0),idreferent,titre);
+        DialogFragment editerreferentFragment = ReferentDialogFragment.newInstance(Long.valueOf(0),idreferent,titre);
         editerreferentFragment.show(manager, tag);
+    }
+
+    public static void EditerPersonnelDialog(FragmentManager manager,Long idpersonnel,String titre, String tag) {
+        DialogFragment editerpersonnelFragment = PersonnelDialogFragment.newInstance(Long.valueOf(0),idpersonnel,titre);
+        editerpersonnelFragment.show(manager, tag);
     }
 }
