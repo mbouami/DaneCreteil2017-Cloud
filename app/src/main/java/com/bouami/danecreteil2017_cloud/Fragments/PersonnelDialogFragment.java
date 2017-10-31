@@ -95,7 +95,7 @@ public class PersonnelDialogFragment extends DialogFragment {
         mMailPersonnel = (EditText) viewdialog.findViewById(R.id.email);
         mPersonnelIdBase = Long.valueOf(0);
         if (mPersonnelId > 0) {
-            Cursor cursorreferent = DaneContract.getReferentFromId(mContext,mReferentId);
+            Cursor cursorreferent = DaneContract.getReferentFromId(mContext,mPersonnelId);
 //            mEtablissementId = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
 //            mReferentIdBase = cursorreferent.getLong(cursorreferent.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
             String civilite = DaneContract.getValueFromCursor(cursorreferent,"CIVILITE");
