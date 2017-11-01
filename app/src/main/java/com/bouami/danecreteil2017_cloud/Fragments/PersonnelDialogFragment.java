@@ -124,9 +124,9 @@ public class PersonnelDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         ContentValues jsonpersonnel = new ContentValues();
                             final String genre = ((RadioButton) viewdialog.findViewById(mGenrePersonnel.getCheckedRadioButtonId())).getText().toString();
-                            jsonpersonnel.put("nom",mNomPersonnel.getText().toString());
-                            jsonpersonnel.put("prenom",mPrenomPersonnel.getText().toString());
-                            jsonpersonnel.put("civilite_id",DaneContract.getIdCiviliteFromNom(mContext,genre));
+//                            jsonpersonnel.put("nom",mNomPersonnel.getText().toString());
+//                            jsonpersonnel.put("prenom",mPrenomPersonnel.getText().toString());
+//                            jsonpersonnel.put("civilite_id",DaneContract.getIdCiviliteFromNom(mContext,genre));
                             jsonpersonnel.put("tel",mTelPersonnel.getText().toString());
                             jsonpersonnel.put("email",mMailPersonnel.getText().toString());
                             jsonpersonnel.put("synchroniser",false);

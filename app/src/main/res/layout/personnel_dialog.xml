@@ -22,6 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:text="MM" />
 
             <RadioButton
@@ -29,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:text="M" />
 
         </RadioGroup>
@@ -49,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Nom"
+                    android:enabled="false"
                     android:inputType="textPersonName" />
             </TableRow>
 
@@ -62,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Prénom"
+                    android:enabled="false"
                     android:inputType="textPersonName" />
             </TableRow>
 

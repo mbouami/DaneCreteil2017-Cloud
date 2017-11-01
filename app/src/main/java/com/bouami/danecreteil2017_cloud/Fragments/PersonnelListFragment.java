@@ -71,7 +71,10 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
                 final Long idpersonnel = mcursor.getLong(mcursor.getColumnIndex(DaneContract.PersonnelEntry._ID));
-                DaneContract.EditerPersonnelDialog(getFragmentManager(),idpersonnel,"Edition du personnel", "edit_personnel");
+                final String nompersonnel = DaneContract.getValueFromCursor(mcursor,"CIVILITE") +
+                        " "+ DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_NOM)+
+                        " "+ DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_PRENOM);
+                DaneContract.EditerPersonnelDialog(getFragmentManager(),idpersonnel,"Modiofication des informations de : "+nompersonnel, "edit_personnel");
             }
         });
         return rootView;
