@@ -33,15 +33,26 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_weight="1" />
-            <ImageView
-                android:id="@+id/detail"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:baselineAlignBottom="true"
-                app:srcCompat="@drawable/ic_detail_24dp"/>
+                android:orientation="vertical">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_black_24dp"
+                    android:contentDescription="@string/menu_animateur"
+                    android:onClick="showPopup" />
+                <ImageView
+                    android:id="@+id/detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:baselineAlignBottom="true"
+                    app:srcCompat="@drawable/ic_detail_24dp"/>
+            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

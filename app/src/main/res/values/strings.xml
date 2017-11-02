@@ -33,5 +33,8 @@
     <string name="Non">Non</string>
     <string name="valider">Valider</string>
     <string name="cancel">Quitter</string>
+    <string name="menu_animateur">Menu Animateur</string>
+    <string name="animateur_tel">Appeler l\'animateur</string>
+    <string name="animateur_email">envoyer un email</string>
 
 </resources>

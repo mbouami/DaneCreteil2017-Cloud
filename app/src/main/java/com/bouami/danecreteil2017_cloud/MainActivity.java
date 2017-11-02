@@ -12,9 +12,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -147,6 +151,36 @@ public class MainActivity extends AppCompatActivity {
 //        if (mRequestQueue != null) {
 //            mRequestQueue.cancelAll(TAG);
 //        }
+    }
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.animateur_menu, popup.getMenu());
+        popup.show();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.animateur_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.animateur_tel:
+                Log.d(TAG,"onContextItemSelected : tel");
+                return true;
+            case R.id.animateur_email:
+                Log.d(TAG,"onContextItemSelected : email");
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override

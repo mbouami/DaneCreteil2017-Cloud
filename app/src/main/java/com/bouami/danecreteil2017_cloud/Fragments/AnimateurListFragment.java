@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import com.bouami.danecreteil2017_cloud.Adapter.AnimateursRecyclerViewAdapter;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
@@ -58,6 +59,7 @@ public class AnimateurListFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_all_animateurs, container, false);
         mRecycler = (RecyclerView) rootView.findViewById(R.id.animateur_list);
         mRecycler.setHasFixedSize(true);
+        registerForContextMenu(mRecycler);
         return rootView;
     }
 
