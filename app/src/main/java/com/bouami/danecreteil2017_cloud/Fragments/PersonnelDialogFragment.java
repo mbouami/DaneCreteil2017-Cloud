@@ -11,13 +11,10 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.bouami.danecreteil2017_cloud.Adapter.DisciplinesAdapter;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import com.bouami.danecreteil2017_cloud.R;
 
@@ -115,7 +112,7 @@ public class PersonnelDialogFragment extends DialogFragment {
             }
         }
         // Pass null as the parent view because its going in the dialog layout
-        builder.setIcon(R.drawable.ic_settings_applications_black_24dp)
+        builder.setIcon(R.drawable.ic_settings_applications)
                 .setTitle(mTitre)
                 .setView(viewdialog)
                 // Add action buttons
@@ -132,7 +129,7 @@ public class PersonnelDialogFragment extends DialogFragment {
                             jsonpersonnel.put("synchroniser",false);
                             jsonpersonnel.put("_id",mPersonnelId);
                             jsonpersonnel.put("personnel_id",mPersonnelIdBase);
-                            Log.d(TAG, "enregistrer le personnel : "+jsonpersonnel);
+//                            Log.d(TAG, "enregistrer le personnel : "+jsonpersonnel);
                         mListener.onDialogPersonnelPositiveClick(PersonnelDialogFragment.this, jsonpersonnel);
                     }
                 })

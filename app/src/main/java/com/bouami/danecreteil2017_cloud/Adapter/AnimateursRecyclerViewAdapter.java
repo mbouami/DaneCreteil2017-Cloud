@@ -1,12 +1,21 @@
 package com.bouami.danecreteil2017_cloud.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListPopupWindow;
+import android.widget.PopupMenu;
 
 import com.bouami.danecreteil2017_cloud.DetailAnimateurActivity;
 import com.bouami.danecreteil2017_cloud.Models.Animateur;
@@ -24,6 +33,7 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
     private int ligneselectionnee = 0;
     private FloatingActionButton mailanimateur;
     private FloatingActionButton phoneanimateur;
+    private int mPosition = 0;
 
 //    private boolean mDataValid;
 //    private int mRowIDColumn;
@@ -36,56 +46,97 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
 
     @Override
     public AnimateurViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.include_animateur_references, parent, false);
-        mailanimateur = (FloatingActionButton) parent.getRootView().findViewById(R.id.mailanimateur);
-        mailanimateur.setVisibility(View.INVISIBLE);
-        mailanimateur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCursor.moveToPosition(ligneselectionnee);
-                String emailanim = mCursor.getString(mCursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
-                view.getContext().startActivity(DaneContract.createMailIntent(emailanim));
-            }
-        });
-        phoneanimateur = (FloatingActionButton) parent.getRootView().findViewById(R.id.phoneanimateur);
-        phoneanimateur.setVisibility(View.INVISIBLE);
-        phoneanimateur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCursor.moveToPosition(ligneselectionnee);
-                String telanim = mCursor.getString(mCursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_TEL));
-                view.getContext().startActivity(DaneContract.createPhoneIntent(telanim));
-
-            }
-        });
+//        View view = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.include_animateur_references, parent, false);
+//        mailanimateur = (FloatingActionButton) parent.getRootView().findViewById(R.id.mailanimateur);
+//        mailanimateur.setVisibility(View.INVISIBLE);
+//        mailanimateur.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mCursor.moveToPosition(ligneselectionnee);
+//                String emailanim = mCursor.getString(mCursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
+//                view.getContext().startActivity(DaneContract.createMailIntent(emailanim));
+//            }
+//        });
+//        phoneanimateur = (FloatingActionButton) parent.getRootView().findViewById(R.id.phoneanimateur);
+//        phoneanimateur.setVisibility(View.INVISIBLE);
+//        phoneanimateur.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mCursor.moveToPosition(ligneselectionnee);
+//                String telanim = mCursor.getString(mCursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_TEL));
+//                view.getContext().startActivity(DaneContract.createPhoneIntent(telanim));
+//
+//            }
+//        });
         return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
-    protected void populateViewHolder(AnimateurViewHolder viewHolder, final Cursor cursor, final int position) {
-        viewHolder.mListeEtabsView.setOnClickListener(new View.OnClickListener() {
+    protected void populateViewHolder(final AnimateurViewHolder viewHolder, final Cursor cursor, final int position) {
+        mPosition = position;
+//        viewHolder.mListeEtabsView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cursor.moveToPosition(position);
+//                Long idanim = Long.valueOf(DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry._ID));
+//                Intent intent = new Intent(v.getContext(), DetailAnimateurActivity.class);
+//                intent.putExtra(DetailAnimateurActivity.EXTRA_ANIMATEUR_ID, idanim);
+//                v.getContext().startActivity(intent);
+//            }
+//        });
+        viewHolder.mZoneReferenceAnimateur.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 cursor.moveToPosition(position);
                 Long idanim = Long.valueOf(DaneContract.getValueFromCursor(cursor,DaneContract.AnimateurEntry._ID));
-                Intent intent = new Intent(v.getContext(), DetailAnimateurActivity.class);
+                Intent intent = new Intent(view.getContext(), DetailAnimateurActivity.class);
                 intent.putExtra(DetailAnimateurActivity.EXTRA_ANIMATEUR_ID, idanim);
-                v.getContext().startActivity(intent);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        viewHolder.mMenuAnimateur.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint({"LongLogTag", "ResourceType"})
+            @Override
+            public void onClick(final View view) {
+                PopupMenu popup = new PopupMenu(view.getContext(), view);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.animateur_menu, popup.getMenu());
+                popup.show();
+                final Cursor animateurcursor = DaneContract.getAnimateurFromId(view.getContext(),viewHolder.getItemId());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+//                        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+                        switch (menuItem.getItemId()) {
+                            case R.id.animateur_tel:
+                                String telanim = animateurcursor.getString(animateurcursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_TEL));
+                                view.getContext().startActivity(DaneContract.createPhoneIntent(telanim));
+                                return true;
+                            case R.id.animateur_email:
+                                String emailanim = animateurcursor.getString(animateurcursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
+                                view.getContext().startActivity(DaneContract.createMailIntent(emailanim));
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
             }
         });
         // Bind Post to ViewHolder, setting OnClickListener for the star button
         viewHolder.bindToAnimateur(cursor, new View.OnClickListener() {
             @Override
             public void onClick(View starView) {
-                ligneselectionnee = position;
+                ligneselectionnee = mPosition;
                 mCursor = cursor;
-                if (mailanimateur.getVisibility()==View.INVISIBLE) {
-                    mailanimateur.setVisibility(View.VISIBLE);
-                }
-                if (phoneanimateur.getVisibility()==View.INVISIBLE) {
-                    phoneanimateur.setVisibility(View.VISIBLE);
-                }
+//                if (mailanimateur.getVisibility()==View.INVISIBLE) {
+//                    mailanimateur.setVisibility(View.VISIBLE);
+//                }
+//                if (phoneanimateur.getVisibility()==View.INVISIBLE) {
+//                    phoneanimateur.setVisibility(View.VISIBLE);
+//                }
             }
         });
     }

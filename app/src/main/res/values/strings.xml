@@ -36,5 +36,17 @@
     <string name="menu_animateur">Menu Animateur</string>
     <string name="animateur_tel">Appeler l\'animateur</string>
     <string name="animateur_email">envoyer un email</string>
+    <string name="referent_tel">Appeler le référent</string>
+    <string name="referent_email">envoyer un email</string>
+    <string name="personnel_tel">Appeler le personnel</string>
+    <string name="personnel_email">envoyer un email</string>
+    <string name="etablissement_tel">Appeler l\'établissement</string>
+    <string name="etablissement_email">Envoyer un mail</string>
+    <string name="etablissement_map">Aller à l\'établissement</string>
+    <string name="menu_etablissement">Liste des Actions</string>
+    <string name="menu_actions">Liste des Actions</string>
+    <string name="personnel_edit">Modifier</string>
+    <string name="referent_edit">Modifier</string>
+    <string name="referent_delete">Supprimer</string>
 
 </resources>

@@ -71,7 +71,7 @@ public class DetailAnimateurActivity extends AppCompatActivity {
         super.onStart();
         Cursor mcursor = DaneContract.getAnimateurFromId(this,mAnimateurId);
         if (mcursor!=null) {
-            String civiliteanim  = DaneContract.getValueFromCursor(mcursor,DaneContract.CiviliteEntry.COLUMN_CIVILITE_NOM);
+            String civiliteanim  = DaneContract.getValueFromCursor(mcursor,"CIVILITE");
             String nomanim  = DaneContract.getValueFromCursor(mcursor,DaneContract.AnimateurEntry.COLUMN_NOM);
             String prenomanim  = DaneContract.getValueFromCursor(mcursor,DaneContract.AnimateurEntry.COLUMN_PRENOM);
             nomanimateur.setText(civiliteanim + " "+nomanim+" "+prenomanim);

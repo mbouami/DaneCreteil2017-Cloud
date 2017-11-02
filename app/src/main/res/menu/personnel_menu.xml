@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/personnel_tel"
+            android:icon="@drawable/ic_phone"
+            android:alphabeticShortcut="t"
+            android:title="@string/personnel_tel"/>
+        <item android:id="@+id/personnel_email"
+            android:icon="@drawable/ic_email"
+            android:alphabeticShortcut="e"
+            android:title="@string/personnel_email"/>
+        <item android:id="@+id/personnel_modifier"
+            android:icon="@drawable/ic_mode_edit"
+            android:alphabeticShortcut="e"
+            android:title="@string/personnel_edit"/>
+</menu>

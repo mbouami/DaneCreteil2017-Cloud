@@ -130,7 +130,7 @@ public class ReferentDialogFragment extends DialogFragment {
             }
         }
         // Pass null as the parent view because its going in the dialog layout
-        builder.setIcon(R.drawable.ic_settings_applications_black_24dp)
+        builder.setIcon(R.drawable.ic_settings_applications)
                 .setTitle(mTitre)
                 .setView(viewdialog)
                 // Add action buttons

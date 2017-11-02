@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <header android:fragment="com.bouami.danecreteil2017_cloud.Fragments.PrefsDepartementFragment"
-        android:icon="@drawable/ic_settings_applications_black_24dp"
+        android:icon="@drawaic_settings_applications24dp"
         android:title="Département"
         android:summary="Choisir le département par défault." />
 </PreferenceScreen>-->
@@ -9,7 +9,7 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
 <header android:fragment="com.bouami.danecreteil2017_cloud.Fragments.PrefsDepartementFragment"
-    android:icon="@drawable/ic_settings_applications_black_24dp"
+    android:icon="@drawable/ic_settings_applications"
     android:title="Département Par défault"
     android:summary="Choisir le département par défault." />
 <!--

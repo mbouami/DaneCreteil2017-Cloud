@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -43,6 +44,8 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
     private Uri mUri;
     private static final int PERSONNEL_PAR_DEPARTEMENT_LOADER = 0;
 
+    public static FragmentManager mfragmentManager;
+
     public PersonnelListFragment() {
     }
 
@@ -65,18 +68,19 @@ public class PersonnelListFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_all_personnel, container, false);
         mRecycler = (RecyclerView) rootView.findViewById(R.id.personnel_list);
         mRecycler.setHasFixedSize(true);
-        editpersonnel = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editpersonnel);
-        editpersonnel.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-                final Long idpersonnel = mcursor.getLong(mcursor.getColumnIndex(DaneContract.PersonnelEntry._ID));
-                final String nompersonnel = DaneContract.getValueFromCursor(mcursor,"CIVILITE") +
-                        " "+ DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_NOM)+
-                        " "+ DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_PRENOM);
-                DaneContract.EditerPersonnelDialog(getFragmentManager(),idpersonnel,"Modiofication des informations de : "+nompersonnel, "edit_personnel");
-            }
-        });
+        mfragmentManager = getFragmentManager();
+//        editpersonnel = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editpersonnel);
+//        editpersonnel.setOnClickListener(new View.OnClickListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onClick(View view) {
+//                final Long idpersonnel = mcursor.getLong(mcursor.getColumnIndex(DaneContract.PersonnelEntry._ID));
+//                final String nompersonnel = DaneContract.getValueFromCursor(mcursor,"CIVILITE") +
+//                        " "+ DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_NOM)+
+//                        " "+ DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_PRENOM);
+//                DaneContract.EditerPersonnelDialog(getFragmentManager(),idpersonnel,"Modiofication des informations de : "+nompersonnel, "edit_personnel");
+//            }
+//        });
         return rootView;
     }
 

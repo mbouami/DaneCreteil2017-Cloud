@@ -3,6 +3,7 @@ package com.bouami.danecreteil2017_cloud.ViewHolder;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,8 +25,8 @@ public class PersonnelViewHolder extends RecyclerView.ViewHolder {
     public final TextView mEtablissementView;
     //    public final ImageView mListePersonnelView;
     public final LinearLayout mZoneReferencePersonnel;
-    public Personnel mItem;
     public final View mView;
+    public final ImageButton mMenuPersonnel;
 
     public PersonnelViewHolder(View itemView) {
         super(itemView);
@@ -36,6 +37,7 @@ public class PersonnelViewHolder extends RecyclerView.ViewHolder {
         mEtablissementView = (TextView) itemView.findViewById(R.id.etablissement);
 //        mListePersonnelView = (ImageView) itemView.findViewById(R.id.detail);
         mZoneReferencePersonnel = (LinearLayout) itemView.findViewById(R.id.zone_reference_personnel);
+        mMenuPersonnel = (ImageButton) itemView.findViewById(R.id.liste_operations);
         mView = itemView;
     }
 

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -47,6 +48,8 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
     private Long mEtablissementId;
     private Cursor mcursor;
 
+    public static FragmentManager mfragmentManager;
+
     private FloatingActionButton addreferent, deletereferent,editreferent;
 
     private Uri mUri;
@@ -71,10 +74,11 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
         View rootView = inflater.inflate(R.layout.fragment_all_referent, container, false);
         mRecycler = (RecyclerView) rootView.findViewById(R.id.referent_list);
         mRecycler.setHasFixedSize(true);
+        mfragmentManager = getFragmentManager();
         addreferent = (FloatingActionButton) rootView.findViewById(R.id.addreferent);
-        deletereferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.deletereferent);
-        editreferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editreferent);
-
+//        deletereferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.deletereferent);
+//        editreferent = (FloatingActionButton) rootView.getRootView().findViewById(R.id.editreferent);
+//
         if (mEtablissementId!=0) {
             addreferent.setVisibility(View.VISIBLE);
         }
@@ -84,26 +88,26 @@ public class ReferentListFragment extends Fragment implements LoaderManager.Load
                 DaneContract.AjoutReferentDialog(getFragmentManager(),mEtablissementId,"Ajout d'un nouveau référent","Ajout_Referent");
             }
         });
-        deletereferent.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-                final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
-                final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-                final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
-//                DaneContract.confirmationOperation(getFragmentManager(),mcursor,"Voulez-vous supprimer le référent " +nomreferent,"suppression_referent");
-                DaneContract.DeleteReferentDialog(getFragmentManager(),"Suppression du référent","Voulez-vous supprimer le référent " +nomreferent,idreferent,idbasereferent,"suppression_referent");
-            }
-        });
-
-        editreferent.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onClick(View view) {
-                final Long idreferent = mcursor.getLong(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
-                DaneContract.EditerReferentDialog(getFragmentManager(),idreferent,"Edition du référent", "edit_referent");
-            }
-        });
+//        deletereferent.setOnClickListener(new View.OnClickListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onClick(View view) {
+//                final String nomreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_NOM));
+//                final String idreferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+//                final String idbasereferent = mcursor.getString(mcursor.getColumnIndex(DaneContract.ReferentEntry.COLUMN_REFERENT_ID));
+////                DaneContract.confirmationOperation(getFragmentManager(),mcursor,"Voulez-vous supprimer le référent " +nomreferent,"suppression_referent");
+//                DaneContract.DeleteReferentDialog(getFragmentManager(),"Suppression du référent","Voulez-vous supprimer le référent " +nomreferent,idreferent,idbasereferent,"suppression_referent");
+//            }
+//        });
+//
+//        editreferent.setOnClickListener(new View.OnClickListener() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onClick(View view) {
+//                final Long idreferent = mcursor.getLong(mcursor.getColumnIndex(DaneContract.ReferentEntry._ID));
+//                DaneContract.EditerReferentDialog(getFragmentManager(),idreferent,"Edition du référent", "edit_referent");
+//            }
+//        });
         return rootView;
     }
 

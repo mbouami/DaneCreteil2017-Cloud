@@ -3,6 +3,7 @@ package com.bouami.danecreteil2017_cloud.ViewHolder;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,10 +25,10 @@ public class EtablissementViewHolder extends RecyclerView.ViewHolder {
     public final TextView mEmailView;
     public final TextView mAdresseView;
     public final TextView mVilleView;
-    public final ImageView mListePersonnelView;
     public final LinearLayout mZoneReferenceEtablissement;
-    public Etablissement mItem;
     public final View mView;
+    public final ImageButton mMenuEtablissement;
+
 
     @Override
     public String toString() {
@@ -42,8 +43,8 @@ public class EtablissementViewHolder extends RecyclerView.ViewHolder {
         mEmailView = (TextView) itemView.findViewById(R.id.email);
         mAdresseView = (TextView) itemView.findViewById(R.id.adresse);
         mVilleView = (TextView) itemView.findViewById(R.id.ville);
-        mListePersonnelView = (ImageView) itemView.findViewById(R.id.detail);
         mZoneReferenceEtablissement = (LinearLayout) itemView.findViewById(R.id.zone_reference_etablissement);
+        mMenuEtablissement = (ImageButton) itemView.findViewById(R.id.liste_operations);
         mView = itemView;
     }
 
@@ -62,7 +63,7 @@ public class EtablissementViewHolder extends RecyclerView.ViewHolder {
         mEmailView.setText(emailetab);
         mAdresseView.setText(adresseetab);
         mVilleView.setText(ville);
-        mZoneReferenceEtablissement.setOnClickListener(starClickListener);
+//        mZoneReferenceEtablissement.setOnClickListener(starClickListener);
     }
 
 }

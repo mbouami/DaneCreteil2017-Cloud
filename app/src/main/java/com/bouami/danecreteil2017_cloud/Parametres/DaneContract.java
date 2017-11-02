@@ -1282,7 +1282,7 @@ public class DaneContract {
         return shareIntent;
     }
 
-    public Intent createMapIntent(String mAdresseEtabcast) {
+    public static Intent createMapIntent(String mAdresseEtabcast) {
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
                 .appendQueryParameter("q", mAdresseEtabcast)
                 .build();

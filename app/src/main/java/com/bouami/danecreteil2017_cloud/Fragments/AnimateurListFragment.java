@@ -12,12 +12,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.PopupMenu;
 
 import com.bouami.danecreteil2017_cloud.Adapter.AnimateursRecyclerViewAdapter;
@@ -58,8 +61,8 @@ public class AnimateurListFragment extends Fragment implements LoaderManager.Loa
         mUri = DaneContract.AnimateurEntry.buildAnimateursParDepartement(mDepartement,"depart");
         View rootView = inflater.inflate(R.layout.fragment_all_animateurs, container, false);
         mRecycler = (RecyclerView) rootView.findViewById(R.id.animateur_list);
-        mRecycler.setHasFixedSize(true);
         registerForContextMenu(mRecycler);
+        mRecycler.setHasFixedSize(true);
         return rootView;
     }
 
@@ -74,6 +77,37 @@ public class AnimateurListFragment extends Fragment implements LoaderManager.Loa
         mAnimsAdapter = new AnimateursRecyclerViewAdapter(Animateur.class,R.layout.item_animateur,AnimateurViewHolder.class,mcursor);
         mRecycler.setAdapter(mAnimsAdapter);
     }
+
+    //    public void showPopup(View v) {
+//        PopupMenu popup = new PopupMenu(this, v);
+//        MenuInflater inflater = popup.getMenuInflater();
+//        inflater.inflate(R.menu.animateur_menu, popup.getMenu());
+//        popup.show();
+//    }
+
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v,
+//                                    ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.animateur_menu, menu);
+//    }
+
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        switch (item.getItemId()) {
+//            case R.id.animateur_tel:
+//                Log.d(TAG,"onContextItemSelected : tel");
+//                return true;
+//            case R.id.animateur_email:
+//                Log.d(TAG,"onContextItemSelected : email");
+//                return true;
+//            default:
+//                return super.onContextItemSelected(item);
+//        }
+//    }
 
 //    @Override
 //    public void onDestroyView() {

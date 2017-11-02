@@ -5,7 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,16 +23,16 @@ import com.bouami.danecreteil2017_cloud.R;
  * Created by mbouami on 15/09/2017.
  */
 
-public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
+public class AnimateurViewHolder extends RecyclerView.ViewHolder {
 
     private final String TAG = "AnimateurViewHolder";
     public final TextView mNomView;
     public final TextView mTelView;
     public final TextView mEmailView;
     public final ImageView mPhotoView;
-    public final ImageView mListeEtabsView;
     public final LinearLayout mZoneReferenceAnimateur;
     public final View mView;
+    public final ImageButton mMenuAnimateur;
 
     public AnimateurViewHolder(View itemView) {
         super(itemView);
@@ -35,8 +40,8 @@ public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
         mTelView = (TextView) itemView.findViewById(R.id.tel);
         mEmailView = (TextView) itemView.findViewById(R.id.email);
         mPhotoView = (ImageView) itemView.findViewById(R.id.photo);
-        mListeEtabsView = (ImageView) itemView.findViewById(R.id.detail);
         mZoneReferenceAnimateur = (LinearLayout) itemView.findViewById(R.id.zone_reference_animateur);
+        mMenuAnimateur = (ImageButton) itemView.findViewById(R.id.liste_operations);
         mView = itemView;
     }
 
@@ -51,20 +56,15 @@ public class AnimateurViewHolder extends RecyclerView.ViewHolder  {
             final byte[] imageanim = cursor.getBlob(cursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_PHOTO));
             photoanim = BitmapFactory.decodeByteArray(imageanim, 0, imageanim.length);
         }
-//        Log.d(TAG,"Image : "+cursor.getBlob(cursor.getColumnIndexOrThrow(DaneContract.AnimateurEntry.COLUMN_PHOTO))+"---"+nomanimateur+"---");
-//        byte[] byteArrayPhoto = cursor.getBlob(cursor.getColumnIndexOrThrow(DaneContract.AnimateurEntry.COLUMN_PHOTO));
-//        Bitmap bm = BitmapFactory.decodeByteArray(byteArrayPhoto, 0 ,byteArrayPhoto.length);
-//        Log.d(TAG,"Taile Image : "+byteArrayPhoto.length+"---"+nomanimateur+"---");
         mNomView.setText(civiliteanimateur+" "+nomanimateur+" "+prenomanimateur);
         mTelView.setText(telanimateur);
         mEmailView.setText(emailanimateur);
         if (photoanim!=null) mPhotoView.setImageBitmap(photoanim);
-        mZoneReferenceAnimateur.setOnClickListener(starClickListener);
+//        mZoneReferenceAnimateur.setOnClickListener(starClickListener);
     }
 
     @Override
     public String toString() {
         return super.toString() + " '" + mNomView.getText() + "'";
     }
-
 }

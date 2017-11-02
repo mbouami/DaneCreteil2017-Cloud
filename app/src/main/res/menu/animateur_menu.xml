@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-        <item android:id="@+id/animateur_tel"
+        <item
+            android:id="@+id/animateur_tel"
             android:icon="@drawable/ic_phone"
-            android:title="@string/animateur_tel" />
+            android:alphabeticShortcut="t"
+            android:title="@string/animateur_tel"/>
         <item android:id="@+id/animateur_email"
             android:icon="@drawable/ic_email"
-            android:title="@string/animateur_email" />
-<!-- menu group -->
-<!--<group android:id="@+id/group_delete">
-        <item android:id="@+id/menu_archive"
-            android:title="@string/menu_archive" />
-        <item android:id="@+id/menu_delete"
-            android:title="@string/menu_delete" />
-</group>-->
+            android:alphabeticShortcut="e"
+            android:title="@string/animateur_email"/>
 </menu>

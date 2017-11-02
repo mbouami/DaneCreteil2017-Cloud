@@ -78,7 +78,7 @@ public class ConfirmationReferentDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setIcon(R.drawable.ic_settings_applications_black_24dp)
+        builder.setIcon(R.drawable.ic_settings_applications)
                 .setMessage(mMessage)
                 .setPositiveButton(R.string.Oui, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

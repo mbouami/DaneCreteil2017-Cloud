@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/referent_tel"
+            android:icon="@drawable/ic_phone"
+            android:alphabeticShortcut="t"
+            android:title="@string/referent_tel"/>
+        <item android:id="@+id/referent_email"
+            android:icon="@drawable/ic_email"
+            android:alphabeticShortcut="e"
+            android:title="@string/referent_email"/>
+        <item android:id="@+id/referent_modifier"
+            android:icon="@drawable/ic_mode_edit"
+            android:alphabeticShortcut="e"
+            android:title="@string/referent_edit"/>
+        <item android:id="@+id/referent_supprimer"
+            android:icon="@drawable/ic_delete"
+            android:alphabeticShortcut="e"
+            android:title="@string/referent_delete"/>
+</menu>
