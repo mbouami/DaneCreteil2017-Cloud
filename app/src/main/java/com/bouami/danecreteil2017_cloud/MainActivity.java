@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -19,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -41,6 +46,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "danecreteil2017_cloud";
+    private ConnectivityManager mConMgr;
     RequestQueue mRequestQueue;
     private MyFragmentPagerAdapter mPagerAdapter = null;
     private ViewPager mViewPager;
@@ -49,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     public static Fragment[] mFragments;
     public static String[] mFragmentNames;
     private RadioGroup choixdepartement;
+    private ProgressBar progressBar;
+    private int progressStatus = 0;
+    private Handler handler = new Handler();
 
     private void SelectDepart() {
         departementencours = getPreferredDepart(this);
@@ -68,13 +77,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setProgressValue() {
+
+        new Thread(new Runnable() {
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+                while (progressStatus < 100) {
+                    progressStatus += 1;
+                    // Update the progress bar and display the
+                    //current value in the text view
+                    handler.post(new Runnable() {
+                        public void run() {
+                            progressBar.setProgress(progressStatus);
+//                            textView.setText(progressStatus+"/"+progressBar.getMax());
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                if (progressStatus>=100) {
+////                    // sleep 2 seconds, so that you can see the 100%
+////                    try {
+////                        Thread.sleep(2000);
+////                    } catch (InterruptedException e) {
+////                        e.printStackTrace();
+////                    }
+////
+////                    // close the progress bar dialog
+//                    progressBar.setVisibility(View.INVISIBLE);
+//                }
+            }
+        }).start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mConMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         mRequestQueue = Volley.newRequestQueue(this);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mtabLayout = (TabLayout) findViewById(R.id.tabs);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         SelectDepart();
         choixdepartement = (RadioGroup) this.findViewById(R.id.choixdepartement);
 //        String departementpardefault = getPreferredDepart(this);
@@ -132,11 +180,22 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null);
         if (!(NombreetablissementCursor.getCount() > 0)) {
-            Log.d(TAG, "Base de données non présente : ");
-            DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT);
+            if (mConMgr != null) {
+                NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT);
+                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Snackbar.make(getCurrentFocus(), "Réseau indisponible", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
         } else {
-            Log.d(TAG, NombreetablissementCursor.getCount()+" établissements sont déjà enregistrés dans la Base de données.");
+            DaneContract.SynchroniserPersonnel(this);
+            DaneContract.SynchroniserReferents(this);
         }
+//        setProgressValue();
     }
 
 

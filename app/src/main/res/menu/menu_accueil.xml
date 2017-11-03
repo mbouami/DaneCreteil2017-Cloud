@@ -19,8 +19,8 @@
             android:visible="true"
             app:showAsAction="never" />
         <item
-            android:id="@+id/action_logout"
-            android:title="@string/menu_logout"
+            android:id="@+id/action_version"
+            android:title="@string/message_version"
             android:visible="true"
             app:showAsAction="never" />
 </menu>

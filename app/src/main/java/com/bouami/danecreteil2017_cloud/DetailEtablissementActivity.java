@@ -174,8 +174,8 @@ public class DetailEtablissementActivity extends AppCompatActivity
         mFragments[1] = ReferentListFragment.newInstance(null,mEtablissementId);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(1);
-//        Snackbar.make(this, "La création du référent à réussie", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show();
+        Snackbar.make(getCurrentFocus(), "La création du référent à réussie", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     @SuppressLint("LongLogTag")

@@ -44,15 +44,15 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-//        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
 //        public static final int DATABASE_VERSION = 6;
-    public static final int DATABASE_VERSION = 32;
+    public static final int DATABASE_VERSION = 20;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -708,32 +708,12 @@ public class DaneContract {
 
     public static long addReferent(Context mContext, ContentValues referent) {
         long referentId = 0;
-//        final String OWM_REFERENT_ID = "referent_id";
-//        // First, check if the location with this city name exists in the db
-//        Cursor referentCursor = null;
-//        referentCursor = mContext.getContentResolver().query(
-//                ReferentEntry.CONTENT_URI,
-//                new String[]{ReferentEntry._ID},
-//                ReferentEntry.COLUMN_REFERENT_ID + " = ?",
-//                new String[]{referent.getAsString(OWM_REFERENT_ID)},
-//                null);
-//        if (referentCursor.moveToFirst()) {
-//            int referentIdIndex = referentCursor.getColumnIndex(ReferentEntry._ID);
-//            referentId = referentCursor.getLong(referentIdIndex);
-//        } else {
-            // Finally, insert location data into the database.
-            Uri insertedUri = mContext.getContentResolver().insert(ReferentEntry.CONTENT_URI,referent);
-            referentId = ContentUris.parseId(insertedUri);
-//        }
-//        referentCursor.close();
+        Uri insertedUri = mContext.getContentResolver().insert(ReferentEntry.CONTENT_URI,referent);
+        referentId = ContentUris.parseId(insertedUri);
         return referentId;
     }
 
     public static long updateReferent(Context mContext, ContentValues referent) {
-//        Uri muri = DaneContract.ReferentEntry.buildReferentUri(referent.getAsLong("_id"));
-//        referent.remove("referent_id");
-//        long updatereferent = mContext.getContentResolver().update(muri,referent,null,null);
-//        return updatereferent;
         Uri muri = DaneContract.ReferentEntry.buildReferent();
         String idreferent = referent.getAsString("_id");
         referent.remove("_id");
@@ -1339,6 +1319,36 @@ public class DaneContract {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
         mRequestQueue.add(jsObjRequest);
+    }
+
+    public static void SynchroniserPersonnel(Context mContext){
+            Uri uri = DaneContract.PersonnelEntry.buildPersonnel();
+            String[] selectionArgs = new String[]{"false"};
+            String sortOrder = PersonnelEntry.COLUMN_NOM;
+            String selection = PersonnelEntry.TABLE_NAME+"." + PersonnelEntry.COLUMN_SYNCHRONISER +" = ?";
+            Cursor mcursor = mContext.getContentResolver().query(uri,
+                    PERSONNEL_COLUMNS,
+                    selection,
+                    selectionArgs,
+                    sortOrder,
+                    null
+            );
+            Log.d(TAG,"Nombre de personnels à synchroniser : "+mcursor.getCount());
+    }
+
+    public static void SynchroniserReferents(Context mContext){
+        Uri uri = DaneContract.ReferentEntry.buildReferent();
+        String[] selectionArgs = new String[]{"false"};
+        String sortOrder = ReferentEntry.COLUMN_NOM;
+        String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_SYNCHRONISER +" = ?";
+        Cursor mcursor = mContext.getContentResolver().query(uri,
+                REFERENTS_COLUMNS,
+                selection,
+                selectionArgs,
+                sortOrder,
+                null
+        );
+        Log.d(TAG,"Nombre de référents à synchroniser : "+mcursor.getCount());
     }
 
     @SuppressLint("LongLogTag")
