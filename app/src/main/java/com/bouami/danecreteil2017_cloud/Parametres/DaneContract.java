@@ -44,8 +44,8 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-//        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
@@ -120,20 +120,21 @@ public class DaneContract {
     };
 
     public static final String[] REFERENTS_COLUMNS = {
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry._ID,
-            DaneContract.CiviliteEntry.TABLE_NAME + "." + DaneContract.CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_NOM,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_PRENOM,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_TEL,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_EMAIL,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_STATUT,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_REFERENT_ID,
-            DaneContract.ReferentEntry.TABLE_NAME + "." + DaneContract.ReferentEntry.COLUMN_SYNCHRONISER,
-            DaneContract.DisciplineEntry.TABLE_NAME + "." + DaneContract.DisciplineEntry.COLUMN_DISCIPLINE_NOM + " AS NOMDISCIPLINE",
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry._ID,
+            CiviliteEntry.TABLE_NAME + "." + CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_NOM,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_PRENOM,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_TEL,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_EMAIL,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_STATUT,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_REFERENT_ID,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_ETABLISSEMENT_ID,
+            ReferentEntry.TABLE_NAME + "." + ReferentEntry.COLUMN_SYNCHRONISER,
+            DisciplineEntry.TABLE_NAME + "." + DisciplineEntry.COLUMN_DISCIPLINE_NOM + " AS NOMDISCIPLINE",
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
+            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
+            DepartementEntry.TABLE_NAME + "." + DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
+            VilleEntry.TABLE_NAME + "." + VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
     };
 
     public static final String[] PERSONNEL_COLUMNS = {
@@ -145,6 +146,8 @@ public class DaneContract {
             DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_EMAIL,
             DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_STATUT,
             DaneContract.PersonnelEntry.TABLE_NAME + "." + DaneContract.PersonnelEntry.COLUMN_SYNCHRONISER,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + PersonnelEntry.COLUMN_ETABLISSEMENT_ID,
+            DaneContract.PersonnelEntry.TABLE_NAME + "." + PersonnelEntry.COLUMN_PERSONNEL_ID,
             DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM + " AS NOMETABLISSEMENT",
             DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_RNE + " AS RNEETABLISSEMENT",
             DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT",
@@ -1333,10 +1336,36 @@ public class DaneContract {
                     sortOrder,
                     null
             );
-            Log.d(TAG,"Nombre de personnels à synchroniser : "+mcursor.getCount());
+        JSONObject lespersonnels = new JSONObject();
+        try {
+            lespersonnels.putOpt("personnels",new JSONObject());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        for (int i=0;i<mcursor.getCount();i++) {
+            mcursor.moveToPosition(i);
+            JSONObject lepersonnel = new JSONObject();
+            try {
+                lepersonnel.put("id",DaneContract.getValueFromCursor(mcursor, PersonnelEntry._ID));
+                lepersonnel.put("idbase",DaneContract.getValueFromCursor(mcursor, PersonnelEntry.COLUMN_PERSONNEL_ID));
+                lepersonnel.put("synchroniser",DaneContract.getValueFromCursor(mcursor, PersonnelEntry.COLUMN_SYNCHRONISER));
+                lepersonnel.put("civilite",DaneContract.getValueFromCursor(mcursor,"CIVILITE"));
+                lepersonnel.put("nom",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_NOM));
+                lepersonnel.put("prenom", DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_PRENOM));
+                lepersonnel.put("tel",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_TEL));
+                lepersonnel.put("email",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_EMAIL));
+                lepersonnel.put("statut",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_STATUT));
+                lepersonnel.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_ETABLISSEMENT_ID));
+                lespersonnels.getJSONObject("personnels").putOpt(String.valueOf(i),lepersonnel);
+//                Log.d(TAG,"Nombre de référents à synchroniser : "+lepersonnel);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+            Log.d(TAG,"Nombre de personnels à synchroniser : "+lespersonnels.toString());
     }
 
-    public static void SynchroniserReferents(Context mContext){
+    public static void SynchroniserReferents(Context mContext) {
         Uri uri = DaneContract.ReferentEntry.buildReferent();
         String[] selectionArgs = new String[]{"0"};
         String sortOrder = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_NOM;
@@ -1348,7 +1377,34 @@ public class DaneContract {
                 sortOrder,
                 null
         );
-        Log.d(TAG,"Nombre de référents à synchroniser : "+mcursor.getCount());
+        JSONObject lesreferents = new JSONObject();
+        try {
+            lesreferents.putOpt("referents",new JSONObject());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        for (int i=0;i<mcursor.getCount();i++) {
+            mcursor.moveToPosition(i);
+            JSONObject lereferent = new JSONObject();
+            try {
+                lereferent.put("id",DaneContract.getValueFromCursor(mcursor, ReferentEntry._ID));
+                lereferent.put("idbase",DaneContract.getValueFromCursor(mcursor, ReferentEntry.COLUMN_REFERENT_ID));
+                lereferent.put("synchroniser",DaneContract.getValueFromCursor(mcursor, ReferentEntry.COLUMN_SYNCHRONISER));
+                lereferent.put("civilite",DaneContract.getValueFromCursor(mcursor,"CIVILITE"));
+                lereferent.put("nom",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_NOM));
+                lereferent.put("prenom", DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_PRENOM));
+                lereferent.put("tel",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_TEL));
+                lereferent.put("email",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_EMAIL));
+                lereferent.put("statut",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_STATUT));
+                lereferent.put("discipline",DaneContract.getValueFromCursor(mcursor,"NOMDISCIPLINE"));
+                lereferent.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
+                lesreferents.getJSONObject("referents").putOpt(String.valueOf(i),lereferent);
+//                Log.d(TAG,"Nombre de référents à synchroniser : "+lereferent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.d(TAG,"Nombre de référents à synchroniser : "+lesreferents.toString());
     }
 
     @SuppressLint("LongLogTag")

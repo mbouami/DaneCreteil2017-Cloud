@@ -1,6 +1,9 @@
 package com.bouami.danecreteil2017_cloud.Models;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +47,20 @@ public class Referent {
         this.statut = referent.get("statut").toString();
         this.discipline = referent.getJSONObject("discipline").keys().next();
         this.etablissement = referent.getJSONObject("etablissements").keys().next();
+    }
+
+    public JSONObject getJsonFromCursorReferent(Cursor mcursor) throws JSONException {
+        JSONObject lereferent = new JSONObject();
+        lereferent.put("id",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry._ID));
+        lereferent.put("civilite",DaneContract.getValueFromCursor(mcursor,"CIVILITE"));
+        lereferent.put("nom",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_NOM));
+        lereferent.put("prenom", DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_PRENOM));
+        lereferent.put("tel",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_TEL));
+        lereferent.put("email",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_EMAIL));
+        lereferent.put("statut",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_STATUT));
+        lereferent.put("discipline",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_DISCIPLINE_ID));
+        lereferent.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
+        return lereferent;
     }
 
     public ContentValues getRefer() {
