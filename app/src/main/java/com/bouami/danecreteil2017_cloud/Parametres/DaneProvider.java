@@ -1092,8 +1092,16 @@ public class DaneProvider extends ContentProvider {
                 break;
             }
             case PERSONNEL: {
-                retCursor = mDaneHelper.getReadableDatabase().query(
-                        PersonnelEntry.TABLE_NAME,
+//                retCursor = mDaneHelper.getReadableDatabase().query(
+//                        PersonnelEntry.TABLE_NAME,
+//                        projection,
+//                        selection,
+//                        selectionArgs,
+//                        null,
+//                        null,
+//                        sortOrder
+//                );
+                retCursor = sPersonnelParDepartementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,
@@ -1105,8 +1113,16 @@ public class DaneProvider extends ContentProvider {
             }
 
             case REFERENT: {
-                retCursor = mDaneHelper.getReadableDatabase().query(
-                        ReferentEntry.TABLE_NAME,
+//                retCursor = mDaneHelper.getReadableDatabase().query(
+//                        ReferentEntry.TABLE_NAME,
+//                        projection,
+//                        selection,
+//                        selectionArgs,
+//                        null,
+//                        null,
+//                        sortOrder
+//                );
+                retCursor = sReferentsParDepartementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,

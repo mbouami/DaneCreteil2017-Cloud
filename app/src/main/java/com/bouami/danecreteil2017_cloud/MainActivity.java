@@ -183,12 +183,14 @@ public class MainActivity extends AppCompatActivity {
             if (mConMgr != null) {
                 NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
+                    Log.d(TAG,"Synchronisation en cours");
                     DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT);
-                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+//                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
                 } else {
-                    Snackbar.make(getCurrentFocus(), "Réseau indisponible", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Log.d(TAG,"Réseau indisponible");
+//                    Snackbar.make(getCurrentFocus(), "Réseau indisponible", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
                 }
             }
         } else {

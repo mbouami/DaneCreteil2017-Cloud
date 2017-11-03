@@ -44,15 +44,15 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+//        public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final int NUM_VERSION_SQLITE = 1;
 //        public static final int DATABASE_VERSION = 6;
-    public static final int DATABASE_VERSION = 20;
+    public static final int DATABASE_VERSION = 32;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -1323,8 +1323,8 @@ public class DaneContract {
 
     public static void SynchroniserPersonnel(Context mContext){
             Uri uri = DaneContract.PersonnelEntry.buildPersonnel();
-            String[] selectionArgs = new String[]{"false"};
-            String sortOrder = PersonnelEntry.COLUMN_NOM;
+            String[] selectionArgs = new String[]{"0"};
+            String sortOrder = PersonnelEntry.TABLE_NAME+"." + PersonnelEntry.COLUMN_NOM;
             String selection = PersonnelEntry.TABLE_NAME+"." + PersonnelEntry.COLUMN_SYNCHRONISER +" = ?";
             Cursor mcursor = mContext.getContentResolver().query(uri,
                     PERSONNEL_COLUMNS,
@@ -1338,8 +1338,8 @@ public class DaneContract {
 
     public static void SynchroniserReferents(Context mContext){
         Uri uri = DaneContract.ReferentEntry.buildReferent();
-        String[] selectionArgs = new String[]{"false"};
-        String sortOrder = ReferentEntry.COLUMN_NOM;
+        String[] selectionArgs = new String[]{"0"};
+        String sortOrder = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_NOM;
         String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_SYNCHRONISER +" = ?";
         Cursor mcursor = mContext.getContentResolver().query(uri,
                 REFERENTS_COLUMNS,
