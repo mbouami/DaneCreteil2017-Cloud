@@ -12,6 +12,8 @@ import android.provider.BaseColumns;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -52,8 +54,8 @@ public class DaneContract {
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
     public static final int NUM_VERSION_SQLITE = 1;
-//        public static final int DATABASE_VERSION = 6;
-    public static final int DATABASE_VERSION = 40;
+//        public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 41;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -1327,7 +1329,7 @@ public class DaneContract {
         return intent;
     }
 
-    public static void ImporterDonneesFromUrlToDatabase(final Context ctx, String url) {
+    public static void ImporterDonneesFromUrlToDatabase(final Context ctx, String url, final ProgressBar progressBar) {
         JsonObjectRequest jsObjRequest;
         RequestQueue mRequestQueue;
         mRequestQueue = Volley.newRequestQueue(ctx);
@@ -1358,6 +1360,7 @@ public class DaneContract {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 }, new Response.ErrorListener() {
 
@@ -1629,7 +1632,7 @@ public class DaneContract {
         }
     }
 
-    public static void synchroniserDonnees(final Context mcontext, JSONObject donnees) {
+    public static void synchroniserDonnees(final Context mcontext, JSONObject donnees, final ProgressBar progressBar) {
         Log.d(TAG,"Données à synchroniser vers avec la base : "+donnees);
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -1643,7 +1646,7 @@ public class DaneContract {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 }, new Response.ErrorListener() {
 

@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        progressBar.setVisibility(View.VISIBLE);
         Cursor NombreetablissementCursor = getBaseContext().getContentResolver().query(
                 DaneContract.EtablissementEntry.CONTENT_URI,
                 new String[]{DaneContract.EtablissementEntry._ID},
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
                     Log.d(TAG,"Synchronisation en cours");
-                    DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT);
+                    DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT,progressBar);
 //                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
                 } else {
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
                 jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
-                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser);
+                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,progressBar);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
