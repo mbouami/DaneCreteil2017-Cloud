@@ -46,8 +46,8 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+//    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
@@ -55,7 +55,7 @@ public class DaneContract {
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
     public static final int NUM_VERSION_SQLITE = 1;
 //        public static final int DATABASE_VERSION = 1;
-    public static final int DATABASE_VERSION = 41;
+    public static final int DATABASE_VERSION = 33;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -1654,6 +1654,7 @@ public class DaneContract {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         Log.d(TAG, "That didn't work!");
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
         //        stringRequest.setTag(TAG);
