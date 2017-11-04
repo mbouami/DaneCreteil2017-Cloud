@@ -1520,12 +1520,13 @@ public class DaneContract {
                 ref.setRefer(true,insertedCivilite);
                 Cursor referentcursor = getReferentFromIdBase(ctx,ref.getRefer());
                 if (referentcursor==null){
+//                    Log.d(TAG,"importerReferentsDansBase : addReferent");
                     long insertedreferent = DaneContract.addReferent(ctx,ref.getRefer());
                 } else {
+//                    Log.d(TAG,"importerReferentsDansBase : updateReferentSynchroniser");
                     long updatedreferent = updateReferentSynchroniser(ctx,ref.getRefer(),getValueFromCursor(referentcursor,ReferentEntry._ID));
                 }
-
-                Log.d(TAG, "referent : " + ref.getRefer().getAsString("nom") + "---"+ref.getRefer().getAsString("statut")+"---"+ref.getRefer().getAsString("etablissement_id"));
+//                Log.d(TAG, "referent : " + ref.getRefer().getAsString("nom") + "---"+ref.getRefer().getAsString("statut")+"---"+ref.getRefer().getAsString("etablissement_id"));
             }
         }
     }
@@ -1633,13 +1634,13 @@ public class DaneContract {
     }
 
     public static void synchroniserDonnees(final Context mcontext, JSONObject donnees, final ProgressBar progressBar) {
-        Log.d(TAG,"Données à synchroniser vers avec la base : "+donnees);
+//        Log.d(TAG,"Données à synchroniser vers avec la base : "+donnees);
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, DaneContract.BASE_URL_SYNCHRONISER, donnees, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                            Log.d(TAG,"Données à synchroniser avec le mobile : "+response);
+//                            Log.d(TAG,"Données à synchroniser avec le mobile : "+response);
                         try {
                             synchroniserReferentsDepuisLaBase(mcontext,response);
                             synchroniserPersonnelsDepuisLaBase(mcontext,response);
