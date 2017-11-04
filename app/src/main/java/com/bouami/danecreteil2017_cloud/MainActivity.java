@@ -16,13 +16,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,14 +31,10 @@ import com.bouami.danecreteil2017_cloud.Fragments.PersonnelListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.AnimateurListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.EtablissementListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
-import com.bouami.danecreteil2017_cloud.Models.Animateur;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "danecreteil2017_cloud";
@@ -194,8 +186,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            DaneContract.SynchroniserPersonnel(this);
-            DaneContract.SynchroniserReferents(this);
+            JSONObject jsondonneesasynchroniser = new JSONObject();
+            try {
+                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
+                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
+                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 //        setProgressValue();
     }

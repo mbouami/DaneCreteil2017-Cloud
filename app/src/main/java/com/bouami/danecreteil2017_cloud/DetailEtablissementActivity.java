@@ -194,8 +194,12 @@ public class DetailEtablissementActivity extends AppCompatActivity
             e.printStackTrace();
         }
         if (this.getContentResolver().delete(muri, null,null)>0) {
-//        DaneContract.deleteReferent(this,jsonreferent);
-            Log.d(TAG, "Suppression du référent : "+jsonreferent);
+            try {
+                if (jsonreferent.getString("idbase")!="0") DaneContract.deleteReferent(this,jsonreferent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//            Log.d(TAG, "Suppression du référent : "+jsonreferent);
             mFragments[0] = PersonnelListFragment.newInstance(null,mEtablissementId );
             mFragments[1] = ReferentListFragment.newInstance(null,mEtablissementId);
             mViewPager.setAdapter(mPagerAdapter);

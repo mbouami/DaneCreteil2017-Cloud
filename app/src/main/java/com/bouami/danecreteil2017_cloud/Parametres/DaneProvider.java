@@ -1092,15 +1092,6 @@ public class DaneProvider extends ContentProvider {
                 break;
             }
             case PERSONNEL: {
-//                retCursor = mDaneHelper.getReadableDatabase().query(
-//                        PersonnelEntry.TABLE_NAME,
-//                        projection,
-//                        selection,
-//                        selectionArgs,
-//                        null,
-//                        null,
-//                        sortOrder
-//                );
                 retCursor = sPersonnelParDepartementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                         projection,
                         selection,
