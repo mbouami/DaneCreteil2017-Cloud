@@ -10,14 +10,19 @@
             android:icon="@android:drawable/ic_menu_search"
             android:title="Rechercher un animateur"
             app:showAsAction="ifRoom|collapseActionView"></item>
+        <!--<item-->
+            <!--android:id="@+id/action_reinitialisation"-->
+            <!--android:title="@string/menu_reinitialisation"-->
+            <!--android:visible="true"-->
+            <!--app:showAsAction="never" />-->
+        <!--<item-->
+            <!--android:id="@+id/action_logout"-->
+            <!--android:title="@string/menu_logout"-->
+            <!--android:visible="true"-->
+            <!--app:showAsAction="never" />-->
         <item
-            android:id="@+id/action_reinitialisation"
-            android:title="@string/menu_reinitialisation"
-            android:visible="true"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_logout"
-            android:title="@string/menu_logout"
+            android:id="@+id/action_version"
+            android:title="@string/message_version"
             android:visible="true"
             app:showAsAction="never" />
 </menu>

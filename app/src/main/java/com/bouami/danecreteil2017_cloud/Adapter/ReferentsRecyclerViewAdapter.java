@@ -124,9 +124,10 @@ public class ReferentsRecyclerViewAdapter extends MyRecycleAdapter<Referent,Refe
                 inflater.inflate(R.menu.referent_menu, popup.getMenu());
                 if (telreferent.equals("")) popup.getMenu().getItem(0).setEnabled(false);
                 if (emailreferent.equals("")) popup.getMenu().getItem(1).setEnabled(false);
+                popup.getMenu().getItem(3).setEnabled(false);
                 if (!mModifier) {
                     popup.getMenu().getItem(2).setEnabled(false);
-                    popup.getMenu().getItem(3).setEnabled(false);
+//                    popup.getMenu().getItem(3).setEnabled(false);
                 }
                 popup.show();
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

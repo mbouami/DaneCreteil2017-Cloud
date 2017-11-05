@@ -55,7 +55,7 @@ public class DaneContract {
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
     public static final int NUM_VERSION_SQLITE = 1;
 //        public static final int DATABASE_VERSION = 1;
-    public static final int DATABASE_VERSION = 33;
+    public static final int DATABASE_VERSION = 35;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -76,15 +76,12 @@ public class DaneContract {
     public static final String PATH_PERSONNEL = "personnel";
     public static final String PATH_REFERENTS = "referents";
 
+    private static final String[] ETABLISSEMENT_REF_COLUMNS = {
+            EtablissementEntry.TABLE_NAME + ".*"
+    };
+
     private static final String[] ETABLISSEMENT_COLUMNS = {
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry._ID,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_TYPE,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_NOM,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_TEL,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_FAX,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_EMAIL,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_ADRESSE,
-            EtablissementEntry.TABLE_NAME + "." + EtablissementEntry.COLUMN_ANIMATEUR_ID,
+            EtablissementEntry.TABLE_NAME + ".*",
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_NOM + " AS NOMANIMATEUR",
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_PRENOM + " AS PRENOMANIMATEUR" ,
             CiviliteEntry.TABLE_NAME + "." + CiviliteEntry.COLUMN_CIVILITE_NOM + " AS CIVILITE",
@@ -514,17 +511,21 @@ public class DaneContract {
     }
 
 
-    public static void initialiserBase(Context mContext){
+    public static void initialiserBase(Context mContext, String url, final ProgressBar progressBar){
 //            mContext.deleteDatabase(DaneContract.CONTENT_AUTHORITY);
 //            mContext.openOrCreateDatabase("test",Context.MODE_ENABLE_WRITE_AHEAD_LOGGING,null);
-        mContext.getContentResolver().delete(DaneContract.PersonnelEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.ReferentEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.EtablissementEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.VilleEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.AnimateurEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.DepartementEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.DisciplineEntry.CONTENT_URI,null,null);
-        mContext.getContentResolver().delete(DaneContract.CiviliteEntry.CONTENT_URI,null,null);
+        try {
+            mContext.getContentResolver().delete(PersonnelEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(ReferentEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(EtablissementEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(VilleEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(AnimateurEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(DepartementEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(DisciplineEntry.CONTENT_URI,null,null);
+            mContext.getContentResolver().delete(CiviliteEntry.CONTENT_URI,null,null);
+        } finally {
+            ImporterDonneesFromUrlToDatabase(mContext, url, progressBar);
+        }
     }
 
     static long addDepartement(Context mContext, String nom, String intitule) {
@@ -785,6 +786,22 @@ public class DaneContract {
                 null,
                 null,
                 null);
+        if (etabcursor.moveToFirst()){
+            return etabcursor;
+        }
+        return null;
+    };
+    public static  Cursor getEtablissementFromIdBase(Context mContext, String idbaseetab) {
+        Uri uri = DaneContract.EtablissementEntry.buildEtablissements();
+        String[] selectionArgs = new String[]{idbaseetab};
+        String selection = EtablissementEntry.TABLE_NAME+"." + EtablissementEntry.COLUMN_ETABLISSEMENT_ID +" = ?";
+        Cursor etabcursor = mContext.getContentResolver().query(uri,
+                ETABLISSEMENT_REF_COLUMNS,
+                selection,
+                selectionArgs,
+                null,
+                null
+        );
         if (etabcursor.moveToFirst()){
             return etabcursor;
         }
@@ -1333,7 +1350,7 @@ public class DaneContract {
         JsonObjectRequest jsObjRequest;
         RequestQueue mRequestQueue;
         mRequestQueue = Volley.newRequestQueue(ctx);
-        DaneContract.initialiserBase(ctx);
+//        initialiserBase(ctx);
         jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @SuppressLint("LongLogTag")
@@ -1520,8 +1537,11 @@ public class DaneContract {
                 ref.setRefer(true,insertedCivilite);
                 Cursor referentcursor = getReferentFromIdBase(ctx,ref.getRefer());
                 if (referentcursor==null){
-//                    Log.d(TAG,"importerReferentsDansBase : addReferent");
-                    long insertedreferent = DaneContract.addReferent(ctx,ref.getRefer());
+                    Cursor etabcursor = getEtablissementFromIdBase(ctx,ref.getEtablissement());
+                    ContentValues nouveauref = ref.getRefer();
+                    nouveauref.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
+//                    Log.d(TAG,"importerReferentsDansBase : addReferent "+ref.getEtablissement());
+                    long insertedreferent = DaneContract.addReferent(ctx,nouveauref);
                 } else {
 //                    Log.d(TAG,"importerReferentsDansBase : updateReferentSynchroniser");
                     long updatedreferent = updateReferentSynchroniser(ctx,ref.getRefer(),getValueFromCursor(referentcursor,ReferentEntry._ID));

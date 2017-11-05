@@ -176,8 +176,10 @@ public class MainActivity extends AppCompatActivity {
             if (mConMgr != null) {
                 NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
+//                    DaneContract.initialiserBase(this);
                     Log.d(TAG,"Synchronisation en cours");
-                    DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+                    DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+//                    DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT,progressBar);
 //                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
                 } else {
@@ -234,9 +236,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_logout :
-                Log.d(TAG, "AccueilActivity: action_logout activé");
-                return true;
+//            case R.id.action_logout :
+//                Log.d(TAG, "AccueilActivity: action_logout activé");
+//                return true;
             case R.id.action_settings:
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
@@ -244,7 +246,10 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(i);
                 return true;
             case R.id.action_reinitialisation :
-
+//                DaneContract.initialiserBase(this);
+                progressBar.setVisibility(View.VISIBLE);
+//                DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+                DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,progressBar);
                 return true;
         }
         return super.onOptionsItemSelected(item);
