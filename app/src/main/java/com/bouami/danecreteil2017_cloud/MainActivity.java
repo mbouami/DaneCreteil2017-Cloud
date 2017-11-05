@@ -246,10 +246,15 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(i);
                 return true;
             case R.id.action_reinitialisation :
-//                DaneContract.initialiserBase(this);
-                progressBar.setVisibility(View.VISIBLE);
-//                DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT,progressBar);
-                DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+                if (mConMgr != null) {
+                    NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
+                    if (networkInfo != null && networkInfo.isConnected()) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+                    } else {
+                        Log.d(TAG,"Réseau indisponible");
+                    }
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
