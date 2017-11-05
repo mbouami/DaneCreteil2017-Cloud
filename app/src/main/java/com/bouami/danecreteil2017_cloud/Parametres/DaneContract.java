@@ -54,8 +54,8 @@ public class DaneContract {
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
     public static final int NUM_VERSION_SQLITE = 1;
-//        public static final int DATABASE_VERSION = 1;
-    public static final int DATABASE_VERSION = 35;
+    public static final int DATABASE_VERSION = 1;
+//    public static final int DATABASE_VERSION = 35;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -1386,6 +1386,7 @@ public class DaneContract {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         Log.d(TAG, "That didn't work!");
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
         //        stringRequest.setTag(TAG);
