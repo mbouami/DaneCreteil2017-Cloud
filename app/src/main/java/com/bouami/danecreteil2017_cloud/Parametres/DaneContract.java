@@ -1570,7 +1570,10 @@ public class DaneContract {
                 perso.setPerso(idetab,insertedCivilite,true);
                 Cursor personnelcursor = getPersonnelFromIdBase(ctx,perso.getPerso().getAsString("personnel_id"));
                 if (personnelcursor==null){
-                    long insertedperso = DaneContract.addPersonnel(ctx,perso.getPerso());
+                    Cursor etabcursor = getEtablissementFromIdBase(ctx, String.valueOf(idetab));
+                    ContentValues nouveauperso = perso.getPerso();
+                    nouveauperso.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
+                    long insertedperso = DaneContract.addPersonnel(ctx,nouveauperso);
                 } else {
                     long updatedperso = updatePersonnelSynchroniser(ctx,perso.getPerso(),getValueFromCursor(personnelcursor,PersonnelEntry._ID));
                 }
