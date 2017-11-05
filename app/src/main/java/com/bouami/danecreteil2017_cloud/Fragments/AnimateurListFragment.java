@@ -173,7 +173,7 @@ public class AnimateurListFragment extends Fragment implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if ( null != mUri && mDepartement!=null ) {
-            String sortOrder = DaneContract.AnimateurEntry.TABLE_NAME+"."+DaneContract.AnimateurEntry.COLUMN_NOM + " ASC";
+            String sortOrder = DaneContract.AnimateurEntry.TABLE_NAME+"."+DaneContract.AnimateurEntry.COLUMN_NOM + " DESC";
             CursorLoader cursorLoader = new CursorLoader(getActivity(),mUri,
                     DaneContract.ANIM_COLUMNS,"NOMDEPARTEMENT = ?",
                     new String[]{mDepartement},sortOrder);
