@@ -1,5 +1,6 @@
 package com.bouami.danecreteil2017_cloud;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public static String[] mFragmentNames;
     private RadioGroup choixdepartement;
     private ProgressBar progressBar;
+    private ProgressDialog prog;
     private int progressStatus = 0;
     private Handler handler = new Handler();
 
@@ -69,43 +71,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setProgressValue() {
-
-        new Thread(new Runnable() {
-            public void run() {
-                progressBar.setVisibility(View.VISIBLE);
-                while (progressStatus < 100) {
-                    progressStatus += 1;
-                    // Update the progress bar and display the
-                    //current value in the text view
-                    handler.post(new Runnable() {
-                        public void run() {
-                            progressBar.setProgress(progressStatus);
-//                            textView.setText(progressStatus+"/"+progressBar.getMax());
-                        }
-                    });
-                    try {
-                        // Sleep for 200 milliseconds.
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-//                if (progressStatus>=100) {
-////                    // sleep 2 seconds, so that you can see the 100%
-////                    try {
-////                        Thread.sleep(2000);
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-////
-////                    // close the progress bar dialog
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                }
-            }
-        }).start();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
         mViewPager = (ViewPager) findViewById(R.id.container);
         mtabLayout = (TabLayout) findViewById(R.id.tabs);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         SelectDepart();
         choixdepartement = (RadioGroup) this.findViewById(R.id.choixdepartement);
 //        String departementpardefault = getPreferredDepart(this);
@@ -164,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         Cursor NombreetablissementCursor = getBaseContext().getContentResolver().query(
                 DaneContract.EtablissementEntry.CONTENT_URI,
                 new String[]{DaneContract.EtablissementEntry._ID},
@@ -176,9 +139,9 @@ public class MainActivity extends AppCompatActivity {
             if (mConMgr != null) {
                 NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
-//                    DaneContract.initialiserBase(this);
-                    Log.d(TAG,"Synchronisation en cours");
-                    DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+                    prog= new ProgressDialog(this);
+                    DaneContract.showLoadingDialog(prog,"Réinitialisation des Données","Merci de patienter");
+                    DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,prog);
 //                    DaneContract.ImporterDonneesFromUrlToDatabase(this,DaneContract.BASE_URL_EXPORT,progressBar);
 //                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
@@ -191,9 +154,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             JSONObject jsondonneesasynchroniser = new JSONObject();
             try {
+                prog= new ProgressDialog(this);
+                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
                 jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
                 jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
-                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,progressBar);
+                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -249,8 +214,9 @@ public class MainActivity extends AppCompatActivity {
                 if (mConMgr != null) {
                     NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
                     if (networkInfo != null && networkInfo.isConnected()) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,progressBar);
+                        prog= new ProgressDialog(this);
+                        DaneContract.showLoadingDialog(prog,"Réinitialisation des Données","Merci de patienter");
+                        DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,prog);
                     } else {
                         Log.d(TAG,"Réseau indisponible");
                     }

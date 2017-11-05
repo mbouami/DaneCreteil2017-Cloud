@@ -1,6 +1,7 @@
 package com.bouami.danecreteil2017_cloud.Parametres;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -13,8 +14,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -46,16 +45,16 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-//    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
     public static final int NUM_VERSION_SQLITE = 1;
-    public static final int DATABASE_VERSION = 1;
-//    public static final int DATABASE_VERSION = 35;
+//    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 41;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -511,7 +510,7 @@ public class DaneContract {
     }
 
 
-    public static void initialiserBase(Context mContext, String url, final ProgressBar progressBar){
+    public static void initialiserBase(Context mContext, String url, final ProgressDialog progressBar){
 //            mContext.deleteDatabase(DaneContract.CONTENT_AUTHORITY);
 //            mContext.openOrCreateDatabase("test",Context.MODE_ENABLE_WRITE_AHEAD_LOGGING,null);
         try {
@@ -1346,11 +1345,10 @@ public class DaneContract {
         return intent;
     }
 
-    public static void ImporterDonneesFromUrlToDatabase(final Context ctx, String url, final ProgressBar progressBar) {
+    public static void ImporterDonneesFromUrlToDatabase(final Context ctx, String url, final ProgressDialog progressBar) {
         JsonObjectRequest jsObjRequest;
         RequestQueue mRequestQueue;
         mRequestQueue = Volley.newRequestQueue(ctx);
-//        initialiserBase(ctx);
         jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @SuppressLint("LongLogTag")
@@ -1377,7 +1375,7 @@ public class DaneContract {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        progressBar.setVisibility(View.INVISIBLE);
+                        hideLoadingDialog(progressBar);
                     }
                 }, new Response.ErrorListener() {
 
@@ -1386,7 +1384,7 @@ public class DaneContract {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         Log.d(TAG, "That didn't work!");
-                        progressBar.setVisibility(View.INVISIBLE);
+                        hideLoadingDialog(progressBar);
                     }
                 });
         //        stringRequest.setTag(TAG);
@@ -1657,7 +1655,7 @@ public class DaneContract {
         }
     }
 
-    public static void synchroniserDonnees(final Context mcontext, JSONObject donnees, final ProgressBar progressBar) {
+    public static void synchroniserDonnees(final Context mcontext, JSONObject donnees, final ProgressDialog progressBar) {
 //        Log.d(TAG,"Données à synchroniser vers avec la base : "+donnees);
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -1671,7 +1669,7 @@ public class DaneContract {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        progressBar.setVisibility(View.INVISIBLE);
+                        hideLoadingDialog(progressBar);
                     }
                 }, new Response.ErrorListener() {
 
@@ -1679,7 +1677,7 @@ public class DaneContract {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         Log.d(TAG, "That didn't work!");
-                        progressBar.setVisibility(View.INVISIBLE);
+                        hideLoadingDialog(progressBar);
                     }
                 });
         //        stringRequest.setTag(TAG);
@@ -1789,5 +1787,18 @@ public class DaneContract {
     public static void EditerPersonnelDialog(FragmentManager manager,Long idpersonnel,String titre, String tag) {
         DialogFragment editerpersonnelFragment = PersonnelDialogFragment.newInstance(Long.valueOf(0),idpersonnel,titre);
         editerpersonnelFragment.show(manager, tag);
+    }
+
+    public static void showLoadingDialog(final ProgressDialog mprog,String titre, String message) {
+        mprog.setTitle(titre);
+        mprog.setMessage(message);
+        mprog.setCancelable(false);
+        mprog.setIndeterminate(true);
+        mprog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mprog.show();
+    }
+
+    public static void hideLoadingDialog(ProgressDialog mprog) {
+        mprog.dismiss();
     }
 }
