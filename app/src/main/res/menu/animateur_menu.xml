@@ -9,4 +9,8 @@
             android:icon="@drawable/ic_email"
             android:alphabeticShortcut="e"
             android:title="@string/animateur_email"/>
+        <item android:id="@+id/animateur_photo"
+            android:icon="@drawable/ic_photo"
+            android:alphabeticShortcut="e"
+            android:title="@string/animateur_photo"/>
 </menu>

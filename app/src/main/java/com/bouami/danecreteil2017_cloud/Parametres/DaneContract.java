@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import com.android.volley.DefaultRetryPolicy;
@@ -45,16 +46,17 @@ import java.util.Map;
 public class DaneContract {
 
     private static final String TAG = "DaneContract";
-//    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
-    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
+    public static final String BASE_URL ="http://www.bouami.fr/danecreteil/web/";
+//    public static final String BASE_URL ="http://192.168.1.17/danecreteil/web/";
     public static final String BASE_URL_EXPORT = BASE_URL + "exportdonnees/";
     public final String BASE_URL_DEPART = BASE_URL + "listedetailvillespardepart/";
     public static final String BASE_URL_NEW_REFERENT = BASE_URL + "newreferent/";
     public static final String BASE_URL_DELETE_REFERENT = BASE_URL + "deletereferent/";
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
+    public static final String BASE_URL_MAJ_ANIMATEUR = BASE_URL + "majanimateurs/";
     public static final int NUM_VERSION_SQLITE = 1;
 //    public static final int DATABASE_VERSION = 1;
-    public static final int DATABASE_VERSION = 41;
+    public static final int DATABASE_VERSION = 35;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -79,7 +81,7 @@ public class DaneContract {
             EtablissementEntry.TABLE_NAME + ".*"
     };
 
-    private static final String[] ETABLISSEMENT_COLUMNS = {
+    public static final String[] ETABLISSEMENT_COLUMNS = {
             EtablissementEntry.TABLE_NAME + ".*",
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_NOM + " AS NOMANIMATEUR",
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_PRENOM + " AS PRENOMANIMATEUR" ,
@@ -97,6 +99,7 @@ public class DaneContract {
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_TEL,
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_EMAIL,
             AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_PHOTO,
+            AnimateurEntry.TABLE_NAME + "." + AnimateurEntry.COLUMN_ANIMATEUR_ID,
             DepartementEntry.TABLE_NAME + "." + DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT"
     };
 
@@ -741,6 +744,14 @@ public class DaneContract {
         return updatereferent;
     }
 
+    public static long updateAnimateurSynchroniser(Context mContext, ContentValues animateur,String idanimateur) {
+        Uri muri = DaneContract.AnimateurEntry.buildAnimateurs();
+        String[] selectionArgs = new String[]{idanimateur};
+        String selection = AnimateurEntry.TABLE_NAME+"." + AnimateurEntry._ID + " = ? ";
+        long updateanimateur = mContext.getContentResolver().update(muri,animateur,selection,selectionArgs);
+        return updateanimateur;
+    }
+
     public static long updatePersonnel(Context mContext, ContentValues personnel) {
         Uri muri = DaneContract.PersonnelEntry.buildPersonnel();
         String idpersonnel = personnel.getAsString("_id");
@@ -820,7 +831,24 @@ public class DaneContract {
         return null;
     };
 
-    public static  Cursor getReferentFromIdBase(Context mContext, ContentValues referent) {
+    public static  Cursor getReferentFromIdBase(Context mContext, String idbasereferent) {
+        Uri uri = DaneContract.ReferentEntry.buildReferent();
+        String[] selectionArgs = new String[]{idbasereferent};
+        String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_REFERENT_ID +" = ?";
+        Cursor referentcursor = mContext.getContentResolver().query(uri,
+                REFERENTS_COLUMNS,
+                selection,
+                selectionArgs,
+                null,
+                null
+        );
+        if (referentcursor.moveToFirst()){
+            return referentcursor;
+        }
+        return null;
+    };
+
+ /*   public static  Cursor getReferentFromIdBase(Context mContext, ContentValues referent) {
         Uri uri = DaneContract.ReferentEntry.buildReferent();
         String[] selectionArgs = new String[]{referent.getAsString("nom"),referent.getAsString("prenom")};
         String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_NOM+" = ? "+" AND "+
@@ -837,7 +865,7 @@ public class DaneContract {
         }
         return null;
     };
-
+*/
     public static  Cursor getPersonnelFromId(Context mContext, Long idpersonnel) {
         Uri uri = PersonnelEntry.buildPersonnelUri(idpersonnel);
         Cursor personnelcursor = mContext.getContentResolver().query(uri,
@@ -1396,6 +1424,54 @@ public class DaneContract {
         mRequestQueue.add(jsObjRequest);
     }
 
+    public static void majanimateurDatabase(final Context ctx, String url,final String idanimateur) {
+        JsonObjectRequest jsObjRequest;
+        RequestQueue mRequestQueue;
+        mRequestQueue = Volley.newRequestQueue(ctx);
+        final Cursor cursoranimateur = getAnimateurFromId(ctx, Long.valueOf(idanimateur));
+        String idbaseanimateur = "";
+        if (cursoranimateur!=null) {
+            idbaseanimateur = getValueFromCursor(cursoranimateur,AnimateurEntry.COLUMN_ANIMATEUR_ID);
+        }
+        String majurl = url+idbaseanimateur;
+        jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, majurl, null, new Response.Listener<JSONObject>() {
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onResponse(final JSONObject response) {
+                        try {
+                                String tel = response.getString("tel");
+                                String photo = response.getString("photo");
+                                if (cursoranimateur!=null) {
+                                    ContentValues anim = new ContentValues();
+                                    anim.put("tel",tel);
+                                    anim.put("photo", Base64.decode(photo, Base64.DEFAULT));
+                                    updateAnimateurSynchroniser(ctx,anim,idanimateur);
+                                }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Log.d(TAG, "That didn't work!");
+                    }
+                });
+        //        stringRequest.setTag(TAG);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        mRequestQueue.add(jsObjRequest);
+    }
+
+
     public static JSONObject PersonnelASynchroniser(Context mContext){
             Uri uri = DaneContract.PersonnelEntry.buildPersonnel();
             String[] selectionArgs = new String[]{"0"};
@@ -1416,6 +1492,7 @@ public class DaneContract {
 //        }
         for (int i=0;i<mcursor.getCount();i++) {
             mcursor.moveToPosition(i);
+            Cursor etabcursor = getEtablissementFromId(mContext, Long.valueOf(DaneContract.getValueFromCursor(mcursor, PersonnelEntry.COLUMN_ETABLISSEMENT_ID)));
             JSONObject lepersonnel = new JSONObject();
             try {
                 lepersonnel.put("id",DaneContract.getValueFromCursor(mcursor, PersonnelEntry._ID));
@@ -1427,7 +1504,8 @@ public class DaneContract {
                 lepersonnel.put("tel",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_TEL));
                 lepersonnel.put("email",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_EMAIL));
                 lepersonnel.put("statut",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_STATUT));
-                lepersonnel.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_ETABLISSEMENT_ID));
+//                lepersonnel.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.PersonnelEntry.COLUMN_ETABLISSEMENT_ID));
+                lepersonnel.put("etablissement",DaneContract.getValueFromCursor(etabcursor, EtablissementEntry.COLUMN_ETABLISSEMENT_ID));
                 lespersonnels.putOpt(String.valueOf(i),lepersonnel);
 //                Log.d(TAG,"Nombre de référents à synchroniser : "+lepersonnel);
             } catch (JSONException e) {
@@ -1458,6 +1536,7 @@ public class DaneContract {
 //        }
         for (int i=0;i<mcursor.getCount();i++) {
             mcursor.moveToPosition(i);
+            Cursor etabcursor = getEtablissementFromId(mContext, Long.valueOf(DaneContract.getValueFromCursor(mcursor, ReferentEntry.COLUMN_ETABLISSEMENT_ID)));
             JSONObject lereferent = new JSONObject();
             try {
                 lereferent.put("id",DaneContract.getValueFromCursor(mcursor, ReferentEntry._ID));
@@ -1469,8 +1548,10 @@ public class DaneContract {
                 lereferent.put("tel",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_TEL));
                 lereferent.put("email",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_EMAIL));
                 lereferent.put("statut",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_STATUT));
-                lereferent.put("discipline",DaneContract.getValueFromCursor(mcursor,"NOMDISCIPLINE"));
-                lereferent.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
+                String nomdiscipline = DaneContract.getValueFromCursor(mcursor,"NOMDISCIPLINE");
+                lereferent.put("discipline",nomdiscipline==null?"Autre":nomdiscipline);
+//                lereferent.put("etablissement",DaneContract.getValueFromCursor(mcursor,DaneContract.ReferentEntry.COLUMN_ETABLISSEMENT_ID));
+                lereferent.put("etablissement",DaneContract.getValueFromCursor(etabcursor, EtablissementEntry.COLUMN_ETABLISSEMENT_ID));
                 lesreferents.putOpt(String.valueOf(i),lereferent);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1534,16 +1615,16 @@ public class DaneContract {
                 }
                 long insertedCivilite = DaneContract.addCivilite(ctx,ref.getCivilite(),referentciviliteintitule);
                 ref.setRefer(true,insertedCivilite);
-                Cursor referentcursor = getReferentFromIdBase(ctx,ref.getRefer());
+                Cursor referentcursor = getReferentFromIdBase(ctx,ref.getId());
+                Cursor etabcursor = getEtablissementFromIdBase(ctx,ref.getEtablissement());
+                ContentValues lereferent = ref.getRefer();
+                lereferent.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
                 if (referentcursor==null){
-                    Cursor etabcursor = getEtablissementFromIdBase(ctx,ref.getEtablissement());
-                    ContentValues nouveauref = ref.getRefer();
-                    nouveauref.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
 //                    Log.d(TAG,"importerReferentsDansBase : addReferent "+ref.getEtablissement());
-                    long insertedreferent = DaneContract.addReferent(ctx,nouveauref);
+                    long insertedreferent = DaneContract.addReferent(ctx,lereferent);
                 } else {
 //                    Log.d(TAG,"importerReferentsDansBase : updateReferentSynchroniser");
-                    long updatedreferent = updateReferentSynchroniser(ctx,ref.getRefer(),getValueFromCursor(referentcursor,ReferentEntry._ID));
+                    long updatedreferent = updateReferentSynchroniser(ctx,lereferent,getValueFromCursor(referentcursor,ReferentEntry._ID));
                 }
 //                Log.d(TAG, "referent : " + ref.getRefer().getAsString("nom") + "---"+ref.getRefer().getAsString("statut")+"---"+ref.getRefer().getAsString("etablissement_id"));
             }
@@ -1568,13 +1649,13 @@ public class DaneContract {
                 Long idetab = Long.valueOf(donnees.getJSONObject("personnel").getJSONObject(departement).getJSONObject(idpersonnel).getJSONObject("etablissements").keys().next());
                 perso.setPerso(idetab,insertedCivilite,true);
                 Cursor personnelcursor = getPersonnelFromIdBase(ctx,perso.getPerso().getAsString("personnel_id"));
+                Cursor etabcursor = getEtablissementFromIdBase(ctx, String.valueOf(idetab));
+                ContentValues nouveauperso = perso.getPerso();
+                nouveauperso.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
                 if (personnelcursor==null){
-                    Cursor etabcursor = getEtablissementFromIdBase(ctx, String.valueOf(idetab));
-                    ContentValues nouveauperso = perso.getPerso();
-                    nouveauperso.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
                     long insertedperso = DaneContract.addPersonnel(ctx,nouveauperso);
                 } else {
-                    long updatedperso = updatePersonnelSynchroniser(ctx,perso.getPerso(),getValueFromCursor(personnelcursor,PersonnelEntry._ID));
+                    long updatedperso = updatePersonnelSynchroniser(ctx,nouveauperso,getValueFromCursor(personnelcursor,PersonnelEntry._ID));
                 }
             }
         }
@@ -1656,13 +1737,13 @@ public class DaneContract {
     }
 
     public static void synchroniserDonnees(final Context mcontext, JSONObject donnees, final ProgressDialog progressBar) {
-//        Log.d(TAG,"Données à synchroniser vers avec la base : "+donnees);
+        Log.d(TAG,"Données à synchroniser avec la base : "+donnees);
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, DaneContract.BASE_URL_SYNCHRONISER, donnees, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-//                            Log.d(TAG,"Données à synchroniser avec le mobile : "+response);
+                           Log.d(TAG,"Données à synchroniser avec le mobile : "+response);
                         try {
                             synchroniserReferentsDepuisLaBase(mcontext,response);
                             synchroniserPersonnelsDepuisLaBase(mcontext,response);
@@ -1676,7 +1757,7 @@ public class DaneContract {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.d(TAG, "That didn't work!");
+                        Log.d(TAG, "La synchronisation des référents et personnels a échoué!");
                         hideLoadingDialog(progressBar);
                     }
                 });

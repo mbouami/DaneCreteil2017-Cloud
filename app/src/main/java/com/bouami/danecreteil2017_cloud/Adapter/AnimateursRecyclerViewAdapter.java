@@ -1,6 +1,7 @@
 package com.bouami.danecreteil2017_cloud.Adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.LayoutRes;
@@ -117,6 +118,9 @@ public class AnimateursRecyclerViewAdapter extends MyRecycleAdapter<Animateur,An
                             case R.id.animateur_email:
                                 String emailanim = animateurcursor.getString(animateurcursor.getColumnIndex(DaneContract.AnimateurEntry.COLUMN_EMAIL));
                                 view.getContext().startActivity(DaneContract.createMailIntent(emailanim));
+                                return true;
+                            case R.id.animateur_photo:
+                                DaneContract.majanimateurDatabase(view.getContext(), DaneContract.BASE_URL_MAJ_ANIMATEUR,DaneContract.getValueFromCursor(animateurcursor, DaneContract.AnimateurEntry._ID));
                                 return true;
                             default:
                                 return false;

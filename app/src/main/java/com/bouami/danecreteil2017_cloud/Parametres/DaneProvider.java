@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.bouami.danecreteil2017_cloud.Models.Personnel;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract.*;
 
 import static com.bouami.danecreteil2017_cloud.Parametres.DaneContract.CONTENT_AUTHORITY;
@@ -42,7 +41,7 @@ public class DaneProvider extends ContentProvider {
     static final int ANIMATEURS_PAR_DEPARTEMENT = ANIMATEURS+4;
 
     static final int ETABLISSEMENTS = 300*DaneContract.NUM_VERSION_SQLITE;
-    static final int ETABLISSEMENTS_PAR_VILLE = ETABLISSEMENTS+1;
+    static final int ETABLISSEMENTS_PAR_DEPARTEMENT_PAR_VILLE = ETABLISSEMENTS+1;
     static final int ETABLISSEMENTS_ID = ETABLISSEMENTS+2;
     static final int ETABLISSEMENTS_CONTENANT_NOM = ETABLISSEMENTS+3;
     static final int ETABLISSEMENTS_PAR_ANIMATEUR = ETABLISSEMENTS+4;
@@ -109,7 +108,12 @@ public class DaneProvider extends ContentProvider {
                         " = " + VilleEntry.TABLE_NAME +
                         "." + VilleEntry._ID +
                         " = " + VilleEntry.TABLE_NAME +
-                        "." + VilleEntry._ID  + " LEFT JOIN " +
+                        "." + VilleEntry._ID + " LEFT JOIN " +
+                        DepartementEntry.TABLE_NAME +
+                        " ON " + DepartementEntry.TABLE_NAME +
+                        "." + DepartementEntry._ID +
+                        " = " + VilleEntry.TABLE_NAME +
+                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID + " LEFT JOIN " +
                         AnimateurEntry.TABLE_NAME +
                         " ON " + EtablissementEntry.TABLE_NAME +
                         "." + EtablissementEntry.COLUMN_ANIMATEUR_ID +
@@ -418,7 +422,7 @@ public class DaneProvider extends ContentProvider {
 
         matcher.addURI(authority, PATH_ETABLISSEMENTS, ETABLISSEMENTS);
         matcher.addURI(authority, PATH_ETABLISSEMENTS+ "/*", ETABLISSEMENTS_ID);
-        matcher.addURI(authority, PATH_ETABLISSEMENTS+ "/*/ville", ETABLISSEMENTS_PAR_VILLE);
+        matcher.addURI(authority, PATH_ETABLISSEMENTS+ "/*/ville/rechercher", ETABLISSEMENTS_PAR_DEPARTEMENT_PAR_VILLE);
         matcher.addURI(authority, PATH_ETABLISSEMENTS+ "/*/depart", ETABLISSEMENTS_PAR_DEPARTEMENT);
         matcher.addURI(authority, PATH_ETABLISSEMENTS+ "/*/etab", ETABLISSEMENTS_ID);
         matcher.addURI(authority, PATH_ETABLISSEMENTS+ "/*/rechercher", ETABLISSEMENTS_CONTENANT_NOM);
@@ -533,8 +537,8 @@ public class DaneProvider extends ContentProvider {
         );
     }
     private static final String sEtablissementsParVilleSelection =
-            EtablissementEntry.TABLE_NAME+
-                    "." + EtablissementEntry.COLUMN_VILLE_ID + " = ? ";
+            VilleEntry.TABLE_NAME+
+                    "." + VilleEntry.COLUMN_VILLE_NOM + " like ? ";
 
     private Cursor getAnimateursParDepartementContenantleNom(Uri uri, String[] projection,String selection, String[] selectionArgs, String sortOrder) {
         return sAnimateurParDepartementQueryBuilder.query(mDaneHelper.getReadableDatabase(),
@@ -552,7 +556,7 @@ public class DaneProvider extends ContentProvider {
         String ville = EtablissementEntry.getVilleFromUri(uri);
         String[] selectionArgs;
         String selection;
-        selectionArgs = new String[]{ville};
+        selectionArgs = new String[]{"%" + ville +"%"};
         selection = sEtablissementsParVilleSelection;
         return sEtablissementsParVilleQueryBuilder.query(mDaneHelper.getReadableDatabase(),
                 projection,
@@ -895,7 +899,7 @@ public class DaneProvider extends ContentProvider {
                 return AnimateurEntry.CONTENT_ITEM_TYPE;
             case ETABLISSEMENTS:
                 return EtablissementEntry.CONTENT_TYPE;
-            case ETABLISSEMENTS_PAR_VILLE:
+            case ETABLISSEMENTS_PAR_DEPARTEMENT_PAR_VILLE:
                 return EtablissementEntry.CONTENT_ITEM_TYPE;
             case ETABLISSEMENTS_PAR_DEPARTEMENT:
                 return EtablissementEntry.CONTENT_ITEM_TYPE;
@@ -943,7 +947,7 @@ public class DaneProvider extends ContentProvider {
                 retCursor = getVillesParDepartement(uri, projection, sortOrder);
                 break;
             }
-            case ETABLISSEMENTS_PAR_VILLE: {
+            case ETABLISSEMENTS_PAR_DEPARTEMENT_PAR_VILLE: {
                 retCursor = getEtablissementsParVille(uri, projection, sortOrder);
                 break;
             }

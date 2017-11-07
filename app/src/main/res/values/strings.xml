@@ -49,5 +49,6 @@
     <string name="personnel_edit">Modifier</string>
     <string name="referent_edit">Modifier</string>
     <string name="referent_delete">Supprimer</string>
+    <string name="animateur_photo">Synchroniser</string>
 
 </resources>

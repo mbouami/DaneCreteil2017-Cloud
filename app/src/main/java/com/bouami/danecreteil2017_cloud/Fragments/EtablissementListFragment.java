@@ -44,25 +44,6 @@ public class EtablissementListFragment extends Fragment implements LoaderManager
     private Uri mUri;
     private static final int ETABLISSEMENTS_PAR_DEPARTEMENT_LOADER = 0;
 
-    private static final String[] DEPARTEMENT_COLUMNS = {
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry._ID,
-            DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM,
-            DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_INTITULE
-    };
-    private static final String[] ETABLISSEMENT_COLUMNS = {
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry._ID,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_TYPE,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_NOM,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_TEL,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_FAX,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_EMAIL,
-            DaneContract.EtablissementEntry.TABLE_NAME + "." + DaneContract.EtablissementEntry.COLUMN_ADRESSE,
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_CP + " AS CPVILLE",
-            DaneContract.VilleEntry.TABLE_NAME + "." + DaneContract.VilleEntry.COLUMN_VILLE_NOM + " AS NOMVILLE",
-            DaneContract.DepartementEntry.TABLE_NAME + "." + DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM + " AS NOMDEPARTEMENT"
-    };
-
-
     public static  EtablissementListFragment newInstance(String champ, Long id) {
         EtablissementListFragment f = new EtablissementListFragment();
         Bundle args = new Bundle();
@@ -106,12 +87,17 @@ public class EtablissementListFragment extends Fragment implements LoaderManager
     public Cursor rechercherEtablissement(String constraint) {
         if (!constraint.equals("")) {
             Uri uri = DaneContract.EtablissementEntry.buildEtablissementParDepartementContenatLeNom(mDepartement,constraint,"rechercher");
+//            String[] selectionArgs = new String[]{"%" + constraint +"%",mDepartement,"%" + constraint +"%"};
             String[] selectionArgs = new String[]{"%" + constraint +"%",mDepartement};
             String sortOrder = " NOMVILLE ASC";
+//            String selection = "( "+DaneContract.EtablissementEntry.TABLE_NAME+"." + DaneContract.EtablissementEntry.COLUMN_NOM +
+//                    " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" =? ) OR ("+
+//                    DaneContract.VilleEntry.TABLE_NAME+"."+DaneContract.VilleEntry.COLUMN_VILLE_NOM+" like ? AND "+
+//                    DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" =? )";
             String selection = DaneContract.EtablissementEntry.TABLE_NAME+"." + DaneContract.EtablissementEntry.COLUMN_NOM +
-                    " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" =?";
+                    " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" = ?";
             return getContext().getContentResolver().query(uri,
-                    ETABLISSEMENT_COLUMNS,
+                    DaneContract.ETABLISSEMENT_COLUMNS,
                     selection,
                     selectionArgs,
                     sortOrder,
@@ -201,11 +187,11 @@ public class EtablissementListFragment extends Fragment implements LoaderManager
             String sortOrder = " NOMVILLE ASC";
             if (mAnimateurId==0) {
                 cursorLoader = new CursorLoader(getActivity(),mUri,
-                        ETABLISSEMENT_COLUMNS, "NOMDEPARTEMENT = ?",
+                        DaneContract.ETABLISSEMENT_COLUMNS, "NOMDEPARTEMENT = ?",
                         new String[]{mDepartement},sortOrder);
             } else {
                 cursorLoader = new CursorLoader(getActivity(),mUri,
-                        ETABLISSEMENT_COLUMNS,null ,null,sortOrder);
+                        DaneContract.ETABLISSEMENT_COLUMNS,null ,null,sortOrder);
             }
             return cursorLoader;
         }
