@@ -50,5 +50,6 @@
     <string name="referent_edit">Modifier</string>
     <string name="referent_delete">Supprimer</string>
     <string name="animateur_photo">Synchroniser</string>
+    <string name="service_name">Synchronisation</string>
 
 </resources>

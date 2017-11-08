@@ -34,6 +34,7 @@ import com.bouami.danecreteil2017_cloud.Fragments.EtablissementListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
 import com.bouami.danecreteil2017_cloud.Services.SynchrinisationService;
+import com.bouami.danecreteil2017_cloud.Services.SynchronisationService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -163,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-//            Intent intent = new Intent(this, SynchrinisationService.class);
-//            startService(intent);
+//            Intent intent = new Intent(this, SynchronisationService.class);
+//            this.startService(intent);
 //            startForegroundService(intent);
         }
 //        setProgressValue();

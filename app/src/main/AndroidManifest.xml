@@ -79,9 +79,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <service
-            android:name=".Services$SynchrinisationService"
-            android:isolatedProcess="true"
-            android:enabled="true">
+            android:name="com.bouami.danecreteil2017_cloud.Services.SynchronisationService">
         </service>
     </application>
 
