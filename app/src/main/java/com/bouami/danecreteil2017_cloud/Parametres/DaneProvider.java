@@ -282,7 +282,12 @@ public class DaneProvider extends ContentProvider {
                         " ON " + DepartementEntry.TABLE_NAME +
                         "." + DepartementEntry._ID +
                         " = " + VilleEntry.TABLE_NAME +
-                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID
+                        "." + VilleEntry.COLUMN_DEPARTEMENT_ID +
+                        " LEFT JOIN " + CiviliteEntry.TABLE_NAME +
+                        " ON " + CiviliteEntry.TABLE_NAME +
+                        "." + CiviliteEntry._ID +
+                        " = " + AnimateurEntry.TABLE_NAME +
+                        "." + AnimateurEntry.COLUMN_CIVILITE_ID
         );
     }
 

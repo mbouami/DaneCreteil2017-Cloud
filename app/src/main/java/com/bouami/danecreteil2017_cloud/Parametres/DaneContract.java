@@ -55,8 +55,8 @@ public class DaneContract {
     public static final String BASE_URL_SYNCHRONISER = BASE_URL + "synchroniser/";
     public static final String BASE_URL_MAJ_ANIMATEUR = BASE_URL + "majanimateurs/";
     public static final int NUM_VERSION_SQLITE = 1;
-//    public static final int DATABASE_VERSION = 1;
-    public static final int DATABASE_VERSION = 35;
+    public static final int DATABASE_VERSION = 1;
+//    public static final int DATABASE_VERSION = 35;
     List<Animateur> listedesanimateurs = new ArrayList<Animateur>();
     List<Etablissement> listedesetablissements = new ArrayList<Etablissement>();
     List<Personnel> listedespersonnels = new ArrayList<Personnel>();
@@ -831,24 +831,24 @@ public class DaneContract {
         return null;
     };
 
-    public static  Cursor getReferentFromIdBase(Context mContext, String idbasereferent) {
-        Uri uri = DaneContract.ReferentEntry.buildReferent();
-        String[] selectionArgs = new String[]{idbasereferent};
-        String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_REFERENT_ID +" = ?";
-        Cursor referentcursor = mContext.getContentResolver().query(uri,
-                REFERENTS_COLUMNS,
-                selection,
-                selectionArgs,
-                null,
-                null
-        );
-        if (referentcursor.moveToFirst()){
-            return referentcursor;
-        }
-        return null;
-    };
+//    public static  Cursor getReferentFromIdBase(Context mContext, String idbasereferent) {
+//        Uri uri = DaneContract.ReferentEntry.buildReferent();
+//        String[] selectionArgs = new String[]{idbasereferent};
+//        String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_REFERENT_ID +" = ?";
+//        Cursor referentcursor = mContext.getContentResolver().query(uri,
+//                REFERENTS_COLUMNS,
+//                selection,
+//                selectionArgs,
+//                null,
+//                null
+//        );
+//        if (referentcursor.moveToFirst()){
+//            return referentcursor;
+//        }
+//        return null;
+//    };
 
- /*   public static  Cursor getReferentFromIdBase(Context mContext, ContentValues referent) {
+    public static  Cursor getReferentFromIdBase(Context mContext, ContentValues referent) {
         Uri uri = DaneContract.ReferentEntry.buildReferent();
         String[] selectionArgs = new String[]{referent.getAsString("nom"),referent.getAsString("prenom")};
         String selection = ReferentEntry.TABLE_NAME+"." + ReferentEntry.COLUMN_NOM+" = ? "+" AND "+
@@ -865,7 +865,7 @@ public class DaneContract {
         }
         return null;
     };
-*/
+
     public static  Cursor getPersonnelFromId(Context mContext, Long idpersonnel) {
         Uri uri = PersonnelEntry.buildPersonnelUri(idpersonnel);
         Cursor personnelcursor = mContext.getContentResolver().query(uri,
@@ -1615,7 +1615,8 @@ public class DaneContract {
                 }
                 long insertedCivilite = DaneContract.addCivilite(ctx,ref.getCivilite(),referentciviliteintitule);
                 ref.setRefer(true,insertedCivilite);
-                Cursor referentcursor = getReferentFromIdBase(ctx,ref.getId());
+//                Cursor referentcursor = getReferentFromIdBase(ctx,ref.getId());
+                Cursor referentcursor = getReferentFromIdBase(ctx,ref.getRefer());
                 Cursor etabcursor = getEtablissementFromIdBase(ctx,ref.getEtablissement());
                 ContentValues lereferent = ref.getRefer();
                 lereferent.put("etablissement_id",getValueFromCursor(etabcursor,EtablissementEntry._ID));
@@ -1737,13 +1738,13 @@ public class DaneContract {
     }
 
     public static void synchroniserDonnees(final Context mcontext, JSONObject donnees, final ProgressDialog progressBar) {
-        Log.d(TAG,"Données à synchroniser avec la base : "+donnees);
+//        Log.d(TAG,"Données à synchroniser avec la base : "+donnees);
         RequestQueue mRequestQueue = Volley.newRequestQueue(mcontext);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, DaneContract.BASE_URL_SYNCHRONISER, donnees, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                           Log.d(TAG,"Données à synchroniser avec le mobile : "+response);
+//                           Log.d(TAG,"Données à synchroniser avec le mobile : "+response);
                         try {
                             synchroniserReferentsDepuisLaBase(mcontext,response);
                             synchroniserPersonnelsDepuisLaBase(mcontext,response);

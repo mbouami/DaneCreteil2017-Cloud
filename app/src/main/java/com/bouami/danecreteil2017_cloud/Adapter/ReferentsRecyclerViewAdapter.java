@@ -127,7 +127,7 @@ public class ReferentsRecyclerViewAdapter extends MyRecycleAdapter<Referent,Refe
 //                popup.getMenu().getItem(3).setEnabled(false);
                 if (!mModifier) {
                     popup.getMenu().getItem(2).setEnabled(false);
-//                    popup.getMenu().getItem(3).setEnabled(false);
+                    popup.getMenu().getItem(3).setEnabled(false);
                 }
                 popup.show();
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
