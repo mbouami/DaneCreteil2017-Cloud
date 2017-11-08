@@ -1,6 +1,7 @@
 package com.bouami.danecreteil2017_cloud.ViewHolder;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -49,6 +50,9 @@ public class PersonnelViewHolder extends RecyclerView.ViewHolder {
         String nomperso = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_NOM));
         String prenomperso = cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_PRENOM));
         mNomView.setText(civiliteperso+" "+nomperso+" "+prenomperso);
+        if (DaneContract.getValueFromCursor(cursor,DaneContract.PersonnelEntry.COLUMN_SYNCHRONISER).equals("0")) {
+            mNomView.setTextColor(Color.RED);
+        }
         mStatutView.setText(cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_STATUT)));
         mTelView.setText("Tél : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_TEL)));
         mEmailView.setText("Email : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.PersonnelEntry.COLUMN_EMAIL)));

@@ -1,7 +1,10 @@
 package com.bouami.danecreteil2017_cloud.ViewHolder;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.nfc.Tag;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,6 +21,7 @@ import com.bouami.danecreteil2017_cloud.R;
  */
 
 public class ReferentViewHolder extends RecyclerView.ViewHolder {
+    private final String TAG = "ReferentViewHolder";
     public final TextView mNomView;
     public final TextView mStatutView;
     public final TextView mTelView;
@@ -54,6 +58,9 @@ public class ReferentViewHolder extends RecyclerView.ViewHolder {
         String emailref = "Email : "+cursor.getString(cursor.getColumnIndexOrThrow(DaneContract.ReferentEntry.COLUMN_EMAIL));
         String disciplref = "Discipline : "+cursor.getString(cursor.getColumnIndexOrThrow("NOMDISCIPLINE"));
         mNomView.setText(civiliteref+" "+nomref+" "+prenomref);
+        if (DaneContract.getValueFromCursor(cursor,DaneContract.ReferentEntry.COLUMN_SYNCHRONISER).equals("0")) {
+            mNomView.setTextColor(Color.RED);
+        }
         mStatutView.setText(statutref);
         mTelView.setText(telref);
         mEmailView.setText(emailref);
