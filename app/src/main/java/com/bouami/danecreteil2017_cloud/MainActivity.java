@@ -33,6 +33,7 @@ import com.bouami.danecreteil2017_cloud.Fragments.AnimateurListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.EtablissementListFragment;
 import com.bouami.danecreteil2017_cloud.Fragments.ReferentListFragment;
 import com.bouami.danecreteil2017_cloud.Parametres.DaneContract;
+import com.bouami.danecreteil2017_cloud.Services.SynchrinisationService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -152,16 +153,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            JSONObject jsondonneesasynchroniser = new JSONObject();
-            try {
-                prog= new ProgressDialog(this);
-                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
-                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
-                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
-                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            JSONObject jsondonneesasynchroniser = new JSONObject();
+//            try {
+//                prog= new ProgressDialog(this);
+//                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
+//                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
+//                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
+//                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+            Intent intent = new Intent(this, SynchrinisationService.class);
+            startService(intent);
         }
 //        setProgressValue();
     }
