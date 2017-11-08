@@ -153,18 +153,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-//            JSONObject jsondonneesasynchroniser = new JSONObject();
-//            try {
-//                prog= new ProgressDialog(this);
-//                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
-//                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
-//                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
-//                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-            Intent intent = new Intent(this, SynchrinisationService.class);
-            startService(intent);
+            JSONObject jsondonneesasynchroniser = new JSONObject();
+            try {
+                prog= new ProgressDialog(this);
+                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
+                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
+                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
+                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//            Intent intent = new Intent(this, SynchrinisationService.class);
+//            startService(intent);
+//            startForegroundService(intent);
         }
 //        setProgressValue();
     }

@@ -80,7 +80,8 @@
         </activity>
         <service
             android:name=".Services$SynchrinisationService"
-            tools:ignore="InnerclassSeparator">
+            android:isolatedProcess="true"
+            android:enabled="true">
         </service>
     </application>
 
