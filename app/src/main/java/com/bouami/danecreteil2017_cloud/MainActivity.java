@@ -130,17 +130,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-//        progressBar.setVisibility(View.VISIBLE);
-        Cursor NombreetablissementCursor = getBaseContext().getContentResolver().query(
-                DaneContract.EtablissementEntry.CONTENT_URI,
-                new String[]{DaneContract.EtablissementEntry._ID},
-                null,
-                null,
-                null);
-        if (!(NombreetablissementCursor.getCount() > 0)) {
-            if (mConMgr != null) {
-                NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
-                if (networkInfo != null && networkInfo.isConnected()) {
+        if (mConMgr != null) {
+            NetworkInfo networkInfo = mConMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                Cursor NombreetablissementCursor = getBaseContext().getContentResolver().query(
+                        DaneContract.EtablissementEntry.CONTENT_URI,
+                        new String[]{DaneContract.EtablissementEntry._ID},
+                        null,
+                        null,
+                        null);
+                if (!(NombreetablissementCursor.getCount() > 0)) {
                     prog= new ProgressDialog(this);
                     DaneContract.showLoadingDialog(prog,"Réinitialisation des Données","Merci de patienter");
                     DaneContract.initialiserBase(this,DaneContract.BASE_URL_EXPORT,prog);
@@ -148,27 +147,26 @@ public class MainActivity extends AppCompatActivity {
 //                    Snackbar.make(getCurrentFocus(), "Synchronisation en cours", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
                 } else {
-                    Log.d(TAG,"Réseau indisponible");
+//            JSONObject jsondonneesasynchroniser = new JSONObject();
+//            try {
+//                prog= new ProgressDialog(this);
+//                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
+//                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
+//                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
+//                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+                    Intent intent = new Intent(this, SynchronisationService.class);
+                    this.startService(intent);
+//            startForegroundService(intent);
+                }
+            } else {
+                Log.d(TAG,"Réseau indisponible");
 //                    Snackbar.make(getCurrentFocus(), "Réseau indisponible", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
-                }
             }
-        } else {
-            JSONObject jsondonneesasynchroniser = new JSONObject();
-            try {
-                prog= new ProgressDialog(this);
-                DaneContract.showLoadingDialog(prog,"Synchronisation en cours","Merci de patienter");
-                jsondonneesasynchroniser.putOpt("referents",DaneContract.ReferentsASynchroniser(this));
-                jsondonneesasynchroniser.putOpt("personnels",DaneContract.PersonnelASynchroniser(this));
-                DaneContract.synchroniserDonnees(this,jsondonneesasynchroniser,prog);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-//            Intent intent = new Intent(this, SynchronisationService.class);
-//            this.startService(intent);
-//            startForegroundService(intent);
         }
-//        setProgressValue();
     }
 
 

@@ -20,12 +20,12 @@ public class SynchronisationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Lancement de la synchronisation des réferents et du personnel", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //TODO do something useful
+//        Toast.makeText(this, "Lancement de la synchronisation des réferents et du personnel", Toast.LENGTH_SHORT).show();
         synchroniserValues();
         return Service.START_NOT_STICKY;
     }

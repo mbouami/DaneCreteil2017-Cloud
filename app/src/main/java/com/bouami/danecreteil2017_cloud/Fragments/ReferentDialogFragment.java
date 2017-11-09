@@ -157,7 +157,6 @@ public class ReferentDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 //                        LoginDialogFragment.this.getDialog().cancel();
-//                        Log.d(TAG, "quitter : ");
                         mListener.onDialogReferentCancelClick(ReferentDialogFragment.this);
                     }
                 });
