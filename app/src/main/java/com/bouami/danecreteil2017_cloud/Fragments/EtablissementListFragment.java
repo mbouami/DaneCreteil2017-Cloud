@@ -87,15 +87,14 @@ public class EtablissementListFragment extends Fragment implements LoaderManager
     public Cursor rechercherEtablissement(String constraint) {
         if (!constraint.equals("")) {
             Uri uri = DaneContract.EtablissementEntry.buildEtablissementParDepartementContenatLeNom(mDepartement,constraint,"rechercher");
-//            String[] selectionArgs = new String[]{"%" + constraint +"%",mDepartement,"%" + constraint +"%"};
-            String[] selectionArgs = new String[]{"%" + constraint +"%",mDepartement};
+            String[] selectionArgs = new String[]{"%" + constraint +"%",mDepartement,"%" + constraint +"%",mDepartement};
+//            String[] selectionArgs = new String[]{"%" + constraint +"%",mDepartement};
             String sortOrder = " NOMVILLE ASC";
-//            String selection = "( "+DaneContract.EtablissementEntry.TABLE_NAME+"." + DaneContract.EtablissementEntry.COLUMN_NOM +
-//                    " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" =? ) OR ("+
-//                    DaneContract.VilleEntry.TABLE_NAME+"."+DaneContract.VilleEntry.COLUMN_VILLE_NOM+" like ? AND "+
-//                    DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" =? )";
-            String selection = DaneContract.EtablissementEntry.TABLE_NAME+"." + DaneContract.EtablissementEntry.COLUMN_NOM +
-                    " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+" = ?";
+            String selection = "( "+DaneContract.EtablissementEntry.TABLE_NAME+"." + DaneContract.EtablissementEntry.COLUMN_NOM +
+                    " like ? AND "+DaneContract.DepartementEntry.TABLE_NAME+"."+DaneContract.DepartementEntry.COLUMN_DEPARTEMENT_NOM+
+                    " = ? ) OR ( NOMVILLE like ? AND NOMDEPARTEMENT = ? )";
+//            String selection = DaneContract.EtablissementEntry.TABLE_NAME+"." + DaneContract.EtablissementEntry.COLUMN_NOM +
+//                    " like ? AND AND NOMDEPARTEMENT = ?";
             return getContext().getContentResolver().query(uri,
                     DaneContract.ETABLISSEMENT_COLUMNS,
                     selection,
